@@ -1,0 +1,11 @@
+-- 1) Get data
+
+// GET http://localhost:8080/api/measurements/external?muid=7eb6cb7a-bd74-4fb3-9503-0867b737c2f6&start=2021-05-01T00:00:00Z&stop=2021-07-01T23:59:59Z&limit=100000
+curl -G -d 'muid=7eb6cb7a-bd74-4fb3-9503-0867b737c2f6' -d 'start=2021-05-01T00:00:00Z' -d 'stop=2021-07-01T23:59:59Z' -d 'limit=100000' http://localhost:8080/api/measurements/external
+
+-- 2) Store data
+
+curl -i -X POST -H 'Content-Type: application/json' -d '{"muid": "7eb6cb7a-bd74-4fb3-9503-0867b737c2f6", "start": "2021-05-01T00:00:00Z", "stop": "2021-07-01T23:59:59Z", "limit": 100000}' http://localhost:8080/api/measurements/import
+
+// GET http://localhost:8080/api/measurements
+curl -G http://localhost:8080/api/measurements

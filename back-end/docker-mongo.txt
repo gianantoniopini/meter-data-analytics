@@ -1,0 +1,14 @@
+-- Create images
+docker pull mongo
+docker pull mongo-express
+
+-- Create containers
+docker run -v /data/db:/data/db -p 27017:27017 --name mevn-stack-app_mongo -d mongo:latest
+docker run --link mevn-stack-app_mongo:mongo -p 8081:8081 --name mevn-stack-app_mongo-express -e ME_CONFIG_MONGODB_URL="mongodb://mongo:27017" mongo-express:latest
+
+-- Start containers
+docker container start mevn-stack-app_mongo
+docker container start mevn-stack-app_mongo-express
+
+-- Stop containers
+docker stop $(docker ps -a -q)

@@ -1,0 +1,37 @@
+use('mevn-stack-app_db');
+
+db.measurements.find({ timestamp: { $gte: new Date('2021-05-01'), $lt: new Date('2021-06-01') } });
+
+// Check if there are measurements with 0100020700FF <> 0
+db.measurements.find({ '0100020700FF': { $ne: 0 } });
+
+// Check if there are measurements with 0100010700FF <> 0100100700FF
+db.measurements.find({ $where: "this['0100010700FF'] !== this['0100100700FF']" });
+
+// Group by month
+const aggregation = [
+  { $group: { _id: { month: { $month: "$timestamp" } }, 'Sum_0100100700FF': { $sum: '$0100100700FF' },
+  'Avg_0100100700FF': { $avg: '$0100100700FF' } } }
+];
+db.measurements.aggregate(aggregation).sort({"_id.month":1}).toArray();
+
+// Group by month, day and hour
+const aggregation = [
+  { $group: { _id: { month: { $month: "$timestamp" }, day: { $dayOfMonth: "$timestamp" }, hour: { $hour: "$timestamp" } }, 'Sum_0100100700FF': { $sum: '$0100100700FF' },
+  'Avg_0100100700FF': { $avg: '$0100100700FF' } } }
+];
+db.measurements.aggregate(aggregation).sort({"_id.month":1, "_id.day":1, "_id.hour":1}).toArray();
+
+// Group by month and hour
+const aggregation = [
+  { $group: { _id: { month: { $month: "$timestamp" }, hour: { $hour: "$timestamp" } }, 'Sum_0100100700FF': { $sum: '$0100100700FF' },
+  'Avg_0100100700FF': { $avg: '$0100100700FF' } } }
+];
+db.measurements.aggregate(aggregation).sort({"_id.month":1, "_id.hour":1}).toArray();
+
+// Group by day of the week
+const aggregation = [
+  { $group: { _id: { dayOfWeek: { $isoDayOfWeek: "$timestamp" } }, 'Sum_0100100700FF': { $sum: '$0100100700FF' },
+  'Avg_0100100700FF': { $avg: '$0100100700FF' } } }
+];
+db.measurements.aggregate(aggregation).sort({"_id.dayOfWeek":1}).toArray();

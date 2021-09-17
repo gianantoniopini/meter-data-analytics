@@ -1,0 +1,15 @@
+# Output directory
+build/
+
+# Dependency directories
+node_modules/
+
+# dotenv environment variable files
+.env
+
+# MongoDB data export files
+*.mongodb.json
+
+# Links, Notes files
+links.txt
+notes.txt

@@ -1,5 +1,5 @@
 import { model, Schema, Model } from 'mongoose';
-import { MeasurementInterface } from '../interfaces/MeasurementInterface';
+import { Measurement } from '../interfaces/Measurement';
 
 const MeasurementSchema: Schema = new Schema({
   measurement: {
@@ -30,7 +30,7 @@ const MeasurementSchema: Schema = new Schema({
   }
 });
 
-const MeasurementModel: Model<MeasurementInterface> = model(
+const MeasurementModel: Model<Measurement> = model(
   'Measurement',
   MeasurementSchema
 );

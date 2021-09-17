@@ -8,9 +8,9 @@
     <div v-else>
       <div class="row pb-4">
         <div class="col-md-12">
-          <h4>Measurements List - {{ measurements.length }} rows</h4>
+          <h4>Measurements - {{ measurements.length }} items</h4>
           <div class="row">
-            <div class="col-md-2 border border-dark">Row Number</div>
+            <div class="col-md-2 border border-dark">Item Number</div>
             <div class="col-md-4 border border-dark">Smart Meter Id</div>
             <div class="col-md-4 border border-dark">Timestamp</div>
             <div class="col-md-2 border border-dark">Power (W)</div>
@@ -41,7 +41,6 @@
 import { defineComponent } from "vue";
 import MeasurementDataService from "@/services/MeasurementDataService";
 import Measurement from "@/types/Measurement";
-import ResponseData from "@/types/ResponseData";
 
 export default defineComponent({
   name: "MeasurementsList",
@@ -49,17 +48,15 @@ export default defineComponent({
     return {
       loading: false,
       measurements: [] as Measurement[],
-      currentMeasurement: {} as Measurement,
-      currentIndex: -1,
     };
   },
   methods: {
     retrieveMeasurements() {
       this.loading = true;
       MeasurementDataService.getAll()
-        .then((response: ResponseData) => {
-          this.measurements = response.data.data;
-          //console.log(response.data);
+        .then((measurements: Measurement[]) => {
+          this.measurements = measurements;
+          //console.log(measurements);
         })
         .catch((e: Error) => {
           console.log(e);
@@ -69,13 +66,6 @@ export default defineComponent({
 
     refreshList() {
       this.retrieveMeasurements();
-      this.currentMeasurement = {} as Measurement;
-      this.currentIndex = -1;
-    },
-
-    setActiveMeasurement(measurement: Measurement, index = -1) {
-      this.currentMeasurement = measurement;
-      this.currentIndex = index;
     },
 
     formatDate(value: string) {

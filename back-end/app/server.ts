@@ -1,7 +1,7 @@
 import express, { Application } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import connectDb from './database/db';
+import openConnection from './database';
 import { router } from './routes/router';
 import { errorHandler } from './middleware/errorHandler';
 
@@ -21,7 +21,7 @@ app.use(express.json());
 app.use(router);
 app.use(errorHandler);
 
-connectDb();
+openConnection();
 
 // Server Listening
 app.listen(port, () => {

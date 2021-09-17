@@ -4,7 +4,7 @@ import {
   authenticateAndGetMeasurement,
   Measurement as ExternalMeasurement
 } from './externalApi';
-import MeasurementModel from '../database/models/MeasurementModel';
+import MeasurementModel from '../models/MeasurementModel';
 
 const mapExternalMeasurement = (externalMeasurement: ExternalMeasurement) => {
   return new MeasurementModel({

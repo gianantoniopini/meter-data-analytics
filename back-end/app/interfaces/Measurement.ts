@@ -1,6 +1,6 @@
 import mongoose, { Document } from 'mongoose';
 
-export interface MeasurementInterface extends Document {
+export interface Measurement extends Document {
   _id: mongoose.Types.ObjectId;
   measurement: string;
   timestamp: Date;

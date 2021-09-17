@@ -1,9 +1,22 @@
 import http from "@/http-common";
-import ResponseData from "@/types/ResponseData";
+import ResponseBody from "@/types/ResponseBody";
+import Measurement from "@/types/Measurement";
 
 class MeasurementDataService {
-  getAll(): Promise<ResponseData> {
-    return http.get("/measurements");
+  async getAll(): Promise<Measurement[]> {
+    const { data: responseBody } = await http.get<ResponseBody>(
+      "/measurements"
+    );
+
+    const sortedMeasurements = responseBody.data.sort(
+      (m1: Measurement, m2: Measurement) => {
+        return (
+          new Date(m1.timestamp).getTime() - new Date(m2.timestamp).getTime()
+        );
+      }
+    );
+
+    return sortedMeasurements;
   }
 }
 

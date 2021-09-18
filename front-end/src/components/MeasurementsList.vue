@@ -6,6 +6,9 @@
       </div>
     </div>
     <div v-else>
+      <div class="row">
+        <TimeSeriesChart :labels="chartLabels" :datasets="chartDataSets" />
+      </div>
       <div class="row pb-4">
         <div class="col-md-12">
           <h4>Measurements - {{ measurements.length }} items</h4>
@@ -41,22 +44,38 @@
 import { defineComponent } from "vue";
 import MeasurementDataService from "@/services/MeasurementDataService";
 import Measurement from "@/types/Measurement";
+import TimeSeriesChart from "./TimeSeriesChart.vue";
 
 export default defineComponent({
   name: "MeasurementsList",
+
+  components: { TimeSeriesChart },
+
   data() {
     return {
       loading: false,
       measurements: [] as Measurement[],
+      chartLabels: [] as string[],
+      chartDataSets: [] as { label: string; data: number[] }[],
     };
   },
+
   methods: {
     retrieveMeasurements() {
       this.loading = true;
       MeasurementDataService.getAll()
         .then((measurements: Measurement[]) => {
-          this.measurements = measurements;
           //console.log(measurements);
+          this.measurements = measurements;
+          this.chartLabels = measurements.map((m) =>
+            this.formatDate(m.timestamp)
+          );
+          this.chartDataSets = [
+            {
+              label: "Power (W)",
+              data: measurements.map((m) => m["0100100700FF"]),
+            },
+          ];
         })
         .catch((e: Error) => {
           console.log(e);
@@ -76,6 +95,7 @@ export default defineComponent({
       return value.toFixed(2);
     },
   },
+
   mounted() {
     this.retrieveMeasurements();
   },

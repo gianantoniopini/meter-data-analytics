@@ -6,29 +6,83 @@
       </div>
     </div>
     <div v-else>
-      <div class="row">
-        <TimeSeriesChart :labels="chartLabels" :datasets="chartDataSets" />
+      <div class="row pb-4">
+        <div class="col-md-12">
+          <h4>Filters</h4>
+          <div class="row">
+            <div class="col-md-2">
+              <label for="timestampFromFilter">Timestamp From:</label>
+              <Datepicker
+                id="timestampFromFilter"
+                v-model="timestampFromFilter"
+                :autoApply="true"
+                :format="formatTimestampFilter"
+                :enableTimePicker="false"
+                placeholder="Select Date"
+              ></Datepicker>
+            </div>
+            <div class="col-md-2">
+              <label for="timestampToFilter">Timestamp To:</label>
+              <Datepicker
+                id="timestampToFilter"
+                v-model="timestampToFilter"
+                :autoApply="true"
+                :format="formatTimestampFilter"
+                :enableTimePicker="false"
+                placeholder="Select Date"
+              ></Datepicker>
+            </div>
+            <div class="col-md-8">
+              <button
+                v-on:click="applyFilters"
+                type="submit"
+                class="btn btn-primary"
+              >
+                Apply
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="row pb-4">
         <div class="col-md-12">
-          <h4>Measurements - {{ measurements.length }} items</h4>
+          <h4>Graph</h4>
           <div class="row">
-            <div class="col-md-2 border border-dark">Item Number</div>
+            <div class="col-md-12">
+              <TimeSeriesChart
+                :labels="chartLabels"
+                :datasets="chartDataSets"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row pb-4">
+        <div class="col-md-12">
+          <h4>Table - {{ filteredMeasurements.length }} Items</h4>
+          <div class="row">
+            <div class="col-md-1 border border-dark">Item Number</div>
             <div class="col-md-4 border border-dark">Smart Meter Id</div>
-            <div class="col-md-4 border border-dark">Timestamp</div>
-            <div class="col-md-2 border border-dark">Power (W)</div>
+            <div class="col-md-3 border border-dark">Timestamp</div>
+            <div class="col-md-2 border border-dark">Measurement</div>
+            <div class="col-md-2 border border-dark">
+              Instantaneous Value (W)
+            </div>
           </div>
           <div
             class="row"
-            v-for="(measurement, index) in measurements"
+            v-for="(measurement, index) in filteredMeasurements"
             :key="index"
           >
-            <div class="col-md-2 border">{{ index + 1 }}</div>
+            <div class="col-md-1 border">{{ index + 1 }}</div>
             <div class="col-md-4 border">
               {{ measurement.tags.muid }}
             </div>
-            <div class="col-md-4 border">
+            <div class="col-md-3 border">
               {{ formatDate(measurement.timestamp) }}
+            </div>
+            <div class="col-md-2 border">
+              {{ measurement.measurement }}
             </div>
             <div class="col-md-2 border">
               {{ formatNumber(measurement["0100100700FF"]) }}
@@ -45,16 +99,21 @@ import { defineComponent } from "vue";
 import MeasurementDataService from "@/services/MeasurementDataService";
 import Measurement from "@/types/Measurement";
 import TimeSeriesChart from "./TimeSeriesChart.vue";
+import Datepicker from "vue3-date-time-picker";
+import "vue3-date-time-picker/dist/main.css";
 
 export default defineComponent({
   name: "Measurements",
 
-  components: { TimeSeriesChart },
+  components: { Datepicker, TimeSeriesChart },
 
   data() {
     return {
       loading: false,
+      timestampFromFilter: null,
+      timestampToFilter: null,
       measurements: [] as Measurement[],
+      filteredMeasurements: [] as Measurement[],
       chartLabels: [] as string[],
       chartDataSets: [] as { label: string; data: number[] }[],
     };
@@ -65,17 +124,9 @@ export default defineComponent({
       this.loading = true;
       MeasurementDataService.getAll()
         .then((measurements: Measurement[]) => {
-          //console.log(measurements);
           this.measurements = measurements;
-          this.chartLabels = measurements.map((m) =>
-            this.formatDate(m.timestamp)
-          );
-          this.chartDataSets = [
-            {
-              label: "Power (W)",
-              data: measurements.map((m) => m["0100100700FF"]),
-            },
-          ];
+          this.filteredMeasurements = measurements;
+          this.refreshChartData();
         })
         .catch((e: Error) => {
           console.log(e);
@@ -83,8 +134,56 @@ export default defineComponent({
         .finally(() => (this.loading = false));
     },
 
-    refreshList() {
-      this.retrieveMeasurements();
+    refreshChartData() {
+      this.chartLabels = this.filteredMeasurements.map((m) =>
+        this.formatDate(m.timestamp)
+      );
+      this.chartDataSets = [
+        {
+          label: "Instantaneous Power Value (W)",
+          data: this.filteredMeasurements.map((m) => m["0100100700FF"]),
+        },
+      ];
+    },
+
+    applyFilters() {
+      const timestampFromFilter = this.timestampFromFilter as Date | null;
+      let timestampFromDate: Date | null;
+      const timestampToFilter = this.timestampToFilter as Date | null;
+      let timestampToDate: Date | null;
+
+      if (timestampFromFilter) {
+        timestampFromDate = new Date(
+          Date.UTC(
+            timestampFromFilter.getFullYear(),
+            timestampFromFilter.getMonth(),
+            timestampFromFilter.getDate(),
+            0,
+            0,
+            0
+          )
+        );
+      }
+
+      if (timestampToFilter) {
+        timestampToDate = new Date(
+          Date.UTC(
+            timestampToFilter.getFullYear(),
+            timestampToFilter.getMonth(),
+            timestampToFilter.getDate(),
+            23,
+            59,
+            59
+          )
+        );
+      }
+
+      this.filteredMeasurements = this.measurements.filter(
+        (m) =>
+          (!timestampFromDate || new Date(m.timestamp) >= timestampFromDate) &&
+          (!timestampToDate || new Date(m.timestamp) <= timestampToDate)
+      );
+      this.refreshChartData();
     },
 
     formatDate(value: string) {
@@ -93,6 +192,14 @@ export default defineComponent({
 
     formatNumber(value: number) {
       return value.toFixed(2);
+    },
+
+    formatTimestampFilter(date: Date) {
+      const day = date.getDate();
+      const month = date.getMonth() + 1;
+      const year = date.getFullYear();
+
+      return `${day}/${month}/${year}`;
     },
   },
 

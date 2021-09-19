@@ -10,7 +10,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/measurements",
     name: "measurements",
-    component: () => import("./components/MeasurementsList.vue"),
+    component: () => import("./components/Measurements.vue"),
   },
 ];
 

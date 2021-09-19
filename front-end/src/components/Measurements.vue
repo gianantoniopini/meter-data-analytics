@@ -47,7 +47,7 @@ import Measurement from "@/types/Measurement";
 import TimeSeriesChart from "./TimeSeriesChart.vue";
 
 export default defineComponent({
-  name: "MeasurementsList",
+  name: "Measurements",
 
   components: { TimeSeriesChart },
 

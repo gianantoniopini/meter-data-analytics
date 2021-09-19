@@ -32,7 +32,7 @@
                 placeholder="Select Date"
               ></Datepicker>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-8 align-self-end">
               <button
                 v-on:click="applyFilters"
                 type="submit"
@@ -194,7 +194,11 @@ export default defineComponent({
       return value.toFixed(2);
     },
 
-    formatTimestampFilter(date: Date) {
+    formatTimestampFilter(date: Date | null) {
+      if (!date) {
+        return "";
+      }
+
       const day = date.getDate();
       const month = date.getMonth() + 1;
       const year = date.getFullYear();

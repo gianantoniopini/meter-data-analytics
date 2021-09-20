@@ -23,38 +23,17 @@
             "
           >
             <li class="nav-item">
-              <a
-                href="#filters"
-                class="nav-link py-3 px-2"
-                title="Filters"
-                data-bs-toggle="tooltip"
-                data-bs-placement="right"
-                data-bs-original-title="Filters"
-              >
+              <a href="#filters" class="nav-link py-3 px-2">
                 <i>Filters</i>
               </a>
             </li>
             <li>
-              <a
-                href="#graph"
-                class="nav-link py-3 px-2"
-                title="Graph"
-                data-bs-toggle="tooltip"
-                data-bs-placement="right"
-                data-bs-original-title="Graph"
-              >
+              <a href="#graph" class="nav-link py-3 px-2">
                 <i>Graph</i>
               </a>
             </li>
             <li>
-              <a
-                href="#table"
-                class="nav-link py-3 px-2"
-                title="Table"
-                data-bs-toggle="tooltip"
-                data-bs-placement="right"
-                data-bs-original-title="Table"
-              >
+              <a href="#table" class="nav-link py-3 px-2">
                 <i>Table</i>
               </a>
             </li>
@@ -69,7 +48,7 @@
           </div>
         </div>
         <div v-else>
-          <div class="row pb-4" id="filters">
+          <div class="row pb-3" id="filters">
             <div class="col-md-12">
               <h4>Filters</h4>
               <div class="row">
@@ -107,7 +86,7 @@
               </div>
             </div>
           </div>
-          <div class="row pb-4" id="graph">
+          <div class="row pb-3" id="graph">
             <div class="col-md-12">
               <h4>Graph</h4>
               <div class="row">

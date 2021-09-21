@@ -18,8 +18,8 @@
               flex-sm-column flex-row flex-nowrap
               mb-auto
               mx-auto
-              text-center
-              align-items-center
+              text-left
+              align-items-left
             "
           >
             <li class="nav-item">
@@ -96,7 +96,7 @@
               <h4>Time Series</h4>
               <div class="row">
                 <div class="col-md-12">
-                  <TimeSeriesChart
+                  <BasicLineChart
                     :labels="timeSeriesChartLabels"
                     :datasets="timeSeriesChartDataSets"
                   />
@@ -109,7 +109,7 @@
               <h4>Analytics</h4>
               <div class="row pb-4">
                 <div class="col-md-12">
-                  <TimeSeriesChart
+                  <BasicLineChart
                     :labels="averagePowerByWeekdayChartLabels"
                     :datasets="averagePowerByWeekdayChartDataSets"
                     title="Power by Day of the Week"
@@ -118,7 +118,7 @@
               </div>
               <div class="row">
                 <div class="col-md-12">
-                  <TimeSeriesChart
+                  <BasicLineChart
                     :labels="averagePowerByHourChartLabels"
                     :datasets="averagePowerByHourChartDataSets"
                     title="Power by Hour of the Day"
@@ -171,13 +171,13 @@ import { defineComponent } from "vue";
 import MeasurementDataService from "@/services/MeasurementDataService";
 import MeasurementAnalyticsService from "@/services/MeasurementAnalyticsService";
 import Measurement from "@/types/Measurement";
-import TimeSeriesChart from "./TimeSeriesChart.vue";
+import BasicLineChart from "./BasicLineChart.vue";
 import Datepicker from "vue3-date-time-picker";
 
 export default defineComponent({
   name: "Measurements",
 
-  components: { Datepicker, TimeSeriesChart },
+  components: { Datepicker, BasicLineChart },
 
   data() {
     return {

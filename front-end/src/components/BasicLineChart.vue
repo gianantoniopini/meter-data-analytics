@@ -12,7 +12,7 @@ import { Chart, ChartData, ChartOptions, registerables } from "chart.js";
 Chart.register(...registerables);
 
 export default defineComponent({
-  name: "TimeSeriesChart",
+  name: "BasicLineChart",
 
   components: { LineChart },
 

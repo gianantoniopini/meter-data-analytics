@@ -33,6 +33,11 @@
               </a>
             </li>
             <li>
+              <a href="#analytics" class="nav-link py-3 px-2">
+                <i>Analytics</i>
+              </a>
+            </li>
+            <li>
               <a href="#table" class="nav-link py-3 px-2">
                 <i>Table</i>
               </a>
@@ -92,8 +97,21 @@
               <div class="row">
                 <div class="col-md-12">
                   <TimeSeriesChart
-                    :labels="chartLabels"
-                    :datasets="chartDataSets"
+                    :labels="measurementsChartLabels"
+                    :datasets="measurementsChartDataSets"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row pb-3" id="analytics">
+            <div class="col-md-12">
+              <h4>Analytics</h4>
+              <div class="row">
+                <div class="col-md-12">
+                  <TimeSeriesChart
+                    :labels="averagePowerByWeekdayChartLabels"
+                    :datasets="averagePowerByWeekdayChartDataSets"
                   />
                 </div>
               </div>
@@ -141,6 +159,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import MeasurementDataService from "@/services/MeasurementDataService";
+import MeasurementAnalyticsService from "@/services/MeasurementAnalyticsService";
 import Measurement from "@/types/Measurement";
 import TimeSeriesChart from "./TimeSeriesChart.vue";
 import Datepicker from "vue3-date-time-picker";
@@ -157,8 +176,13 @@ export default defineComponent({
       timestampToFilter: null,
       measurements: [] as Measurement[],
       filteredMeasurements: [] as Measurement[],
-      chartLabels: [] as string[],
-      chartDataSets: [] as { label: string; data: number[] }[],
+      measurementsChartLabels: [] as string[],
+      measurementsChartDataSets: [] as { label: string; data: number[] }[],
+      averagePowerByWeekdayChartLabels: [] as string[],
+      averagePowerByWeekdayChartDataSets: [] as {
+        label: string;
+        data: number[];
+      }[],
     };
   },
 
@@ -169,7 +193,7 @@ export default defineComponent({
         .then((measurements: Measurement[]) => {
           this.measurements = measurements;
           this.filteredMeasurements = measurements;
-          this.refreshChartData();
+          this.refreshChartsData();
         })
         .catch((e: Error) => {
           console.log(e);
@@ -177,14 +201,28 @@ export default defineComponent({
         .finally(() => (this.loading = false));
     },
 
-    refreshChartData() {
-      this.chartLabels = this.filteredMeasurements.map((m) =>
+    refreshChartsData() {
+      this.measurementsChartLabels = this.filteredMeasurements.map((m) =>
         this.formatDate(m.timestamp)
       );
-      this.chartDataSets = [
+      this.measurementsChartDataSets = [
         {
           label: "Instantaneous Power Value (W)",
           data: this.filteredMeasurements.map((m) => m["0100100700FF"]),
+        },
+      ];
+
+      const averagePowerByWeekday =
+        MeasurementAnalyticsService.calculateAveragePowerByWeekday(
+          this.filteredMeasurements
+        );
+      this.averagePowerByWeekdayChartLabels = averagePowerByWeekday.map(
+        (apbw) => this.getIsoWeekdayAsString(apbw.isoWeekday)
+      );
+      this.averagePowerByWeekdayChartDataSets = [
+        {
+          label: "Average Power Value (W)",
+          data: averagePowerByWeekday.map((apbw) => apbw.averagePower),
         },
       ];
     },
@@ -226,7 +264,7 @@ export default defineComponent({
           (!timestampFromDate || new Date(m.timestamp) >= timestampFromDate) &&
           (!timestampToDate || new Date(m.timestamp) <= timestampToDate)
       );
-      this.refreshChartData();
+      this.refreshChartsData();
     },
 
     formatDate(value: string) {
@@ -247,6 +285,19 @@ export default defineComponent({
       const year = date.getFullYear();
 
       return `${day}/${month}/${year}`;
+    },
+
+    getIsoWeekdayAsString(isoWeekday: number): string {
+      const isoWeekdays = new Array(7);
+      isoWeekdays[0] = "Monday";
+      isoWeekdays[1] = "Tuesday";
+      isoWeekdays[2] = "Wednesday";
+      isoWeekdays[3] = "Thursday";
+      isoWeekdays[4] = "Friday";
+      isoWeekdays[5] = "Saturday";
+      isoWeekdays[6] = "Sunday";
+
+      return isoWeekdays[isoWeekday - 1];
     },
   },
 

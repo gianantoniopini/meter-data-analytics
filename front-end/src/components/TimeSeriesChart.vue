@@ -26,6 +26,11 @@ export default defineComponent({
       type: Object as PropType<{ label: string; data: number[] }[]>,
       required: true,
     },
+
+    title: {
+      type: String,
+      required: false,
+    },
   },
 
   data(props) {
@@ -37,6 +42,10 @@ export default defineComponent({
         plugins: {
           legend: {
             position: "top",
+          },
+          title: {
+            display: props.title !== undefined,
+            text: props.title,
           },
         },
       }),

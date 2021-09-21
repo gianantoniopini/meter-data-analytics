@@ -28,8 +28,8 @@
               </a>
             </li>
             <li>
-              <a href="#graph" class="nav-link py-3 px-2">
-                <i>Graph</i>
+              <a href="#timeSeries" class="nav-link py-3 px-2">
+                <i>Time Series</i>
               </a>
             </li>
             <li>
@@ -38,8 +38,8 @@
               </a>
             </li>
             <li>
-              <a href="#table" class="nav-link py-3 px-2">
-                <i>Table</i>
+              <a href="#rawData" class="nav-link py-3 px-2">
+                <i>Raw Data</i>
               </a>
             </li>
           </ul>
@@ -91,14 +91,14 @@
               </div>
             </div>
           </div>
-          <div class="row pb-3" id="graph">
+          <div class="row pb-3" id="timeSeries">
             <div class="col-md-12">
-              <h4>Graph</h4>
+              <h4>Time Series</h4>
               <div class="row">
                 <div class="col-md-12">
                   <TimeSeriesChart
-                    :labels="measurementsChartLabels"
-                    :datasets="measurementsChartDataSets"
+                    :labels="timeSeriesChartLabels"
+                    :datasets="timeSeriesChartDataSets"
                   />
                 </div>
               </div>
@@ -112,14 +112,15 @@
                   <TimeSeriesChart
                     :labels="averagePowerByWeekdayChartLabels"
                     :datasets="averagePowerByWeekdayChartDataSets"
+                    title="Power by Day of the Week"
                   />
                 </div>
               </div>
             </div>
           </div>
-          <div class="row" id="table">
+          <div class="row" id="rawData">
             <div class="col-md-12">
-              <h4>Table - {{ filteredMeasurements.length }} Items</h4>
+              <h4>Raw Data - {{ filteredMeasurements.length }} Items</h4>
               <div class="row">
                 <div class="col-md-1 border border-dark">Item Number</div>
                 <div class="col-md-4 border border-dark">Smart Meter Id</div>
@@ -176,8 +177,8 @@ export default defineComponent({
       timestampToFilter: null,
       measurements: [] as Measurement[],
       filteredMeasurements: [] as Measurement[],
-      measurementsChartLabels: [] as string[],
-      measurementsChartDataSets: [] as { label: string; data: number[] }[],
+      timeSeriesChartLabels: [] as string[],
+      timeSeriesChartDataSets: [] as { label: string; data: number[] }[],
       averagePowerByWeekdayChartLabels: [] as string[],
       averagePowerByWeekdayChartDataSets: [] as {
         label: string;
@@ -202,10 +203,10 @@ export default defineComponent({
     },
 
     refreshChartsData() {
-      this.measurementsChartLabels = this.filteredMeasurements.map((m) =>
+      this.timeSeriesChartLabels = this.filteredMeasurements.map((m) =>
         this.formatDate(m.timestamp)
       );
-      this.measurementsChartDataSets = [
+      this.timeSeriesChartDataSets = [
         {
           label: "Instantaneous Power Value (W)",
           data: this.filteredMeasurements.map((m) => m["0100100700FF"]),

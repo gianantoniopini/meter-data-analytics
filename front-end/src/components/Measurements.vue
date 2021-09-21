@@ -57,6 +57,17 @@
             <div class="col-md-12">
               <h4>Filters</h4>
               <div class="row">
+                <div class="col-md-4">
+                  <label for="smartMeterIdFilter">Smart Meter Id:</label>
+                  <input
+                    id="smartMeterIdFilter"
+                    v-model="smartMeterIdFilter"
+                    placeholder="Enter Smart Meter Id"
+                    type="text"
+                    class="form-control"
+                    readonly="true"
+                  />
+                </div>
                 <div class="col-md-3">
                   <label for="timestampFromFilter">Timestamp From:</label>
                   <Datepicker
@@ -79,7 +90,7 @@
                     placeholder="Select Date"
                   ></Datepicker>
                 </div>
-                <div class="col-md-6 align-self-end">
+                <div class="col-md-2 align-self-end">
                   <button
                     v-on:click="applyFilters"
                     type="submit"
@@ -182,6 +193,7 @@ export default defineComponent({
   data() {
     return {
       loading: false,
+      smartMeterIdFilter: process.env.VUE_APP_DEFAULT_SMART_METER_ID as string,
       timestampFromFilter: null,
       timestampToFilter: null,
       measurements: [] as Measurement[],
@@ -204,7 +216,7 @@ export default defineComponent({
   methods: {
     retrieveMeasurements() {
       this.loading = true;
-      MeasurementDataService.getAll()
+      MeasurementDataService.getMeasurements(this.smartMeterIdFilter)
         .then((measurements: Measurement[]) => {
           this.measurements = measurements;
           this.filteredMeasurements = measurements;

@@ -77,11 +77,15 @@ export const importMeasurements = async (
   });
 };
 
-export const getAllMeasurements = async (
+export const getMeasurements = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const measurements = await MeasurementModel.find();
+  const muid = req.query.muid as string | undefined;
+  const condition = muid ? { tags: { muid: muid } } : {};
+
+  const measurements = await MeasurementModel.find(condition);
+
   res.status(200).json({
     status: res.statusCode,
     data: measurements

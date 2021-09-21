@@ -3,10 +3,13 @@ import ResponseBody from "@/types/ResponseBody";
 import Measurement from "@/types/Measurement";
 
 class MeasurementDataService {
-  async getAll(): Promise<Measurement[]> {
-    const { data: responseBody } = await http.get<ResponseBody>(
-      "/measurements"
-    );
+  async getMeasurements(
+    smartMeterId: string | undefined
+  ): Promise<Measurement[]> {
+    const path = "/measurements";
+    const url = smartMeterId ? `${path}?muid=${smartMeterId}` : path;
+
+    const { data: responseBody } = await http.get<ResponseBody>(url);
 
     const sortedMeasurements = responseBody.data.sort(
       (m1: Measurement, m2: Measurement) => {

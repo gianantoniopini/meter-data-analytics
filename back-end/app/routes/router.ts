@@ -3,9 +3,9 @@ export const router = express.Router();
 import {
   getMeasurementsFromExternalApi,
   importMeasurements,
-  getAllMeasurements
+  getMeasurements
 } from '../controllers/measurementController';
 
 router.get('/api/measurements/external', getMeasurementsFromExternalApi);
 router.post('/api/measurements/import', importMeasurements);
-router.get('/api/measurements', getAllMeasurements);
+router.get('/api/measurements', getMeasurements);

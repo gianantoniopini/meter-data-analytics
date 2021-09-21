@@ -46,6 +46,7 @@ export default defineComponent({
           title: {
             display: props.title !== undefined,
             text: props.title,
+            position: "top",
           },
         },
       }),

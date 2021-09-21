@@ -107,12 +107,21 @@
           <div class="row pb-3" id="analytics">
             <div class="col-md-12">
               <h4>Analytics</h4>
-              <div class="row">
+              <div class="row pb-4">
                 <div class="col-md-12">
                   <TimeSeriesChart
                     :labels="averagePowerByWeekdayChartLabels"
                     :datasets="averagePowerByWeekdayChartDataSets"
                     title="Power by Day of the Week"
+                  />
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <TimeSeriesChart
+                    :labels="averagePowerByHourChartLabels"
+                    :datasets="averagePowerByHourChartDataSets"
+                    title="Power by Hour of the Day"
                   />
                 </div>
               </div>
@@ -184,6 +193,11 @@ export default defineComponent({
         label: string;
         data: number[];
       }[],
+      averagePowerByHourChartLabels: [] as string[],
+      averagePowerByHourChartDataSets: [] as {
+        label: string;
+        data: number[];
+      }[],
     };
   },
 
@@ -224,6 +238,20 @@ export default defineComponent({
         {
           label: "Average Power Value (W)",
           data: averagePowerByWeekday.map((apbw) => apbw.averagePower),
+        },
+      ];
+
+      const averagePowerByHour =
+        MeasurementAnalyticsService.calculateAveragePowerByHour(
+          this.filteredMeasurements
+        );
+      this.averagePowerByHourChartLabels = averagePowerByHour.map((apbh) =>
+        apbh.hour.toString()
+      );
+      this.averagePowerByHourChartDataSets = [
+        {
+          label: "Average Power Value (W)",
+          data: averagePowerByHour.map((apbh) => apbh.averagePower),
         },
       ];
     },

@@ -29,6 +29,13 @@ const aggregation = [
 ];
 db.measurements.aggregate(aggregation).sort({"_id.month":1, "_id.hour":1}).toArray();
 
+// Group by hour
+const aggregation = [
+  { $group: { _id: { hour: { $hour: "$timestamp" } }, 'Sum_0100100700FF': { $sum: '$0100100700FF' },
+  'Avg_0100100700FF': { $avg: '$0100100700FF' } } }
+];
+db.measurements.aggregate(aggregation).sort({"_id.hour":1}).toArray();
+
 // Group by day of the week
 const aggregation = [
   { $group: { _id: { dayOfWeek: { $isoDayOfWeek: "$timestamp" } }, 'Count': { $count: {} }, 'Sum_0100100700FF': { $sum: '$0100100700FF' },

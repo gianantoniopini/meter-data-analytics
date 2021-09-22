@@ -82,9 +82,28 @@ export const getMeasurements = async (
   res: Response
 ): Promise<void> => {
   const muid = req.query.muid as string | undefined;
-  const condition = muid ? { tags: { muid: muid } } : {};
+  const start = req.query.start as string | undefined;
+  const stop = req.query.stop as string | undefined;
+  const limit = req.query.limit as string | undefined;
 
-  const measurements = await MeasurementModel.find(condition);
+  const conditions = [];
+  if (muid) {
+    conditions.push({ tags: { muid: muid } });
+  }
+  if (start) {
+    conditions.push({ timestamp: { $gte: new Date(start) } });
+  }
+  if (stop) {
+    conditions.push({ timestamp: { $lte: new Date(stop) } });
+  }
+
+  const andConditons = conditions.length ? { $and: conditions } : {};
+
+  const limitAsNumber = limit ? parseInt(limit) : 1;
+
+  const measurements = await MeasurementModel.find(andConditons).limit(
+    limitAsNumber
+  );
 
   res.status(200).json({
     status: res.statusCode,

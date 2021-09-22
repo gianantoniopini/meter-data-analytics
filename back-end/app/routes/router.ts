@@ -4,8 +4,8 @@ import {
   getMeasurementsFromExternalApi,
   importMeasurements,
   getMeasurements
-} from '../controllers/measurementController';
+} from '../controllers/meterDataController';
 
-router.get('/api/measurements/external', getMeasurementsFromExternalApi);
-router.post('/api/measurements/import', importMeasurements);
-router.get('/api/measurements', getMeasurements);
+router.get('/meterdata/measurement/external', getMeasurementsFromExternalApi);
+router.post('/meterdata/measurement/import', importMeasurements);
+router.get('/meterdata/measurement', getMeasurements);

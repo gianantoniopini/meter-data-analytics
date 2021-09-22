@@ -140,7 +140,7 @@
           </div>
           <div class="row" id="rawData">
             <div class="col-md-12">
-              <h4>Raw Data - {{ filteredMeasurements.length }} Items</h4>
+              <h4>Raw Data - {{ measurements.length }} Items</h4>
               <div class="row">
                 <div class="col-md-1 border border-dark">Item Number</div>
                 <div class="col-md-4 border border-dark">Smart Meter Id</div>
@@ -152,7 +152,7 @@
               </div>
               <div
                 class="row"
-                v-for="(measurement, index) in filteredMeasurements"
+                v-for="(measurement, index) in measurements"
                 :key="index"
               >
                 <div class="col-md-1 border">{{ index + 1 }}</div>
@@ -179,14 +179,14 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import MeasurementDataService from "@/services/MeasurementDataService";
+import MeterDataService from "@/services/MeterDataService";
 import MeasurementAnalyticsService from "@/services/MeasurementAnalyticsService";
 import Measurement from "@/types/Measurement";
 import BasicLineChart from "./BasicLineChart.vue";
 import Datepicker from "vue3-date-time-picker";
 
 export default defineComponent({
-  name: "Measurements",
+  name: "MeterData",
 
   components: { Datepicker, BasicLineChart },
 
@@ -197,7 +197,6 @@ export default defineComponent({
       timestampFromFilter: null,
       timestampToFilter: null,
       measurements: [] as Measurement[],
-      filteredMeasurements: [] as Measurement[],
       timeSeriesChartLabels: [] as string[],
       timeSeriesChartDataSets: [] as { label: string; data: number[] }[],
       averagePowerByWeekdayChartLabels: [] as string[],
@@ -214,12 +213,15 @@ export default defineComponent({
   },
 
   methods: {
-    retrieveMeasurements() {
+    retrieveMeasurements(
+      smartMeterId: string,
+      timestampFrom: string | null,
+      timestampTo: string | null
+    ) {
       this.loading = true;
-      MeasurementDataService.getMeasurements(this.smartMeterIdFilter)
+      MeterDataService.getMeasurements(smartMeterId, timestampFrom, timestampTo)
         .then((measurements: Measurement[]) => {
           this.measurements = measurements;
-          this.filteredMeasurements = measurements;
           this.refreshChartsData();
         })
         .catch((e: Error) => {
@@ -229,19 +231,19 @@ export default defineComponent({
     },
 
     refreshChartsData() {
-      this.timeSeriesChartLabels = this.filteredMeasurements.map((m) =>
+      this.timeSeriesChartLabels = this.measurements.map((m) =>
         this.formatDate(m.timestamp)
       );
       this.timeSeriesChartDataSets = [
         {
           label: "Instantaneous Power Value (W)",
-          data: this.filteredMeasurements.map((m) => m["0100100700FF"]),
+          data: this.measurements.map((m) => m["0100100700FF"]),
         },
       ];
 
       const averagePowerByWeekday =
         MeasurementAnalyticsService.calculateAveragePowerByWeekday(
-          this.filteredMeasurements
+          this.measurements
         );
       this.averagePowerByWeekdayChartLabels = averagePowerByWeekday.map(
         (apbw) => this.getIsoWeekdayAsString(apbw.isoWeekday)
@@ -255,7 +257,7 @@ export default defineComponent({
 
       const averagePowerByHour =
         MeasurementAnalyticsService.calculateAveragePowerByHour(
-          this.filteredMeasurements
+          this.measurements
         );
       this.averagePowerByHourChartLabels = averagePowerByHour.map((apbh) =>
         apbh.hour.toString()
@@ -270,9 +272,9 @@ export default defineComponent({
 
     applyFilters() {
       const timestampFromFilter = this.timestampFromFilter as Date | null;
-      let timestampFromDate: Date | null;
+      let timestampFromDate: Date | null = null;
       const timestampToFilter = this.timestampToFilter as Date | null;
-      let timestampToDate: Date | null;
+      let timestampToDate: Date | null = null;
 
       if (timestampFromFilter) {
         timestampFromDate = new Date(
@@ -300,12 +302,11 @@ export default defineComponent({
         );
       }
 
-      this.filteredMeasurements = this.measurements.filter(
-        (m) =>
-          (!timestampFromDate || new Date(m.timestamp) >= timestampFromDate) &&
-          (!timestampToDate || new Date(m.timestamp) <= timestampToDate)
+      this.retrieveMeasurements(
+        this.smartMeterIdFilter,
+        timestampFromDate ? timestampFromDate.toISOString() : null,
+        timestampToDate ? timestampToDate.toISOString() : null
       );
-      this.refreshChartsData();
     },
 
     formatDate(value: string) {
@@ -343,7 +344,7 @@ export default defineComponent({
   },
 
   mounted() {
-    this.retrieveMeasurements();
+    this.applyFilters();
   },
 });
 </script>

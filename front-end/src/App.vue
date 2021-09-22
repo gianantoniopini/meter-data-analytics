@@ -6,8 +6,8 @@
       >
       <div class="navbar-nav mr-auto">
         <li class="nav-item">
-          <router-link :to="{ name: 'measurements' }" class="nav-link"
-            >Measurements</router-link
+          <router-link :to="{ name: 'meterData' }" class="nav-link"
+            >Meter Data</router-link
           >
         </li>
       </div>

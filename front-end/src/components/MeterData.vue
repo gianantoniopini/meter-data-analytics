@@ -56,20 +56,33 @@
           <div class="row pb-3" id="filters">
             <div class="col-md-12">
               <h4>Filters</h4>
-              <div class="row">
-                <div class="col-md-4">
-                  <label for="smartMeterIdFilter">Smart Meter Id:</label>
+              <form @submit.prevent="onSubmit" class="row form">
+                <div
+                  class="form-group col-md-4"
+                  :class="{ error: v$.smartMeterIdFilter.$errors.length }"
+                >
+                  <label for="smartMeterIdFilter" class="form-label"
+                    >Smart Meter Id:</label
+                  >
                   <input
                     id="smartMeterIdFilter"
-                    v-model="smartMeterIdFilter"
+                    v-model="v$.smartMeterIdFilter.$model"
                     placeholder="Enter Smart Meter Id"
                     type="text"
                     class="form-control"
-                    readonly="true"
                   />
+                  <div
+                    class="input-errors"
+                    v-for="(error, index) of v$.smartMeterIdFilter.$errors"
+                    :key="index"
+                  >
+                    <div class="error-msg">{{ error.$message }}</div>
+                  </div>
                 </div>
-                <div class="col-md-3">
-                  <label for="timestampFromFilter">Timestamp From:</label>
+                <div class="form-group col-md-3">
+                  <label for="timestampFromFilter" class="form-label"
+                    >Timestamp From:</label
+                  >
                   <Datepicker
                     id="timestampFromFilter"
                     v-model="timestampFromFilter"
@@ -79,8 +92,10 @@
                     placeholder="Select Date"
                   ></Datepicker>
                 </div>
-                <div class="col-md-3">
-                  <label for="timestampToFilter">Timestamp To:</label>
+                <div class="form-group col-md-3">
+                  <label for="timestampToFilter" class="form-label"
+                    >Timestamp To:</label
+                  >
                   <Datepicker
                     id="timestampToFilter"
                     v-model="timestampToFilter"
@@ -92,14 +107,15 @@
                 </div>
                 <div class="col-md-2 align-self-end">
                   <button
+                    :disabled="v$.$invalid"
                     v-on:click="applyFilters"
-                    type="submit"
+                    type="button"
                     class="btn btn-primary"
                   >
                     Apply
                   </button>
                 </div>
-              </div>
+              </form>
             </div>
           </div>
           <div class="row pb-3" id="timeSeries">
@@ -184,11 +200,17 @@ import MeasurementAnalyticsService from "@/services/MeasurementAnalyticsService"
 import Measurement from "@/types/Measurement";
 import BasicLineChart from "./BasicLineChart.vue";
 import Datepicker from "vue3-date-time-picker";
+import useVuelidate from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
 
 export default defineComponent({
   name: "MeterData",
 
   components: { Datepicker, BasicLineChart },
+
+  setup() {
+    return { v$: useVuelidate() };
+  },
 
   data() {
     return {
@@ -209,6 +231,14 @@ export default defineComponent({
         label: string;
         data: number[];
       }[],
+    };
+  },
+
+  validations() {
+    return {
+      smartMeterIdFilter: {
+        required,
+      },
     };
   },
 

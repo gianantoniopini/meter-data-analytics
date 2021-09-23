@@ -126,6 +126,7 @@
                   <BasicLineChart
                     :labels="timeSeriesChartLabels"
                     :datasets="timeSeriesChartDataSets"
+                    title="Instantaneous Power"
                   />
                 </div>
               </div>
@@ -156,14 +157,23 @@
           </div>
           <div class="row" id="rawData">
             <div class="col-md-12">
-              <h4>Raw Data - {{ measurements.length }} Items</h4>
+              <h4>Raw Data - {{ measurements.length }} Measurements</h4>
               <div class="row">
-                <div class="col-md-1 border border-dark">Item Number</div>
-                <div class="col-md-4 border border-dark">Smart Meter Id</div>
-                <div class="col-md-3 border border-dark">Timestamp</div>
-                <div class="col-md-2 border border-dark">Measurement</div>
-                <div class="col-md-2 border border-dark">
-                  Instantaneous Value (W)
+                <div class="col-md-3 border border-dark text-start">
+                  Smart Meter Id
+                </div>
+                <div class="col-md-2 border border-dark text-end">
+                  Timestamp
+                </div>
+                <div class="col-md-1 border border-dark text-start">Meas.</div>
+                <div class="col-md-2 border border-dark text-end">
+                  0100010700FF
+                </div>
+                <div class="col-md-2 border border-dark text-end">
+                  0100020700FF
+                </div>
+                <div class="col-md-2 border border-dark text-end">
+                  0100100700FF
                 </div>
               </div>
               <div
@@ -171,17 +181,22 @@
                 v-for="(measurement, index) in measurements"
                 :key="index"
               >
-                <div class="col-md-1 border">{{ index + 1 }}</div>
-                <div class="col-md-4 border">
+                <div class="col-md-3 border text-start">
                   {{ measurement.tags.muid }}
                 </div>
-                <div class="col-md-3 border">
+                <div class="col-md-2 border text-end">
                   {{ formatDate(measurement.timestamp) }}
                 </div>
-                <div class="col-md-2 border">
+                <div class="col-md-1 border text-start">
                   {{ measurement.measurement }}
                 </div>
-                <div class="col-md-2 border">
+                <div class="col-md-2 border text-end">
+                  {{ formatNumber(measurement["0100010700FF"]) }}
+                </div>
+                <div class="col-md-2 border text-end">
+                  {{ formatNumber(measurement["0100020700FF"]) }}
+                </div>
+                <div class="col-md-2 border text-end">
                   {{ formatNumber(measurement["0100100700FF"]) }}
                 </div>
               </div>
@@ -198,7 +213,7 @@ import { defineComponent } from "vue";
 import MeterDataService from "@/services/MeterDataService";
 import MeasurementAnalyticsService from "@/services/MeasurementAnalyticsService";
 import Measurement from "@/types/Measurement";
-import BasicLineChart from "./BasicLineChart.vue";
+import BasicLineChart, { Dataset } from "./BasicLineChart.vue";
 import Datepicker from "vue3-date-time-picker";
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
@@ -220,17 +235,11 @@ export default defineComponent({
       timestampToFilter: null,
       measurements: [] as Measurement[],
       timeSeriesChartLabels: [] as string[],
-      timeSeriesChartDataSets: [] as { label: string; data: number[] }[],
+      timeSeriesChartDataSets: [] as Dataset[],
       averagePowerByWeekdayChartLabels: [] as string[],
-      averagePowerByWeekdayChartDataSets: [] as {
-        label: string;
-        data: number[];
-      }[],
+      averagePowerByWeekdayChartDataSets: [] as Dataset[],
       averagePowerByHourChartLabels: [] as string[],
-      averagePowerByHourChartDataSets: [] as {
-        label: string;
-        data: number[];
-      }[],
+      averagePowerByHourChartDataSets: [] as Dataset[],
     };
   },
 
@@ -266,8 +275,22 @@ export default defineComponent({
       );
       this.timeSeriesChartDataSets = [
         {
-          label: "Instantaneous Power Value (W)",
+          label: "0100010700FF (W)",
+          data: this.measurements.map((m) => m["0100010700FF"]),
+          backgroundColor: "rgba(255, 99, 132, 0.2)",
+          borderColor: "rgb(255, 99, 132)",
+        },
+        {
+          label: "0100020700FF (W)",
+          data: this.measurements.map((m) => m["0100020700FF"]),
+          backgroundColor: "rgba(255, 159, 64, 0.2)",
+          borderColor: "rgb(255, 159, 64)",
+        },
+        {
+          label: "0100100700FF (W)",
           data: this.measurements.map((m) => m["0100100700FF"]),
+          backgroundColor: "rgba(54, 162, 235, 0.2)",
+          borderColor: "rgb(54, 162, 235)",
         },
       ];
 
@@ -282,6 +305,8 @@ export default defineComponent({
         {
           label: "Average Power Value (W)",
           data: averagePowerByWeekday.map((apbw) => apbw.averagePower),
+          backgroundColor: "rgba(255, 99, 132, 0.2)",
+          borderColor: "rgb(255, 99, 132)",
         },
       ];
 
@@ -296,6 +321,8 @@ export default defineComponent({
         {
           label: "Average Power Value (W)",
           data: averagePowerByHour.map((apbh) => apbh.averagePower),
+          backgroundColor: "rgba(255, 159, 64, 0.2)",
+          borderColor: "rgb(255, 159, 64)",
         },
       ];
     },

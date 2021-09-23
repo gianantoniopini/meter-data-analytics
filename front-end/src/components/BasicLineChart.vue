@@ -11,6 +11,13 @@ import { Chart, ChartData, ChartOptions, registerables } from "chart.js";
 
 Chart.register(...registerables);
 
+export interface Dataset {
+  label: string;
+  data: number[];
+  backgroundColor: string;
+  borderColor: string;
+}
+
 export default defineComponent({
   name: "BasicLineChart",
 
@@ -23,7 +30,7 @@ export default defineComponent({
     },
 
     datasets: {
-      type: Object as PropType<{ label: string; data: number[] }[]>,
+      type: Object as PropType<Dataset[]>,
       required: true,
     },
 

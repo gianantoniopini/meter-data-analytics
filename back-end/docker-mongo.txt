@@ -12,3 +12,8 @@ docker container start mevn-stack-app_mongo-express
 
 -- Stop containers
 docker stop $(docker ps -a -q)
+
+-- Import json file into mongo
+docker cp measurements.json mevn-stack-app_mongo:/tmp/measurements.json
+docker exec mevn-stack-app_mongo mongoimport -d mevn-stack-app_db -c measurements --file /tmp/measurements.json
+docker exec mevn-stack-app_mongo rm -rf /tmp/measurements.json

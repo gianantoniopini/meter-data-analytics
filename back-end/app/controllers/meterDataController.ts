@@ -24,22 +24,29 @@ export const getMeasurementsFromExternalApi = async (
   res: Response,
   next: express.NextFunction
 ): Promise<void> => {
-  const { Measurements: measurements, error } =
-    await authenticateAndGetMeasurement(
-      req.query['muid'] as string,
-      req.query['start'] as string,
-      req.query['stop'] as string,
-      parseInt(req.query['limit'] as string)
-    );
-  if (error) {
-    next(new HttpException(500, error));
+  try {
+    const { Measurements: measurements, error } =
+      await authenticateAndGetMeasurement(
+        req.query['muid'] as string,
+        req.query['start'] as string,
+        req.query['stop'] as string,
+        parseInt(req.query['limit'] as string)
+      );
+    if (error) {
+      next(new HttpException(500, error));
+      return;
+    }
+
+    res.status(200).json({
+      status: res.statusCode,
+      data: measurements
+    });
+  } catch (e: unknown) {
+    const message =
+      e instanceof Error ? e.message : 'An unexpected error occurred';
+    next(new HttpException(500, message));
     return;
   }
-
-  res.status(200).json({
-    status: res.statusCode,
-    data: measurements
-  });
 };
 
 export const importMeasurements = async (
@@ -47,34 +54,41 @@ export const importMeasurements = async (
   res: Response,
   next: express.NextFunction
 ): Promise<void> => {
-  const { Measurements: measurementsFromExternalApi, error } =
-    await authenticateAndGetMeasurement(
-      req.body['muid'] as string,
-      req.body['start'] as string,
-      req.body['stop'] as string,
-      parseInt(req.body['limit'] as string)
+  try {
+    const { Measurements: measurementsFromExternalApi, error } =
+      await authenticateAndGetMeasurement(
+        req.body['muid'] as string,
+        req.body['start'] as string,
+        req.body['stop'] as string,
+        parseInt(req.body['limit'] as string)
+      );
+    if (error) {
+      next(new HttpException(500, error));
+      return;
+    }
+
+    if (!measurementsFromExternalApi) {
+      const error = 'Could not retrieve measurements from external api.';
+      next(new HttpException(500, error));
+      return;
+    }
+
+    const measurements = measurementsFromExternalApi.map((em) =>
+      mapExternalMeasurement(em)
     );
-  if (error) {
-    next(new HttpException(500, error));
+    await MeasurementModel.deleteMany();
+    const result = await MeasurementModel.collection.insertMany(measurements);
+
+    res.status(200).json({
+      status: res.statusCode,
+      message: `${result.insertedCount} measurements imported successfully!`
+    });
+  } catch (e: unknown) {
+    const message =
+      e instanceof Error ? e.message : 'An unexpected error occurred';
+    next(new HttpException(500, message));
     return;
   }
-
-  if (!measurementsFromExternalApi) {
-    const error = 'Could not retrieve measurements from external api.';
-    next(new HttpException(500, error));
-    return;
-  }
-
-  const measurements = measurementsFromExternalApi.map((em) =>
-    mapExternalMeasurement(em)
-  );
-  await MeasurementModel.deleteMany();
-  const result = await MeasurementModel.collection.insertMany(measurements);
-
-  res.status(200).json({
-    status: res.statusCode,
-    message: `${result.insertedCount} measurements imported successfully!`
-  });
 };
 
 export const getMeasurements = async (

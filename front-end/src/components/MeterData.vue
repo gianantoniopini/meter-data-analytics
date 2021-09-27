@@ -57,10 +57,7 @@
             <div class="col-md-12">
               <h4>Filters</h4>
               <form @submit.prevent="onSubmit" class="row form">
-                <div
-                  class="form-group col-md-4"
-                  :class="{ error: v$.smartMeterIdFilter.$errors.length }"
-                >
+                <div class="form-group col-md-4">
                   <label for="smartMeterIdFilter" class="form-label"
                     >Smart Meter Id:</label
                   >
@@ -70,14 +67,16 @@
                     placeholder="Enter Smart Meter Id"
                     type="text"
                     class="form-control"
+                    :class="{
+                      'is-invalid': v$.smartMeterIdFilter.$errors.length,
+                    }"
+                    data-toggle="tooltip"
+                    :title="
+                      v$.smartMeterIdFilter.$errors.length
+                        ? v$.smartMeterIdFilter.$errors[0].$message
+                        : null
+                    "
                   />
-                  <div
-                    class="input-errors"
-                    v-for="(error, index) of v$.smartMeterIdFilter.$errors"
-                    :key="index"
-                  >
-                    <div class="error-msg">{{ error.$message }}</div>
-                  </div>
                 </div>
                 <div class="form-group col-md-3">
                   <label for="timestampFromFilter" class="form-label"

@@ -2,6 +2,10 @@
 
 Repository for learning the MEVN (MongoDB, Express, Vue, Node.js) stack.
 
+The app visualizes smart meter measurements time-series data and provides simple analytics.
+
+The code is split in two parts: [back-end][back-end-url] and [front-end][front-end-url].
+
 ## Requirements
 
 * [Node.js v16.3.0][node-download-url]
@@ -19,3 +23,5 @@ Repository for learning the MEVN (MongoDB, Express, Vue, Node.js) stack.
 [mongodb-download-url]: https://www.mongodb.com/try/download/community
 [back-end-readme-url]: ./back-end/README.md
 [front-end-readme-url]: ./front-end/README.md
+[back-end-url]: ./back-end
+[front-end-url]: ./front-end

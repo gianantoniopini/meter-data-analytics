@@ -1,23 +1,23 @@
-# MEVN Stack App front-end
+# MEVN Stack App back-end
 
 ## Setup
 1. Install NPM packages
 ```sh
 npm install
 ```
-2. Create .env.local file
+2. Create .env file
 
 ### Compiles and hot-reloads for development
 ```sh
-npm run serve
+npm run start
 ```
 
-### Compiles and minifies for production
+### Compiles for production
 ```sh
 npm run build
 ```
 
-### Lints and fixes files
+### Lints
 ```sh
 npm run lint
 ```

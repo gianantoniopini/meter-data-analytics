@@ -82,27 +82,23 @@
                   <label for="timestampFromFilter" class="form-label"
                     >Timestamp From:</label
                   >
-                  <Datepicker
+                  <input
                     id="timestampFromFilter"
+                    class="form-control"
+                    type="date"
                     v-model="timestampFromFilter"
-                    :autoApply="true"
-                    :format="formatTimestampFilter"
-                    :enableTimePicker="false"
-                    placeholder="Select Date"
-                  ></Datepicker>
+                  />
                 </div>
                 <div class="form-group col-md-3">
                   <label for="timestampToFilter" class="form-label"
                     >Timestamp To:</label
                   >
-                  <Datepicker
+                  <input
                     id="timestampToFilter"
+                    class="form-control"
+                    type="date"
                     v-model="timestampToFilter"
-                    :autoApply="true"
-                    :format="formatTimestampFilter"
-                    :enableTimePicker="false"
-                    placeholder="Select Date"
-                  ></Datepicker>
+                  />
                 </div>
                 <div class="col-md-2 align-self-end">
                   <button
@@ -213,14 +209,13 @@ import MeterDataService from "@/services/MeterDataService";
 import MeasurementAnalyticsService from "@/services/MeasurementAnalyticsService";
 import Measurement from "@/types/Measurement";
 import BasicLineChart, { Dataset } from "./BasicLineChart.vue";
-import Datepicker from "vue3-date-time-picker";
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 
 export default defineComponent({
   name: "MeterData",
 
-  components: { Datepicker, BasicLineChart },
+  components: { BasicLineChart },
 
   setup() {
     return { v$: useVuelidate() };
@@ -327,17 +322,18 @@ export default defineComponent({
     },
 
     applyFilters() {
-      const timestampFromFilter = this.timestampFromFilter as Date | null;
+      const timestampFromFilter = this.timestampFromFilter as string | null;
       let timestampFromDate: Date | null = null;
-      const timestampToFilter = this.timestampToFilter as Date | null;
+      const timestampToFilter = this.timestampToFilter as string | null;
       let timestampToDate: Date | null = null;
 
       if (timestampFromFilter) {
+        // timestampFromFilter will be in format YYYY-MM-DD
         timestampFromDate = new Date(
           Date.UTC(
-            timestampFromFilter.getFullYear(),
-            timestampFromFilter.getMonth(),
-            timestampFromFilter.getDate(),
+            parseInt(timestampFromFilter.substr(0, 4)),
+            parseInt(timestampFromFilter.substr(5, 2)) - 1,
+            parseInt(timestampFromFilter.substr(8, 2)),
             0,
             0,
             0
@@ -346,11 +342,12 @@ export default defineComponent({
       }
 
       if (timestampToFilter) {
+        // timestampToFilter will be in format YYYY-MM-DD
         timestampToDate = new Date(
           Date.UTC(
-            timestampToFilter.getFullYear(),
-            timestampToFilter.getMonth(),
-            timestampToFilter.getDate(),
+            parseInt(timestampToFilter.substr(0, 4)),
+            parseInt(timestampToFilter.substr(5, 2)) - 1,
+            parseInt(timestampToFilter.substr(8, 2)),
             23,
             59,
             59
@@ -371,18 +368,6 @@ export default defineComponent({
 
     formatNumber(value: number) {
       return value.toFixed(2);
-    },
-
-    formatTimestampFilter(date: Date | null) {
-      if (!date) {
-        return "";
-      }
-
-      const day = date.getDate();
-      const month = date.getMonth() + 1;
-      const year = date.getFullYear();
-
-      return `${day}/${month}/${year}`;
     },
 
     getIsoWeekdayAsString(isoWeekday: number): string {

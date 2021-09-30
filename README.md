@@ -15,25 +15,25 @@ The [front-end][2] provides a single-page application to visualize the smart met
 
 ## Setup
 
-### 1. back-end
+### 1. back-end setup
 
-#### Switch into the back-end directory
+#### 1.1 Switch into the back-end directory
 
 ```sh
 cd back-end
 ```
 
-#### Install NPM packages {#back-end-install-npm-packages}
+#### 1.2 Install NPM packages
 
 ```sh
 npm install
 ```
 
-#### Create your `.env` file {#back-end-create-env-file}
+#### 1.3 Create your `.env` file
 
 See file [.env.example][6] for an example
 
-#### Import some measurements data into MongoDB
+#### 1.4 Import some measurements data into MongoDB
 
 File [measurements.json.example][7] contains some sample data and the following `mongoimport` command could be used to import it:
 
@@ -41,55 +41,55 @@ File [measurements.json.example][7] contains some sample data and the following 
 mongoimport --db=mevn-stack-app_db --collection=measurements --file=measurements.json.example
 ```
 
-#### Compiles and hot-reloads for development {#back-end-compile-for-development}
+#### 1.5 Compiles and hot-reloads for development
 
 ```sh
 npm run start
 ```
 
-#### Compiles for production
+#### 1.6 Compiles for production
 
 ```sh
 npm run build
 ```
 
-#### Lints
+#### 1.7 Lints
 
 ```sh
 npm run lint
 ```
 
-### 2. front-end
+### 2. front-end setup
 
-#### Switch into the front-end directory
+#### 2.1 Switch into the front-end directory
 
 ```sh
 cd front-end
 ```
 
-#### Install NPM packages {#front-end-install-npm-packages}
+#### 2.2 Install NPM packages
 
 ```sh
 npm install
 ```
 
-#### Create your `.env` file {#front-end-create-env-file}
+#### 2.3 Create your `.env` file
 
 See file [.env.example][8] for an example.
 
-#### Compiles and hot-reloads for development {#front-end-compile-for-development}
+#### 2.4 Compiles and hot-reloads for development
 
 ```sh
 npm run serve
 ```
 
-#### Compiles and minifies for production
+#### 2.5 Compiles and minifies for production
 
 ```sh
 npm run build
 ```
 
-#### Lints and fixes files
+#### 2.6 Lints and fixes files
 
 ```sh
 npm run lint

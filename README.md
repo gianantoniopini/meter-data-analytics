@@ -12,6 +12,7 @@ The [front-end][2] provides a single-page application to visualize the smart met
 - [Node.js v16.3.0][3]
 - [npm v7.15.1][4]
 - MongoDB v5.0 - [Download and install][5], or install with Docker
+- [http-server][9] (only required to start the production version of the front-end)
 
 ## Setup
 
@@ -53,7 +54,13 @@ npm run start
 npm run build
 ```
 
-#### 1.7 Lints
+#### 1.7 Starts production
+
+```sh
+npm run start:production
+```
+
+#### 1.8 Lints
 
 ```sh
 npm run lint
@@ -89,7 +96,13 @@ npm run serve
 npm run build
 ```
 
-#### 2.6 Lints and fixes files
+#### 2.6 Starts production
+
+```sh
+npm run serve:production
+```
+
+#### 2.7 Lints and fixes files
 
 ```sh
 npm run lint
@@ -105,3 +118,4 @@ npm run lint
 [6]: ./back-end/.env.example
 [7]: ./back-end/measurements.json.example
 [8]: ./front-end/.env.example
+[9]: https://www.npmjs.com/package/http-server

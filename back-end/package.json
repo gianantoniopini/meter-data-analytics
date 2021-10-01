@@ -5,10 +5,12 @@
   "description": "Node.js Restful API with Node.js, Express and MongoDB",
   "main": "app/server.ts",
   "scripts": {
-    "build": "tsc --project ./",
+    "clean": "rimraf build",
+    "build": "npm run clean && tsc --project ./",
     "lint": "eslint . --ext .ts",
     "prettier-format": "prettier --config .prettierrc 'app/**/*.ts' --write",
     "start": "nodemon app/server.ts",
+    "start:production": "ts-node build/app/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [

@@ -4,10 +4,10 @@
   "private": true,
   "description": "Vue app with TypeScript and Axios",
   "scripts": {
-    "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "production": "vue-cli-service serve --mode production"
+    "serve": "vue-cli-service serve",
+    "serve:production": "http-server ./dist -p 0"
   },
   "keywords": [
     "vue"

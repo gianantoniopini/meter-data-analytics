@@ -4,7 +4,8 @@ Repository for learning the MEVN stack (MongoDB, Express, Vue, Node.js).
 
 The app visualizes smart meter measurements time-series data and provides simple analytics.
 
-The [back-end][1] provides a REST API to retrieve the smart meter measurements data. It also provides an endpoint to import the data from an external API.  
+The [external-api][10] simulates an external REST API providing smart meter measurements data.  
+The [back-end][1] provides a REST API to retrieve the smart meter measurements data. It also provides an endpoint to import the data from the external-api.  
 The [front-end][2] provides a single-page application to visualize the smart meter measurements data. It also provides simple analytics with graphs showing the data grouped by different time intervals.
 
 ## Requirements
@@ -16,12 +17,12 @@ The [front-end][2] provides a single-page application to visualize the smart met
 
 ## Setup
 
-### 1. back-end setup
+### 1. external-api setup
 
-#### 1.1 Switch into the back-end directory
+#### 1.1 Switch into the external-api directory
 
 ```sh
-cd back-end
+cd external-api
 ```
 
 #### 1.2 Install NPM packages
@@ -32,46 +33,38 @@ npm install
 
 #### 1.3 Create your `.env` file
 
-See file [.env.example][6] for an example
+See file [.env.example][11] for an example
 
-#### 1.4 Import some measurements data into MongoDB
-
-File [measurements.json.example][7] contains some sample data and the following `mongoimport` command could be used to import it:
-
-```sh
-mongoimport --db=mevn-stack-app_db --collection=measurements --file=measurements.json.example
-```
-
-#### 1.5 Compiles and hot-reloads for development
+#### 1.4 Compiles and hot-reloads for development
 
 ```sh
 npm run start
 ```
 
-#### 1.6 Compiles for production
+#### 1.5 Compiles for production
 
 ```sh
 npm run build
 ```
 
-#### 1.7 Starts production
+#### 1.6 Starts production
 
 ```sh
 npm run start:production
 ```
 
-#### 1.8 Lints
+#### 1.7 Lints
 
 ```sh
 npm run lint
 ```
 
-### 2. front-end setup
+### 2. back-end setup
 
-#### 2.1 Switch into the front-end directory
+#### 2.1 Switch into the back-end directory
 
 ```sh
-cd front-end
+cd back-end
 ```
 
 #### 2.2 Install NPM packages
@@ -82,27 +75,77 @@ npm install
 
 #### 2.3 Create your `.env` file
 
-See file [.env.example][8] for an example.
+See file [.env.example][6] for an example
 
-#### 2.4 Compiles and hot-reloads for development
+#### 2.4 Import some measurements data into MongoDB
+
+File [measurements.json.example][7] contains some sample data and the following `mongoimport` command could be used to import it:
 
 ```sh
-npm run serve
+mongoimport --db=mevn-stack-app_db --collection=measurements --file=measurements.json.example
 ```
 
-#### 2.5 Compiles and minifies for production
+#### 2.5 Compiles and hot-reloads for development
+
+```sh
+npm run start
+```
+
+#### 2.6 Compiles for production
 
 ```sh
 npm run build
 ```
 
-#### 2.6 Starts production
+#### 2.7 Starts production
+
+```sh
+npm run start:production
+```
+
+#### 2.8 Lints
+
+```sh
+npm run lint
+```
+
+### 3. front-end setup
+
+#### 3.1 Switch into the front-end directory
+
+```sh
+cd front-end
+```
+
+#### 3.2 Install NPM packages
+
+```sh
+npm install
+```
+
+#### 3.3 Create your `.env` file
+
+See file [.env.example][8] for an example.
+
+#### 3.4 Compiles and hot-reloads for development
+
+```sh
+npm run serve
+```
+
+#### 3.5 Compiles and minifies for production
+
+```sh
+npm run build
+```
+
+#### 3.6 Starts production
 
 ```sh
 npm run serve:production
 ```
 
-#### 2.7 Lints and fixes files
+#### 3.7 Lints and fixes files
 
 ```sh
 npm run lint
@@ -119,3 +162,5 @@ npm run lint
 [7]: ./back-end/measurements.json.example
 [8]: ./front-end/.env.example
 [9]: https://www.npmjs.com/package/http-server
+[10]: ./external-api
+[11]: ./external-api/.env.example

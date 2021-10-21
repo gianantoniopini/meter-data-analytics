@@ -1,0 +1,5 @@
+-- Valid auth
+curl -i -X POST -H 'Content-Type: application/json' -d '{"email": "noemail@noemail.com", "password": "password"}' http://localhost:8083/api/v1/authentication/auth
+
+-- Invalid auth
+curl -i -X POST -H 'Content-Type: application/json' -d '{"email": "noemail@noemail.com", "password": ""}' http://localhost:8083/api/v1/authentication/auth

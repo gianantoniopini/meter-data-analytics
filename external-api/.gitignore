@@ -6,3 +6,6 @@ node_modules/
 
 # dotenv environment variable files
 .env
+
+# Links file
+links.txt

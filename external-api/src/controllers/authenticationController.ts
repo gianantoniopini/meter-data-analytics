@@ -1,6 +1,6 @@
 import jwt, { VerifyErrors } from 'jsonwebtoken';
 import express, { Request, Response } from 'express';
-import HttpException from '../middleware/HttpException';
+import { handleUnknownError } from './utils';
 
 type User = {
   email: string;
@@ -38,10 +38,8 @@ export const authenticate = (
       status: res.statusCode,
       data: validityPeriodInMilliseconds
     });
-  } catch (e: unknown) {
-    const message =
-      e instanceof Error ? e.message : 'An unexpected error occurred';
-    next(new HttpException(500, message));
+  } catch (error: unknown) {
+    handleUnknownError(error, next);
     return;
   }
 };
@@ -76,10 +74,8 @@ export const validateAccessToken = (
         }
       }
     );
-  } catch (e: unknown) {
-    const message =
-      e instanceof Error ? e.message : 'An unexpected error occurred';
-    next(new HttpException(500, message));
+  } catch (error: unknown) {
+    handleUnknownError(error, next);
     return;
   }
 };

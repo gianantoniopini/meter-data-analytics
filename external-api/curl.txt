@@ -6,10 +6,11 @@ curl -i -X POST -H 'Content-Type: application/json' -d '{"email": "noemail@noema
 curl -i -X POST -H 'Content-Type: application/json' -d '{"email": "noemail@noemail.com", "password": ""}' http://localhost:8083/api/v1/authentication/auth
 
 -- Get data
-// GET http://localhost:8083/api/v1/meterdata/measurement?muid=7eb6cb7a-bd74-4fb3-9503-0867b737c2f6&start=2021-04-30T23:59:59Z&stop=2021-07-01T23:59:59Z&limit=100000
+// GET http://localhost:8083/api/v1/meterdata/measurement?muid=09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1&start=2021-04-30T23:59:59Z&stop=2021-07-01T23:59:59Z&limit=100000
 
 -- 1) Bad request (no cookie/token present)
-curl -G -d 'muid=7eb6cb7a-bd74-4fb3-9503-0867b737c2f6' -d 'start=2021-04-30T23:59:59Z' -d 'stop=2021-07-01T23:59:59Z' -d 'limit=100000' http://localhost:8083/api/v1/meterdata/measurement
+curl -i -X GET "http://localhost:8083/api/v1/meterdata/measurement?muid=09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1&start=2021-04-30T23:59:59Z&stop=2021-07-01T23:59:59Z&limit=100000"
 
 -- 2) Valid request (cookie with token is present)
-curl -G --cookie '_db_sess=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5vZW1haWxAbm9lbWFpbC5jb20iLCJwYXNzd29yZCI6InBhc3N3b3JkIiwiaWF0IjoxNjM1MTc3MTg3LCJleHAiOjE2MzUxODA3ODd9.F3-F99up3NRC7xi7d2oso4Cp6BQdC0FO3v9Pcep6NvU; Max-Age=3600; Path=/; Expires=Mon, 25 Oct 2021 16:53:07 GMT; HttpOnly' -d 'muid=7eb6cb7a-bd74-4fb3-9503-0867b737c2f6' -d 'start=2021-04-30T23:59:59Z' -d 'stop=2021-07-01T23:59:59Z' -d 'limit=100000' http://localhost:8083/api/v1/meterdata/measurement
+curl -i -X GET --cookie '_db_sess=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5vZW1haWxAbm9lbWFpbC5jb20iLCJwYXNzd29yZCI6InBhc3N3b3JkIiwiaWF0IjoxNjM1MzQ0OTg0LCJleHAiOjE2MzUzNDg1ODR9.7s877_wYTi57gTerY96es8w7lAOzOcL6hjZg0VfdTrw; Max-Age=3600; Path=/; Expires=Wed, 27 Oct 2021 15:29:44 GMT; HttpOnly' "http://localhost:8083/api/v1/meterdata/measurement?muid=09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1&start=2021-04-30T23:59:59Z&stop=2021-07-01T23:59:59Z&limit=100000"
+

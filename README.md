@@ -53,12 +53,6 @@ npm run build
 npm run start:production
 ```
 
-#### 1.7 Lints
-
-```sh
-npm run lint
-```
-
 ### 2. back-end setup
 
 #### 2.1 Switch into the back-end directory
@@ -103,12 +97,6 @@ npm run build
 npm run start:production
 ```
 
-#### 2.8 Lints
-
-```sh
-npm run lint
-```
-
 ### 3. front-end setup
 
 #### 3.1 Switch into the front-end directory
@@ -143,12 +131,6 @@ npm run build
 
 ```sh
 npm run serve:production
-```
-
-#### 3.7 Lints and fixes files
-
-```sh
-npm run lint
 ```
 
 <!-- MARKDOWN LINKS -->

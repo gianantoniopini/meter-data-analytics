@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import fs from 'fs/promises';
 import { constants as fsConstants } from 'fs';
-import { handleUnknownError } from './utils';
+import { handleUnknownError } from '../utils/controllerUtils';
 import Measurement from '../interfaces/Measurement';
 
 export const getMeasurements = async (

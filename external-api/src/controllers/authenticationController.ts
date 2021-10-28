@@ -1,6 +1,6 @@
 import jwt, { VerifyErrors } from 'jsonwebtoken';
 import express, { Request, Response } from 'express';
-import { handleUnknownError } from './utils';
+import { handleUnknownError } from '../utils/controllerUtils';
 
 type User = {
   email: string;

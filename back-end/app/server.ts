@@ -23,10 +23,10 @@ app.use(express.json());
 app.use(basePath, router);
 app.use(errorHandler);
 
-openConnection();
-
-// Server Listening
-app.listen(port, () => {
-  console.log(`server started at port ${port}`);
-  console.log(`app running here -> http://localhost:${port}`);
+openConnection().then(() => {
+  // Server Listening
+  app.listen(port, () => {
+    console.log(`server started at port ${port}`);
+    console.log(`app running here -> http://localhost:${port}`);
+  });
 });

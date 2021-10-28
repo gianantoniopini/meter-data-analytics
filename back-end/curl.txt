@@ -1,14 +1,14 @@
 -- 1) Get data
 
-// GET http://localhost:8080/api/v1/meterdata/measurement/external?muid=7eb6cb7a-bd74-4fb3-9503-0867b737c2f6&start=2021-04-30T23:59:59Z&stop=2021-07-01T23:59:59Z&limit=100000
-curl -G -d 'muid=7eb6cb7a-bd74-4fb3-9503-0867b737c2f6' -d 'start=2021-04-30T23:59:59Z' -d 'stop=2021-07-01T23:59:59Z' -d 'limit=100000' http://localhost:8080/api/v1/meterdata/measurement/external
+// GET http://localhost:8080/api/v1/meterdata/measurement/external?muid=09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1&start=2021-04-30T23:59:59Z&stop=2021-07-01T23:59:59Z&limit=100000
+curl -i -X GET "http://localhost:8080/api/v1/meterdata/measurement/external?muid=09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1&start=2021-04-30T23:59:59Z&stop=2021-07-01T23:59:59Z&limit=100000"
 
 -- 2) Store data
 
-curl -i -X POST -H 'Content-Type: application/json' -d '{"muid": "7eb6cb7a-bd74-4fb3-9503-0867b737c2f6", "start": "2021-04-30T23:59:59Z", "stop": "2021-07-01T23:59:59Z", "limit": 100000}' http://localhost:8080/api/v1/meterdata/measurement/import
+curl -i -X POST -H 'Content-Type: application/json' -d '{"muid": "09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1", "start": "2021-04-30T23:59:59Z", "stop": "2021-07-01T23:59:59Z", "limit": 100000}' http://localhost:8080/api/v1/meterdata/measurement/import
 
 // GET http://localhost:8080/api/v1/meterdata/measurement
-curl -G http://localhost:8080/api/v1/meterdata/measurement
+curl -i -X GET "http://localhost:8080/api/v1/meterdata/measurement"
 
-// GET http://localhost:8080/api/v1/meterdata/measurement?muid=7eb6cb7a-bd74-4fb3-9503-0867b737c2f6
-// GET http://localhost:8080/api/v1/meterdata/measurement?muid=7eb6cb7a-bd74-4fb3-9503-0867b737c2f6&start=2021-04-30T23:59:59Z&stop=2021-07-01T23:59:59Z&limit=100000
+// GET http://localhost:8080/api/v1/meterdata/measurement?muid=09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1
+// GET http://localhost:8080/api/v1/meterdata/measurement?muid=09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1&start=2021-04-30T23:59:59Z&stop=2021-07-01T23:59:59Z&limit=100000

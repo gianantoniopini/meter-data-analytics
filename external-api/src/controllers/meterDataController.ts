@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import fs from 'fs/promises';
+import { constants as fsConstants } from 'fs';
 import { handleUnknownError } from './utils';
 import Measurement from '../interfaces/Measurement';
 
@@ -22,10 +23,14 @@ export const getMeasurements = async (
       return;
     }
 
-    const filePath = `${__dirname}/../../data/measurements/${muid}.json`;
-    const fileData = await fs.readFile(filePath, { encoding: 'utf8' });
+    const measurements: Measurement[] = [];
 
-    const measurements: Measurement[] = JSON.parse(fileData);
+    const filePath = `${__dirname}/../../data/measurements/${muid}.json`;
+    const fileExists = await exists(filePath);
+    if (fileExists) {
+      const fileData = await fs.readFile(filePath, { encoding: 'utf8' });
+      measurements.push(...JSON.parse(fileData));
+    }
 
     const filteredMeasurements = measurements.filter((m) => {
       return (
@@ -44,5 +49,14 @@ export const getMeasurements = async (
   } catch (error: unknown) {
     handleUnknownError(error, next);
     return;
+  }
+};
+
+const exists = async (path: string): Promise<boolean> => {
+  try {
+    await fs.access(path, fsConstants.R_OK);
+    return true;
+  } catch {
+    return false;
   }
 };

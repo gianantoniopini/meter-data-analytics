@@ -13,7 +13,7 @@
     "vue"
   ],
   "author": "gianantoniopini",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "dependencies": {
     "@vuelidate/core": "^2.0.0-alpha.26",
     "@vuelidate/validators": "^2.0.0-alpha.22",

@@ -21,7 +21,7 @@
     "api"
   ],
   "author": "gianantoniopini",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",

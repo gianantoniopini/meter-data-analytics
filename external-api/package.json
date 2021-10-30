@@ -20,7 +20,7 @@
     "api"
   ],
   "author": "gianantoniopini",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "dependencies": {
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",

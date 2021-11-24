@@ -1,4 +1,4 @@
-name: external-api CI
+name: external-api
 
 on:
   push:

@@ -1,4 +1,4 @@
-name: back-end CI
+name: external-api CI
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 defaults:
   run:
-    working-directory: back-end
+    working-directory: external-api
 
 jobs:
   build:

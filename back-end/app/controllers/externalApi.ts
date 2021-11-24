@@ -11,7 +11,6 @@ type Measurement = {
   '0100100700FF': number;
 };
 
-
 type MeasurementResponse = {
   data: [Measurement];
 };

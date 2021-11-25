@@ -1,4 +1,5 @@
 import express, { Request, Response } from 'express';
+import { StatusCodes } from 'http-status-codes';
 import fs from 'fs/promises';
 import { constants as fsConstants } from 'fs';
 import { handleUnknownError } from '../utils/controllerUtils';
@@ -16,7 +17,7 @@ export const getMeasurements = async (
     const limit = req.query.limit as string | undefined;
 
     if (!muid) {
-      res.status(400).json({
+      res.status(StatusCodes.BAD_REQUEST).json({
         status: res.statusCode,
         message: 'muid query parameter not present'
       });
@@ -42,7 +43,7 @@ export const getMeasurements = async (
     const limitAsNumber = limit ? parseInt(limit) : 1;
     const slicedMeasurements = filteredMeasurements.slice(0, limitAsNumber);
 
-    res.status(200).json({
+    res.status(StatusCodes.OK).json({
       status: res.statusCode,
       data: slicedMeasurements
     });

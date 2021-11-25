@@ -1,13 +1,8 @@
-import jwt, { VerifyErrors } from 'jsonwebtoken';
 import express, { Request, Response } from 'express';
+import { StatusCodes } from 'http-status-codes';
 import { handleUnknownError } from '../utils/controllerUtils';
-
-type User = {
-  email: string;
-  password: string;
-};
-
-const accessTokenCookieName = '_db_sess';
+import User from '../interfaces/User';
+import { accessTokenCookieName, generateAccessToken } from '../middleware/auth';
 
 export const authenticate = (
   req: Request,
@@ -18,7 +13,7 @@ export const authenticate = (
     const email = req.body.email;
     const password = req.body.password;
     if (email !== process.env.AUTH_EMAIL || password !== process.env.AUTH_PWD) {
-      res.status(400).json({
+      res.status(StatusCodes.BAD_REQUEST).json({
         status: res.statusCode,
         message: 'Invalid email address or password!'
       });
@@ -34,7 +29,7 @@ export const authenticate = (
       maxAge: validityPeriodInMilliseconds,
       httpOnly: true
     });
-    res.status(200).json({
+    res.status(StatusCodes.OK).json({
       status: res.statusCode,
       data: validityPeriodInMilliseconds
     });
@@ -42,52 +37,4 @@ export const authenticate = (
     handleUnknownError(error, next);
     return;
   }
-};
-
-export const validateAccessToken = (
-  req: Request,
-  res: Response,
-  next: express.NextFunction
-): void => {
-  try {
-    const accessToken = req.cookies[accessTokenCookieName] as string;
-
-    if (!accessToken) {
-      res.status(400).json({
-        status: res.statusCode,
-        message: 'Token not present'
-      });
-      return;
-    }
-
-    jwt.verify(
-      accessToken,
-      process.env.AUTH_ACCESS_TOKEN_SECRET as jwt.Secret,
-      (err: VerifyErrors | null) => {
-        if (err) {
-          res.status(403).json({
-            status: res.statusCode,
-            message: 'Token invalid'
-          });
-        } else {
-          next();
-        }
-      }
-    );
-  } catch (error: unknown) {
-    handleUnknownError(error, next);
-    return;
-  }
-};
-
-const generateAccessToken = (user: User, validityPeriodInSeconds: number) => {
-  const accessToken = jwt.sign(
-    user,
-    process.env.AUTH_ACCESS_TOKEN_SECRET as jwt.Secret,
-    {
-      expiresIn: validityPeriodInSeconds
-    }
-  );
-
-  return accessToken;
 };

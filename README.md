@@ -4,7 +4,7 @@ Repository for learning the MEVN stack (MongoDB, Express, Vue, Node.js).
 
 The app visualizes smart meter measurements time-series data and provides simple analytics.
 
-The [external-api][10] simulates an external REST API providing smart meter measurements data.  
+The [external-api][10] simulates an external REST API providing smart meter measurements data. It implements authentication using JWT (JSON Web Tokens).  
 The [back-end][1] provides a REST API to retrieve the smart meter measurements data. It also provides an endpoint to import the data from the external-api.  
 The [front-end][2] provides a single-page application to visualize the smart meter measurements data. It also provides simple analytics with graphs showing the data grouped by different time intervals.
 

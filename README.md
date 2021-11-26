@@ -41,13 +41,19 @@ See file [.env.example][11] for an example
 npm run start
 ```
 
-#### 1.5 Compiles for production
+#### 1.5 Runs tests
+
+```sh
+npm run test
+```
+
+#### 1.6 Compiles for production
 
 ```sh
 npm run build
 ```
 
-#### 1.6 Starts production
+#### 1.7 Starts production
 
 ```sh
 npm run start:production

@@ -4,23 +4,10 @@
       <div class="col-sm-auto bg-light sticky-top">
         <!-- sidebar -->
         <div
-          class="
-            d-flex
-            flex-sm-column flex-row flex-nowrap
-            bg-light
-            align-items-center
-            sticky-top
-          "
+          class="d-flex flex-sm-column flex-row flex-nowrap bg-light align-items-center sticky-top"
         >
           <ul
-            class="
-              nav nav-pills nav-flush
-              flex-sm-column flex-row flex-nowrap
-              mb-auto
-              mx-auto
-              text-left
-              align-items-left
-            "
+            class="nav nav-pills nav-flush flex-sm-column flex-row flex-nowrap mb-auto mx-auto text-left align-items-left"
           >
             <li class="nav-item">
               <a href="#filters" class="nav-link py-3 px-2">

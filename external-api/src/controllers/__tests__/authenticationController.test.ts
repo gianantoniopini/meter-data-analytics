@@ -67,3 +67,15 @@ it('Authentication request with valid email and password should return cookie wi
   expect(maxAgeValue).toBeTruthy();
   expect(maxAgeValue).toEqual('3600');
 });
+
+it('Authentication request should fail if access token secret is not present in user environment', async () => {
+  delete process.env.AUTH_ACCESS_TOKEN_SECRET;
+
+  const response = await request(app)
+    .post('/api/v1/authentication/auth')
+    .send({ email: 'user123@noemail.com', password: 'password123' });
+
+  expect(response.status).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
+  expect(response.body.status).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
+  expect(response.body.message).toEqual('secretOrPrivateKey must have a value');
+});

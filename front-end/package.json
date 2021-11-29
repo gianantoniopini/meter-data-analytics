@@ -5,7 +5,7 @@
   "description": "Vue app with TypeScript and Axios",
   "scripts": {
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
+    "lint": "vue-cli-service lint --no-fix",
     "serve": "vue-cli-service serve",
     "serve:production": "http-server ./dist -p 0"
   },

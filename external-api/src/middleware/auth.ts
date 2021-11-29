@@ -4,7 +4,7 @@ import jwt, { VerifyErrors } from 'jsonwebtoken';
 import { handleUnknownError } from '../utils/controllerUtils';
 import User from '../interfaces/User';
 
-export const accessTokenCookieName = 'auth_token';
+export const accessTokenCookieName = 'access_token';
 
 export const generateAccessToken = (
   user: User,

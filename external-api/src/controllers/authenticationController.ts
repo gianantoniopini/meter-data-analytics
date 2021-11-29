@@ -12,10 +12,19 @@ export const authenticate = (
   try {
     const email = req.body.email;
     const password = req.body.password;
+
+    if (!email || !password) {
+      res.status(StatusCodes.BAD_REQUEST).json({
+        status: res.statusCode,
+        message: 'Email address or password not present'
+      });
+      return;
+    }
+
     if (email !== process.env.AUTH_EMAIL || password !== process.env.AUTH_PWD) {
       res.status(StatusCodes.BAD_REQUEST).json({
         status: res.statusCode,
-        message: 'Invalid email address or password!'
+        message: 'Invalid email address or password'
       });
       return;
     }

@@ -7,5 +7,8 @@ node_modules/
 # dotenv environment variable files
 .env
 
+# Code coverage
+coverage/
+
 # Links file
 links.txt

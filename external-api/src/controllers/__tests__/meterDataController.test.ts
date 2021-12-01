@@ -1,9 +1,10 @@
+import { Application } from 'express';
 import request from 'supertest';
 import { StatusCodes } from 'http-status-codes';
-import { app } from '../../app';
+import { initialize as initializeApp } from '../../app';
 import Measurement from '../../interfaces/Measurement';
 
-const getAccessToken = async (): Promise<string> => {
+const getAccessToken = async (app: Application): Promise<string> => {
   const authResponse = await request(app)
     .post('/api/v1/authentication/auth')
     .send({ email: 'user123@noemail.com', password: 'password123' });
@@ -14,6 +15,8 @@ const getAccessToken = async (): Promise<string> => {
 };
 
 it('Measurement request with no access token should fail', async () => {
+  const app = initializeApp();
+
   const response = await request(app)
     .get(
       '/api/v1/meterdata/measurement?muid=09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1'
@@ -26,6 +29,8 @@ it('Measurement request with no access token should fail', async () => {
 });
 
 it('Measurement request with invalid access token should fail', async () => {
+  const app = initializeApp();
+
   const response = await request(app)
     .get(
       '/api/v1/meterdata/measurement?muid=09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1'
@@ -39,7 +44,8 @@ it('Measurement request with invalid access token should fail', async () => {
 });
 
 it('Measurement request with valid access token should succeed', async () => {
-  const accessTokenCookie = await getAccessToken();
+  const app = initializeApp();
+  const accessTokenCookie = await getAccessToken(app);
 
   const response = await request(app)
     .get(
@@ -53,7 +59,8 @@ it('Measurement request with valid access token should succeed', async () => {
 });
 
 it('Measurement request with no muid query parameter should fail', async () => {
-  const accessTokenCookie = await getAccessToken();
+  const app = initializeApp();
+  const accessTokenCookie = await getAccessToken(app);
 
   const response = await request(app)
     .get('/api/v1/meterdata/measurement?muid=')
@@ -66,7 +73,8 @@ it('Measurement request with no muid query parameter should fail', async () => {
 });
 
 it('Measurement request with no limit query parameter should return just one measurement', async () => {
-  const accessTokenCookie = await getAccessToken();
+  const app = initializeApp();
+  const accessTokenCookie = await getAccessToken(app);
 
   const response = await request(app)
     .get(
@@ -80,7 +88,8 @@ it('Measurement request with no limit query parameter should return just one mea
 });
 
 it('Measurement request should return a max number of measurements as per limit query parameter', async () => {
-  const accessTokenCookie = await getAccessToken();
+  const app = initializeApp();
+  const accessTokenCookie = await getAccessToken(app);
 
   const response = await request(app)
     .get(

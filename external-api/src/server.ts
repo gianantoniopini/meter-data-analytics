@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import { app } from './app';
+import { initialize as initializeApp } from './app';
 
 dotenv.config();
 
@@ -7,6 +7,8 @@ if (!process.env.PORT) {
   console.log(`no PORT found in process.env`);
   process.exit(1);
 }
+
+const app = initializeApp();
 
 const port: number = parseInt(process.env.PORT as string, 10);
 

@@ -1,8 +1,10 @@
 import request from 'supertest';
 import { StatusCodes } from 'http-status-codes';
-import { app } from '../../app';
+import { initialize as initializeApp } from '../../app';
 
 it('Authentication request with no email and password should fail', async () => {
+  const app = initializeApp();
+
   const response = await request(app)
     .post('/api/v1/authentication/auth')
     .send();
@@ -15,6 +17,8 @@ it('Authentication request with no email and password should fail', async () => 
 });
 
 it('Authentication request with invalid email should fail', async () => {
+  const app = initializeApp();
+
   const response = await request(app)
     .post('/api/v1/authentication/auth')
     .send({ email: 'invalidEmail', password: 'password123' });
@@ -25,6 +29,8 @@ it('Authentication request with invalid email should fail', async () => {
 });
 
 it('Authentication request with invalid password should fail', async () => {
+  const app = initializeApp();
+
   const response = await request(app)
     .post('/api/v1/authentication/auth')
     .send({ email: 'user123@noemail.com', password: 'invalidPassword' });
@@ -35,6 +41,8 @@ it('Authentication request with invalid password should fail', async () => {
 });
 
 it('Authentication request with valid email and password should succeed', async () => {
+  const app = initializeApp();
+
   const response = await request(app)
     .post('/api/v1/authentication/auth')
     .send({ email: 'user123@noemail.com', password: 'password123' });
@@ -44,6 +52,8 @@ it('Authentication request with valid email and password should succeed', async 
 });
 
 it('Authentication request with valid email and password should return cookie with access token', async () => {
+  const app = initializeApp();
+
   const response = await request(app)
     .post('/api/v1/authentication/auth')
     .send({ email: 'user123@noemail.com', password: 'password123' });
@@ -70,6 +80,7 @@ it('Authentication request with valid email and password should return cookie wi
 
 it('Authentication request should fail if access token secret is not present in user environment', async () => {
   delete process.env.AUTH_ACCESS_TOKEN_SECRET;
+  const app = initializeApp();
 
   const response = await request(app)
     .post('/api/v1/authentication/auth')

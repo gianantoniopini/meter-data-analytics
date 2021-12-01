@@ -101,3 +101,42 @@ it('Measurement request should return a max number of measurements as per limit 
   const measurements = response.body.data as Measurement[];
   expect(measurements).toHaveLength(100);
 });
+
+it('Measurement request for a non-existent muid should return no measurements', async () => {
+  const app = initializeApp();
+  const accessTokenCookie = await getAccessToken(app);
+
+  const response = await request(app)
+    .get('/api/v1/meterdata/measurement?muid=non-existent-muid&limit=100')
+    .set('Cookie', accessTokenCookie)
+    .send();
+
+  expect(response.status).toEqual(StatusCodes.OK);
+  expect(response.body.status).toEqual(StatusCodes.OK);
+  const measurements = response.body.data as Measurement[];
+  expect(measurements).toHaveLength(0);
+});
+
+it('Measurement request with start and stop query parameters should return measurements filtered by timestamp', async () => {
+  const app = initializeApp();
+  const accessTokenCookie = await getAccessToken(app);
+
+  const response = await request(app)
+    .get(
+      '/api/v1/meterdata/measurement?muid=09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1&start=2021-05-01T00:00:00Z&stop=2021-05-01T23:59:59Z&limit=100000'
+    )
+    .set('Cookie', accessTokenCookie)
+    .send();
+
+  const measurements = response.body.data as Measurement[];
+  expect(measurements).toHaveLength(96);
+  const timestamps = measurements.map((m) => new Date(m.timestamp));
+  const minTimestamp = timestamps.reduce(function (a, b) {
+    return a < b ? a : b;
+  });
+  expect(minTimestamp).toEqual(new Date('2021-05-01T00:00:00Z'));
+  const maxTimestamp = timestamps.reduce(function (a, b) {
+    return a > b ? a : b;
+  });
+  expect(maxTimestamp).toEqual(new Date('2021-05-01T23:45:00Z'));
+});

@@ -14,6 +14,10 @@ const getAccessToken = async (app: Application): Promise<string> => {
   return accessTokenCookie;
 };
 
+afterEach(() => {
+  jest.useRealTimers();
+});
+
 it('Measurement request with no access token should fail', async () => {
   const app = initializeApp();
 
@@ -56,6 +60,24 @@ it('Measurement request with valid access token should succeed', async () => {
 
   expect(response.status).toEqual(StatusCodes.OK);
   expect(response.body.status).toEqual(StatusCodes.OK);
+});
+
+it('Measurement request with access token older than 60 minutes should fail', async () => {
+  jest.useFakeTimers();
+  const app = initializeApp();
+  const accessTokenCookie = await getAccessToken(app);
+
+  jest.advanceTimersByTime(61 * 60 * 1000); // 61 minutes
+  const response = await request(app)
+    .get(
+      '/api/v1/meterdata/measurement?muid=09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1'
+    )
+    .set('Cookie', accessTokenCookie)
+    .send();
+
+  expect(response.status).toEqual(StatusCodes.FORBIDDEN);
+  expect(response.body.status).toEqual(StatusCodes.FORBIDDEN);
+  expect(response.body.message).toEqual('Token invalid');
 });
 
 it('Measurement request with no muid query parameter should fail', async () => {

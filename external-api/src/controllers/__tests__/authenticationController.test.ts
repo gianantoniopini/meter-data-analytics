@@ -75,7 +75,7 @@ it('Authentication request with valid email and password should return cookie wi
   expect(maxAgeKey.trim()).toEqual('Max-Age');
   const maxAgeValue = maxAge.split('=')[1];
   expect(maxAgeValue).toBeTruthy();
-  expect(maxAgeValue).toEqual('3600');
+  expect(maxAgeValue).toEqual('600');
 });
 
 it('Authentication request should fail if access token secret is not present in user environment', async () => {

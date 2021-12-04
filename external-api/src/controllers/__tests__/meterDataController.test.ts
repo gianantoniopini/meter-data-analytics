@@ -62,12 +62,12 @@ it('Measurement request with valid access token should succeed', async () => {
   expect(response.body.status).toEqual(StatusCodes.OK);
 });
 
-it('Measurement request with access token older than 60 minutes should fail', async () => {
+it('Measurement request with access token older than 10 minutes should fail', async () => {
   jest.useFakeTimers();
   const app = initializeApp();
   const accessTokenCookie = await getAccessToken(app);
 
-  jest.advanceTimersByTime(61 * 60 * 1000); // 61 minutes
+  jest.advanceTimersByTime(11 * 60 * 1000); // 11 minutes
   const response = await request(app)
     .get(
       '/api/v1/meterdata/measurement?muid=09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1'

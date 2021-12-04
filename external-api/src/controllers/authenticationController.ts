@@ -30,7 +30,10 @@ export const authenticate = (
     }
 
     const user: User = { email: email, password: password };
-    const validityPeriodInSeconds = 3600;
+    const validityPeriodInSeconds = parseInt(
+      process.env.AUTH_ACCESS_TOKEN_LIFESPAN_SECONDS as string,
+      10
+    );
     const accessToken = generateAccessToken(user, validityPeriodInSeconds);
 
     const validityPeriodInMilliseconds = validityPeriodInSeconds * 1000;

@@ -17,7 +17,8 @@
     "nodejs",
     "express",
     "rest",
-    "api"
+    "api",
+    "jwt"
   ],
   "author": "gianantoniopini",
   "license": "MIT",

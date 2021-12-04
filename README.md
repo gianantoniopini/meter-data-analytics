@@ -91,13 +91,19 @@ mongoimport --db=mevn-stack-app_db --collection=measurements --file=measurements
 npm run start
 ```
 
-#### 2.6 Compiles for production
+#### 2.6 Runs tests
+
+```sh
+npm run test
+```
+
+#### 2.7 Compiles for production
 
 ```sh
 npm run build
 ```
 
-#### 2.7 Starts production
+#### 2.8 Starts production
 
 ```sh
 npm run start:production

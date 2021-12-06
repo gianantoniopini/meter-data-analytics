@@ -40,7 +40,7 @@ export const getMeasurements = async (
       );
     });
 
-    const limitAsNumber = limit ? parseInt(limit) : 1;
+    const limitAsNumber = limit ? parseInt(limit, 10) : 1;
     const slicedMeasurements = filteredMeasurements.slice(0, limitAsNumber);
 
     res.status(StatusCodes.OK).json({

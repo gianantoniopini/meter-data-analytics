@@ -22,15 +22,15 @@ const mapExternalMeasurement = (externalMeasurement: ExternalMeasurement) => {
 
 const _getMeasurementsFromExternalApi = async (
   muid: string,
-  start: string,
-  stop: string,
-  limit: string
+  start: string | undefined,
+  stop: string | undefined,
+  limit: string | undefined
 ): Promise<[ExternalMeasurement]> => {
   const { measurements, error } = await authenticateAndGetMeasurement(
     muid,
     start,
     stop,
-    parseInt(limit, 10)
+    limit ? parseInt(limit, 10) : undefined
   );
 
   if (error) {
@@ -50,11 +50,19 @@ export const getMeasurementsFromExternalApi = async (
   next: express.NextFunction
 ): Promise<void> => {
   try {
+    if (!req.query.muid) {
+      res.status(StatusCodes.BAD_REQUEST).json({
+        status: res.statusCode,
+        message: 'muid query parameter not present'
+      });
+      return;
+    }
+
     const measurements = await _getMeasurementsFromExternalApi(
-      req.query['muid'] as string,
-      req.query['start'] as string,
-      req.query['stop'] as string,
-      req.query['limit'] as string
+      req.query.muid as string,
+      req.query.start as string | undefined,
+      req.query.stop as string | undefined,
+      req.query.limit as string | undefined
     );
 
     res.status(StatusCodes.OK).json({
@@ -73,11 +81,19 @@ export const importMeasurements = async (
   next: express.NextFunction
 ): Promise<void> => {
   try {
+    if (!req.body.muid) {
+      res.status(StatusCodes.BAD_REQUEST).json({
+        status: res.statusCode,
+        message: 'muid body parameter not present'
+      });
+      return;
+    }
+
     const measurementsFromExternalApi = await _getMeasurementsFromExternalApi(
-      req.body['muid'] as string,
-      req.body['start'] as string,
-      req.body['stop'] as string,
-      req.body['limit'] as string
+      req.body.muid as string,
+      req.body.start as string | undefined,
+      req.body.stop as string | undefined,
+      req.body.limit as string | undefined
     );
 
     const measurements = measurementsFromExternalApi.map((em) =>
@@ -102,15 +118,21 @@ export const getMeasurements = async (
   next: express.NextFunction
 ): Promise<void> => {
   try {
-    const muid = req.query.muid as string | undefined;
+    if (!req.query.muid) {
+      res.status(StatusCodes.BAD_REQUEST).json({
+        status: res.statusCode,
+        message: 'muid query parameter not present'
+      });
+      return;
+    }
+
+    const muid = req.query.muid as string;
     const start = req.query.start as string | undefined;
     const stop = req.query.stop as string | undefined;
     const limit = req.query.limit as string | undefined;
 
     const conditions = [];
-    if (muid) {
-      conditions.push({ tags: { muid: muid } });
-    }
+    conditions.push({ tags: { muid: muid } });
     if (start) {
       conditions.push({ timestamp: { $gte: new Date(start) } });
     }
@@ -120,7 +142,7 @@ export const getMeasurements = async (
 
     const andConditons = conditions.length ? { $and: conditions } : {};
 
-    const limitAsNumber = limit ? parseInt(limit) : 1;
+    const limitAsNumber = limit ? parseInt(limit, 10) : 1;
 
     const measurements = await MeasurementModel.find(andConditons).limit(
       limitAsNumber

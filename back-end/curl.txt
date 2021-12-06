@@ -9,6 +9,7 @@ curl -i -X POST -H 'Content-Type: application/json' -d '{"muid": "09a2bc02-2f88-
 
 // GET http://localhost:8080/api/v1/meterdata/measurement
 curl -i -X GET "http://localhost:8080/api/v1/meterdata/measurement"
+curl -i -X GET "http://localhost:8080/api/v1/meterdata/measurement?muid=09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1&limit=100000"
 
 // GET http://localhost:8080/api/v1/meterdata/measurement?muid=09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1
 // GET http://localhost:8080/api/v1/meterdata/measurement?muid=09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1&start=2021-04-30T23:59:59Z&stop=2021-07-01T23:59:59Z&limit=100000

@@ -57,16 +57,18 @@ async function getMeasurement(
   cookieDomainUrl: string,
   measurementUrl: string,
   muid: string,
-  start: string,
-  stop: string,
-  limit: number
+  start: string | undefined,
+  stop: string | undefined,
+  limit: number | undefined
 ): Promise<[Measurement]> {
   const cookieJar = new CookieJar();
   const setCookie = promisify(cookieJar.setCookie.bind(cookieJar));
   await setCookie(cookie, cookieDomainUrl);
 
   const { body: responseBody } = await got<MeasurementResponse>(
-    `${measurementUrl}?muid=${muid}&start=${start}&stop=${stop}&limit=${limit}`,
+    `${measurementUrl}?muid=${muid}&start=${start ?? ''}&stop=${
+      stop ?? ''
+    }&limit=${limit ?? ''}`,
     {
       cookieJar,
       responseType: 'json'
@@ -78,9 +80,9 @@ async function getMeasurement(
 
 async function authenticateAndGetMeasurement(
   muid: string,
-  start: string,
-  stop: string,
-  limit: number
+  start: string | undefined,
+  stop: string | undefined,
+  limit: number | undefined
 ): Promise<{
   measurements: [Measurement] | undefined;
   error: string | undefined;

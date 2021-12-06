@@ -318,9 +318,9 @@ export default defineComponent({
         // timestampFromFilter will be in format YYYY-MM-DD
         timestampFromDate = new Date(
           Date.UTC(
-            parseInt(timestampFromFilter.substr(0, 4)),
-            parseInt(timestampFromFilter.substr(5, 2)) - 1,
-            parseInt(timestampFromFilter.substr(8, 2)),
+            parseInt(timestampFromFilter.substr(0, 4), 10),
+            parseInt(timestampFromFilter.substr(5, 2), 10) - 1,
+            parseInt(timestampFromFilter.substr(8, 2), 10),
             0,
             0,
             0
@@ -332,9 +332,9 @@ export default defineComponent({
         // timestampToFilter will be in format YYYY-MM-DD
         timestampToDate = new Date(
           Date.UTC(
-            parseInt(timestampToFilter.substr(0, 4)),
-            parseInt(timestampToFilter.substr(5, 2)) - 1,
-            parseInt(timestampToFilter.substr(8, 2)),
+            parseInt(timestampToFilter.substr(0, 4), 10),
+            parseInt(timestampToFilter.substr(5, 2), 10) - 1,
+            parseInt(timestampToFilter.substr(8, 2), 10),
             23,
             59,
             59

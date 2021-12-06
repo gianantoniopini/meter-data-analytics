@@ -7,28 +7,71 @@ import MeasurementModel from '../../models/MeasurementModel';
 
 let mongoDbConnection: Connection | undefined;
 
+const setupMeasurements = async (
+  muid: string,
+  timestampStart: Date,
+  count: number
+): Promise<Measurement[]> => {
+  const measurements: Measurement[] = [];
+
+  const indexes = [...Array(count).keys()].map((i) => i);
+  for (const index of indexes) {
+    const timestamp =
+      index === 0
+        ? timestampStart
+        : new Date(timestampStart.getTime() + 15 * (index + 1) * 60000);
+
+    const powerValue = Math.random() * 5000;
+
+    const measurementModel = new MeasurementModel({
+      measurement: 'power',
+      timestamp: timestamp,
+      tags: { muid: muid },
+      '0100010700FF': powerValue,
+      '0100020700FF': 0,
+      '0100100700FF': powerValue
+    });
+
+    await measurementModel.save();
+
+    measurements.push(measurementModel);
+  }
+
+  return measurements;
+};
+
 beforeAll(async () => {
   const { connection } = await connect(process.env.MONGO_URI as string);
   mongoDbConnection = connection;
 });
 
-it('Measurement request should return data from MongoDB', async () => {
+it('Measurement request with no muid query parameter should fail', async () => {
+  const app = initializeApp();
+
+  const response = await request(app)
+    .get('/api/v1/meterdata/measurement')
+    .send();
+
+  expect(response.status).toEqual(StatusCodes.BAD_REQUEST);
+  expect(response.body.status).toEqual(StatusCodes.BAD_REQUEST);
+  expect(response.body.message).toEqual('muid query parameter not present');
+});
+
+it('Measurement request should return measurements filtered by muid', async () => {
   const muid = '09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1';
-  const expectedMeasurement = {
-    measurement: 'power',
-    timestamp: '2021-05-01T00:00:00Z',
-    tags: { muid: muid },
-    '0100010700FF': 45.218634000536525,
-    '0100020700FF': 0,
-    '0100100700FF': 45.218634000536525
-  };
-  const measurementModel = new MeasurementModel(expectedMeasurement);
-  await measurementModel.save();
+  const expectedMeasurements = await setupMeasurements(
+    muid,
+    new Date('2021-05-01T00:00:00Z'),
+    1
+  );
+  const expectedMeasurement = expectedMeasurements[0];
+
+  await setupMeasurements('other-muid', new Date('2021-06-01T00:00:00Z'), 10);
 
   const app = initializeApp();
 
   const response = await request(app)
-    .get(`/api/v1/meterdata/measurement?muid=${muid}`)
+    .get(`/api/v1/meterdata/measurement?muid=${muid}&limit=100000`)
     .send();
 
   expect(response.status).toEqual(StatusCodes.OK);
@@ -36,22 +79,45 @@ it('Measurement request should return data from MongoDB', async () => {
   expect(response.body.data).toBeTruthy();
   const actualMeasurements = response.body.data as Measurement[];
   expect(actualMeasurements).toHaveLength(1);
-  expect(actualMeasurements[0].measurement).toEqual(
+  const actualMeasurement = actualMeasurements[0];
+  expect(actualMeasurement.tags.muid).toEqual(muid);
+  expect(actualMeasurement.measurement).toEqual(
     expectedMeasurement.measurement
   );
-  expect(new Date(actualMeasurements[0].timestamp)).toEqual(
+  expect(new Date(actualMeasurement.timestamp)).toEqual(
     new Date(expectedMeasurement.timestamp)
   );
-  expect(actualMeasurements[0].tags).toEqual(expectedMeasurement.tags);
-  expect(actualMeasurements[0]['0100010700FF']).toEqual(
+  expect(actualMeasurement['0100010700FF']).toEqual(
     expectedMeasurement['0100010700FF']
   );
-  expect(actualMeasurements[0]['0100020700FF']).toEqual(
+  expect(actualMeasurement['0100020700FF']).toEqual(
     expectedMeasurement['0100020700FF']
   );
-  expect(actualMeasurements[0]['0100100700FF']).toEqual(
+  expect(actualMeasurement['0100100700FF']).toEqual(
     expectedMeasurement['0100100700FF']
   );
+});
+
+it('Measurement request should return a max number of measurements as per limit query parameter', async () => {
+  const muid = '09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1';
+  await setupMeasurements(muid, new Date('2021-05-01T00:00:00Z'), 100);
+
+  const app = initializeApp();
+
+  const limit = 10;
+
+  const response = await request(app)
+    .get(`/api/v1/meterdata/measurement?muid=${muid}&limit=${limit}`)
+    .send();
+
+  expect(response.status).toEqual(StatusCodes.OK);
+  expect(response.body.status).toEqual(StatusCodes.OK);
+  expect(response.body.data).toBeTruthy();
+  const actualMeasurements = response.body.data as Measurement[];
+  expect(actualMeasurements).toHaveLength(limit);
+  for (const actualMeasurement of actualMeasurements) {
+    expect(actualMeasurement.tags.muid).toEqual(muid);
+  }
 });
 
 afterEach(async () => {

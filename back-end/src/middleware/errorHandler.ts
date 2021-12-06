@@ -1,5 +1,6 @@
-import HttpException from './HttpException';
 import { Request, Response, NextFunction } from 'express';
+import { StatusCodes } from 'http-status-codes';
+import HttpException from './HttpException';
 
 export const errorHandler = (
   error: HttpException,
@@ -8,10 +9,10 @@ export const errorHandler = (
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   next: NextFunction
 ): undefined => {
-  const status = error.status || 500;
+  const status = error.status || StatusCodes.INTERNAL_SERVER_ERROR;
   const message = error.message || 'Something went wrong';
 
-  response.status(status).send({
+  response.status(status).json({
     status: response.statusCode,
     message: message
   });

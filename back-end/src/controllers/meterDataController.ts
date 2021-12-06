@@ -1,9 +1,10 @@
 import express, { Request, Response } from 'express';
-import HttpException from '../middleware/HttpException';
+import { StatusCodes } from 'http-status-codes';
+import { handleUnknownError } from '../utils/controllerUtils';
 import {
   authenticateAndGetMeasurement,
   Measurement as ExternalMeasurement
-} from './externalApi';
+} from '../utils/externalApiProxy';
 import MeasurementModel from '../models/MeasurementModel';
 
 const mapExternalMeasurement = (externalMeasurement: ExternalMeasurement) => {
@@ -19,32 +20,49 @@ const mapExternalMeasurement = (externalMeasurement: ExternalMeasurement) => {
   });
 };
 
+const _getMeasurementsFromExternalApi = async (
+  muid: string,
+  start: string,
+  stop: string,
+  limit: string
+): Promise<[ExternalMeasurement]> => {
+  const { measurements, error } = await authenticateAndGetMeasurement(
+    muid,
+    start,
+    stop,
+    parseInt(limit, 10)
+  );
+
+  if (error) {
+    throw new Error(error);
+  }
+
+  if (!measurements) {
+    throw new Error('Could not retrieve measurements from external api.');
+  }
+
+  return measurements;
+};
+
 export const getMeasurementsFromExternalApi = async (
   req: Request,
   res: Response,
   next: express.NextFunction
 ): Promise<void> => {
   try {
-    const { Measurements: measurements, error } =
-      await authenticateAndGetMeasurement(
-        req.query['muid'] as string,
-        req.query['start'] as string,
-        req.query['stop'] as string,
-        parseInt(req.query['limit'] as string)
-      );
-    if (error) {
-      next(new HttpException(500, error));
-      return;
-    }
+    const measurements = await _getMeasurementsFromExternalApi(
+      req.query['muid'] as string,
+      req.query['start'] as string,
+      req.query['stop'] as string,
+      req.query['limit'] as string
+    );
 
-    res.status(200).json({
+    res.status(StatusCodes.OK).json({
       status: res.statusCode,
       data: measurements
     });
-  } catch (e: unknown) {
-    const message =
-      e instanceof Error ? e.message : 'An unexpected error occurred';
-    next(new HttpException(500, message));
+  } catch (error: unknown) {
+    handleUnknownError(error, next);
     return;
   }
 };
@@ -55,23 +73,12 @@ export const importMeasurements = async (
   next: express.NextFunction
 ): Promise<void> => {
   try {
-    const { Measurements: measurementsFromExternalApi, error } =
-      await authenticateAndGetMeasurement(
-        req.body['muid'] as string,
-        req.body['start'] as string,
-        req.body['stop'] as string,
-        parseInt(req.body['limit'] as string)
-      );
-    if (error) {
-      next(new HttpException(500, error));
-      return;
-    }
-
-    if (!measurementsFromExternalApi) {
-      const error = 'Could not retrieve measurements from external api.';
-      next(new HttpException(500, error));
-      return;
-    }
+    const measurementsFromExternalApi = await _getMeasurementsFromExternalApi(
+      req.body['muid'] as string,
+      req.body['start'] as string,
+      req.body['stop'] as string,
+      req.body['limit'] as string
+    );
 
     const measurements = measurementsFromExternalApi.map((em) =>
       mapExternalMeasurement(em)
@@ -79,48 +86,52 @@ export const importMeasurements = async (
     await MeasurementModel.deleteMany();
     const result = await MeasurementModel.collection.insertMany(measurements);
 
-    res.status(200).json({
+    res.status(StatusCodes.OK).json({
       status: res.statusCode,
       message: `${result.insertedCount} measurements imported successfully!`
     });
-  } catch (e: unknown) {
-    const message =
-      e instanceof Error ? e.message : 'An unexpected error occurred';
-    next(new HttpException(500, message));
+  } catch (error: unknown) {
+    handleUnknownError(error, next);
     return;
   }
 };
 
 export const getMeasurements = async (
   req: Request,
-  res: Response
+  res: Response,
+  next: express.NextFunction
 ): Promise<void> => {
-  const muid = req.query.muid as string | undefined;
-  const start = req.query.start as string | undefined;
-  const stop = req.query.stop as string | undefined;
-  const limit = req.query.limit as string | undefined;
+  try {
+    const muid = req.query.muid as string | undefined;
+    const start = req.query.start as string | undefined;
+    const stop = req.query.stop as string | undefined;
+    const limit = req.query.limit as string | undefined;
 
-  const conditions = [];
-  if (muid) {
-    conditions.push({ tags: { muid: muid } });
+    const conditions = [];
+    if (muid) {
+      conditions.push({ tags: { muid: muid } });
+    }
+    if (start) {
+      conditions.push({ timestamp: { $gte: new Date(start) } });
+    }
+    if (stop) {
+      conditions.push({ timestamp: { $lte: new Date(stop) } });
+    }
+
+    const andConditons = conditions.length ? { $and: conditions } : {};
+
+    const limitAsNumber = limit ? parseInt(limit) : 1;
+
+    const measurements = await MeasurementModel.find(andConditons).limit(
+      limitAsNumber
+    );
+
+    res.status(StatusCodes.OK).json({
+      status: res.statusCode,
+      data: measurements
+    });
+  } catch (error: unknown) {
+    handleUnknownError(error, next);
+    return;
   }
-  if (start) {
-    conditions.push({ timestamp: { $gte: new Date(start) } });
-  }
-  if (stop) {
-    conditions.push({ timestamp: { $lte: new Date(stop) } });
-  }
-
-  const andConditons = conditions.length ? { $and: conditions } : {};
-
-  const limitAsNumber = limit ? parseInt(limit) : 1;
-
-  const measurements = await MeasurementModel.find(andConditons).limit(
-    limitAsNumber
-  );
-
-  res.status(200).json({
-    status: res.statusCode,
-    data: measurements
-  });
 };

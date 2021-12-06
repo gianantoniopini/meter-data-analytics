@@ -72,7 +72,6 @@ async function getMeasurement(
       responseType: 'json'
     }
   );
-  //console.log(responseBody.data[0]['0100100700FF']);
 
   return responseBody.data;
 }
@@ -83,7 +82,7 @@ async function authenticateAndGetMeasurement(
   stop: string,
   limit: number
 ): Promise<{
-  Measurements: [Measurement] | undefined;
+  measurements: [Measurement] | undefined;
   error: string | undefined;
 }> {
   const { cookie, error: authError } = await getAuthenticationCookie(
@@ -92,7 +91,7 @@ async function authenticateAndGetMeasurement(
     process.env.EXTERNAL_API_AUTH_PWD as string
   );
   if (authError) {
-    return { Measurements: undefined, error: authError };
+    return { measurements: undefined, error: authError };
   }
 
   const measurements = await getMeasurement(
@@ -104,7 +103,7 @@ async function authenticateAndGetMeasurement(
     stop,
     limit
   );
-  return { Measurements: measurements, error: undefined };
+  return { measurements, error: undefined };
 }
 
 export { authenticateAndGetMeasurement, Measurement };

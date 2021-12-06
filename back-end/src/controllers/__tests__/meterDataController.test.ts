@@ -54,9 +54,15 @@ it('Measurement request should return data from MongoDB', async () => {
   );
 });
 
+afterEach(async () => {
+  await MeasurementModel.deleteMany();
+});
+
 afterAll(async () => {
-  if (mongoDbConnection) {
-    await mongoDbConnection.close();
-    mongoDbConnection = undefined;
+  if (!mongoDbConnection) {
+    return;
   }
+
+  await mongoDbConnection.close();
+  mongoDbConnection = undefined;
 });

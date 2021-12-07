@@ -54,10 +54,10 @@ beforeAll(async () => {
 });
 
 describe('GET /api/v1/meterdata/measurement request', () => {
+  const requestUrl = '/api/v1/meterdata/measurement';
+
   it('with no muid query parameter should fail', async () => {
-    const response = await request(app)
-      .get('/api/v1/meterdata/measurement')
-      .send();
+    const response = await request(app).get(requestUrl).send();
 
     expect(response.status).toEqual(StatusCodes.BAD_REQUEST);
     expect(response.body.status).toEqual(StatusCodes.BAD_REQUEST);
@@ -74,7 +74,7 @@ describe('GET /api/v1/meterdata/measurement request', () => {
     await setupMeasurements('other-muid', new Date('2021-06-01T00:00:00Z'), 10);
 
     const response = await request(app)
-      .get(`/api/v1/meterdata/measurement?muid=${muid}&limit=100000`)
+      .get(`${requestUrl}?muid=${muid}&limit=100000`)
       .send();
 
     expect(response.status).toEqual(StatusCodes.OK);
@@ -110,7 +110,7 @@ describe('GET /api/v1/meterdata/measurement request', () => {
     const limit = 10;
 
     const response = await request(app)
-      .get(`/api/v1/meterdata/measurement?muid=${muid}&limit=${limit}`)
+      .get(`${requestUrl}?muid=${muid}&limit=${limit}`)
       .send();
 
     expect(response.status).toEqual(StatusCodes.OK);
@@ -132,7 +132,7 @@ describe('GET /api/v1/meterdata/measurement request', () => {
 
     const response = await request(app)
       .get(
-        `/api/v1/meterdata/measurement?muid=${muid}&start=${expectedFirstMeasurement.timestamp.toISOString()}&stop=${expectedLastMeasurement.timestamp.toISOString()}&limit=100000`
+        `${requestUrl}?muid=${muid}&start=${expectedFirstMeasurement.timestamp.toISOString()}&stop=${expectedLastMeasurement.timestamp.toISOString()}&limit=100000`
       )
       .send();
 
@@ -159,6 +159,18 @@ describe('GET /api/v1/meterdata/measurement request', () => {
     expect(new Date(actualLastMeasurement.timestamp)).toEqual(
       expectedLastMeasurement.timestamp
     );
+  });
+});
+
+describe('POST /meterdata/measurement/import request', () => {
+  const requestUrl = '/api/v1/meterdata/measurement/import';
+
+  it('with no muid body parameter should fail', async () => {
+    const response = await request(app).post(requestUrl).send({});
+
+    expect(response.status).toEqual(StatusCodes.BAD_REQUEST);
+    expect(response.body.status).toEqual(StatusCodes.BAD_REQUEST);
+    expect(response.body.message).toEqual('muid body parameter not present');
   });
 });
 

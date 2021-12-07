@@ -1,3 +1,4 @@
+import { Application } from 'express';
 import request from 'supertest';
 import { StatusCodes } from 'http-status-codes';
 import { connect, Connection } from 'mongoose';
@@ -6,6 +7,7 @@ import { Measurement } from '../../interfaces/Measurement';
 import MeasurementModel from '../../models/MeasurementModel';
 
 let mongoDbConnection: Connection | undefined;
+let app: Application;
 
 const setupMeasurements = async (
   muid: string,
@@ -43,6 +45,8 @@ beforeAll(async () => {
   try {
     const { connection } = await connect(process.env.MONGO_URI as string);
     mongoDbConnection = connection;
+
+    app = initializeApp();
   } catch (error) {
     console.error(error);
     throw error;
@@ -51,8 +55,6 @@ beforeAll(async () => {
 
 describe('GET /api/v1/meterdata/measurement request', () => {
   it('with no muid query parameter should fail', async () => {
-    const app = initializeApp();
-
     const response = await request(app)
       .get('/api/v1/meterdata/measurement')
       .send();
@@ -70,8 +72,6 @@ describe('GET /api/v1/meterdata/measurement request', () => {
     const expectedMeasurement = expectedMeasurements[0];
 
     await setupMeasurements('other-muid', new Date('2021-06-01T00:00:00Z'), 10);
-
-    const app = initializeApp();
 
     const response = await request(app)
       .get(`/api/v1/meterdata/measurement?muid=${muid}&limit=100000`)
@@ -107,8 +107,6 @@ describe('GET /api/v1/meterdata/measurement request', () => {
     const muid = '09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1';
     await setupMeasurements(muid, new Date('2021-05-01T00:00:00Z'), 100);
 
-    const app = initializeApp();
-
     const limit = 10;
 
     const response = await request(app)
@@ -120,6 +118,47 @@ describe('GET /api/v1/meterdata/measurement request', () => {
     expect(response.body.data).toBeDefined();
     const actualMeasurements = response.body.data as Measurement[];
     expect(actualMeasurements).toHaveLength(limit);
+  });
+
+  it('with start and stop query parameters should return measurements filtered by timestamp', async () => {
+    const muid = '09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1';
+    const measurements = await setupMeasurements(
+      muid,
+      new Date('2021-05-01T00:00:00Z'),
+      100
+    );
+    const expectedFirstMeasurement = measurements[10];
+    const expectedLastMeasurement = measurements[30];
+
+    const response = await request(app)
+      .get(
+        `/api/v1/meterdata/measurement?muid=${muid}&start=${expectedFirstMeasurement.timestamp.toISOString()}&stop=${expectedLastMeasurement.timestamp.toISOString()}&limit=100000`
+      )
+      .send();
+
+    expect(response.status).toEqual(StatusCodes.OK);
+    expect(response.body.status).toEqual(StatusCodes.OK);
+    expect(response.body.data).toBeDefined();
+    const actualMeasurements = response.body.data as Measurement[];
+    expect(actualMeasurements).toHaveLength(21);
+    const actualFirstMeasurement = actualMeasurements.reduce(function (a, b) {
+      return a.timestamp < b.timestamp ? a : b;
+    });
+    expect(actualFirstMeasurement._id.toString()).toEqual(
+      expectedFirstMeasurement._id.toString()
+    );
+    expect(new Date(actualFirstMeasurement.timestamp)).toEqual(
+      expectedFirstMeasurement.timestamp
+    );
+    const actualLastMeasurement = actualMeasurements.reduce(function (a, b) {
+      return a.timestamp > b.timestamp ? a : b;
+    });
+    expect(actualLastMeasurement._id.toString()).toEqual(
+      expectedLastMeasurement._id.toString()
+    );
+    expect(new Date(actualLastMeasurement.timestamp)).toEqual(
+      expectedLastMeasurement.timestamp
+    );
   });
 });
 

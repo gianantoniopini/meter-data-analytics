@@ -65,7 +65,7 @@ async function getMeasurement(
   const setCookie = promisify(cookieJar.setCookie.bind(cookieJar));
   await setCookie(cookie, cookieDomainUrl);
 
-  const { body: responseBody } = await got<MeasurementResponse>(
+  const { body: responseBody } = await got.get<MeasurementResponse>(
     `${measurementUrl}?muid=${muid}&start=${start ?? ''}&stop=${
       stop ?? ''
     }&limit=${limit ?? ''}`,

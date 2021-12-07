@@ -190,6 +190,26 @@ describe('POST /meterdata/measurement/import request', () => {
     expect(response.body.status).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
     expect(response.body.message).toEqual(errorMessage);
   });
+
+  it('should fail if external-api measurement request returns error', async () => {
+    mockedGot.post = jest.fn().mockResolvedValue({
+      headers: {
+        'set-cookie': [
+          'access_token=sdjfkasfjksajfksajfskdjafslakf.skdfjskfjskafjskafjskadfjs3485783skfskfjskfjsf.skadfksdfjdfk_fdjdskafjsdfjsfkjsafjsdkfJJkasjdfkjsfj89; Max-Age=600; Path=/; Expires=Tue, 07 Dec 2021 15:57:45 GMT; HttpOnly'
+        ]
+      }
+    });
+    const errorMessage = 'Token invalid';
+    mockedGot.get = jest.fn().mockRejectedValue(new Error(errorMessage));
+
+    const muid = '09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1';
+
+    const response = await request(app).post(requestUrl).send({ muid });
+
+    expect(response.status).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
+    expect(response.body.status).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
+    expect(response.body.message).toEqual(errorMessage);
+  });
 });
 
 afterEach(async () => {

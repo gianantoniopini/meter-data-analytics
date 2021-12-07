@@ -2,9 +2,13 @@ import { Application } from 'express';
 import request from 'supertest';
 import { StatusCodes } from 'http-status-codes';
 import { connect, Connection } from 'mongoose';
+import { mocked } from 'ts-jest/utils';
+import got from 'got';
 import { initialize as initializeApp } from '../../app';
 import { Measurement } from '../../interfaces/Measurement';
 import MeasurementModel from '../../models/MeasurementModel';
+
+jest.mock('got');
 
 let mongoDbConnection: Connection | undefined;
 let app: Application;
@@ -164,6 +168,7 @@ describe('GET /api/v1/meterdata/measurement request', () => {
 
 describe('POST /meterdata/measurement/import request', () => {
   const requestUrl = '/api/v1/meterdata/measurement/import';
+  const mockedGot = mocked(got);
 
   it('with no muid body parameter should fail', async () => {
     const response = await request(app).post(requestUrl).send({});
@@ -171,6 +176,19 @@ describe('POST /meterdata/measurement/import request', () => {
     expect(response.status).toEqual(StatusCodes.BAD_REQUEST);
     expect(response.body.status).toEqual(StatusCodes.BAD_REQUEST);
     expect(response.body.message).toEqual('muid body parameter not present');
+  });
+
+  it('should fail if external-api authentication request returns error', async () => {
+    const errorMessage = 'Invalid email address or password';
+    mockedGot.post = jest.fn().mockRejectedValue(new Error(errorMessage));
+
+    const muid = '09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1';
+
+    const response = await request(app).post(requestUrl).send({ muid });
+
+    expect(response.status).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
+    expect(response.body.status).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
+    expect(response.body.message).toEqual(errorMessage);
   });
 });
 

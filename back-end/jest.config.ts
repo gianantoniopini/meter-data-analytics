@@ -7,7 +7,7 @@ export default {
   coverageDirectory: 'coverage',
   coverageThreshold: {
     global: {
-      lines: 40
+      lines: 55
     }
   },
   preset: '@shelf/jest-mongodb',

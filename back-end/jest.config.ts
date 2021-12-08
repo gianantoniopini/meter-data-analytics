@@ -5,7 +5,7 @@ export default {
   coverageDirectory: 'coverage',
   coverageThreshold: {
     global: {
-      lines: 60
+      lines: 65
     }
   },
   preset: 'ts-jest',

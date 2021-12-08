@@ -1,5 +1,3 @@
-import { defaults as tsjPreset } from 'ts-jest/presets';
-
 export default {
   clearMocks: true,
   collectCoverage: true,
@@ -10,8 +8,8 @@ export default {
       lines: 60
     }
   },
-  preset: '@shelf/jest-mongodb',
+  preset: 'ts-jest',
   roots: ['<rootDir>/src'],
   setupFiles: ['./jest.setup.ts'],
-  transform: tsjPreset.transform
+  testEnvironment: 'node'
 };

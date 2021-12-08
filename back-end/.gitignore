@@ -10,9 +10,6 @@ node_modules/
 # MongoDB data export files
 *.mongodb.json
 
-# File created by @shelf/jest-mongodb
-globalConfig.json
-
 # Code coverage
 coverage/
 

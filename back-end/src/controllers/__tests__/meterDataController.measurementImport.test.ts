@@ -3,8 +3,8 @@ import { StatusCodes } from 'http-status-codes';
 import request from 'supertest';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { openConnection, closeConnection } from '../../database';
-import got from 'got';
-import { CookieJar } from 'tough-cookie';
+import got, { OptionsOfJSONResponseBody } from 'got';
+import { Cookie, CookieJar } from 'tough-cookie';
 import { mocked } from 'ts-jest/utils';
 import { initialize as initializeApp } from '../../app';
 import MeasurementModel from '../../models/MeasurementModel';
@@ -15,37 +15,24 @@ const mockedGot = mocked(got);
 let mongoServer: MongoMemoryServer;
 let app: Application;
 
-const setupExternalApiAuthenticationRequest = (): {
-  accessTokenKey: string;
-  accessTokenValue: string;
-  maxAge: number;
-  path: string;
-  expires: string;
-  httpOnly: boolean;
-} => {
+const mockExternalApiAuthenticationRequest = (): Cookie => {
   const accessTokenKey = 'access_token';
   const accessTokenValue =
-    'sdjfkasfjksajfksajfskdjafslakf.skdfjskfjskafjskafjskadfjs3485783skfskfjskfjsf.skadfksdfjdfk_fdjdskafjsdfjsfkjsafjsdkfJJkasjdfkjsfj89';
+    'veryLongAlphanumericString.skdfjskfjskafjskafjskadfjs3485783skfskfjskfjsf.skadfksdfjdfk_fdjdskafjsdfjsfkjsafjsdkfJJkasjdfkjsfj89';
   const maxAge = 600;
   const path = '/';
-  const expires = '2021-12-07T15:57:45.000Z';
+  const expires = new Date(new Date().getTime() + maxAge * 1000);
 
-  const cookieValue = `${accessTokenKey}=${accessTokenValue}; Max-Age=${maxAge}; Path=${path}; Expires=${expires}; HttpOnly`;
+  const cookieString = `${accessTokenKey}=${accessTokenValue}; Max-Age=${maxAge}; Path=${path}; Expires=${expires.toUTCString()}; HttpOnly`;
+  const cookie = Cookie.parse(cookieString) as Cookie;
 
   mockedGot.post = jest.fn().mockResolvedValue({
     headers: {
-      'set-cookie': [cookieValue]
+      'set-cookie': [cookieString]
     }
   });
 
-  return {
-    accessTokenKey,
-    accessTokenValue,
-    maxAge,
-    path,
-    expires,
-    httpOnly: true
-  };
+  return cookie;
 };
 
 beforeAll(async () => {
@@ -103,10 +90,10 @@ describe('POST /meterdata/measurement/import request', () => {
   });
 
   it('should make external-api measurement request', async () => {
-    const now = new Date();
+    const externalApiCookieDomainUrl = process.env
+      .EXTERNAL_API_COOKIE_DOMAIN_URL as string;
 
-    const externalApiAuthenticationCookie =
-      setupExternalApiAuthenticationRequest();
+    const expectedAuthenticationCookie = mockExternalApiAuthenticationRequest();
 
     const muid = '09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1';
     const start = '2021-04-30T23:59:59Z';
@@ -117,26 +104,38 @@ describe('POST /meterdata/measurement/import request', () => {
 
     expect(mockedGot.get).toHaveBeenCalledTimes(1);
     const mockedGet = mockedGot.get as jest.Mock;
-    expect(mockedGet.mock.calls[0][0]).toEqual(
+    const mockedGetCallUrl = mockedGet.mock.calls[0][0] as string;
+    expect(mockedGetCallUrl).toEqual(
       `${process.env.EXTERNAL_API_MEASUREMENT_URL}?muid=${muid}&start=${start}&stop=${stop}&limit=${limit}`
     );
-    const cookieJar = (
-      mockedGet.mock.calls[0][1].cookieJar as CookieJar
-    ).toJSON();
-    const cookie = cookieJar.cookies[0];
-    expect(cookie.key).toEqual(externalApiAuthenticationCookie.accessTokenKey);
-    expect(cookie.value).toEqual(
-      externalApiAuthenticationCookie.accessTokenValue
+    const mockedGetCallOptions = mockedGet.mock
+      .calls[0][1] as OptionsOfJSONResponseBody;
+    expect(mockedGetCallOptions).toBeDefined();
+    const mockedGetCallCookieJar = mockedGetCallOptions.cookieJar as CookieJar;
+    expect(mockedGetCallCookieJar).toBeDefined();
+    const mockedGetCallCookies = await mockedGetCallCookieJar.getCookies(
+      externalApiCookieDomainUrl
     );
-    expect(cookie.maxAge).toEqual(externalApiAuthenticationCookie.maxAge);
-    expect(cookie.path).toEqual(externalApiAuthenticationCookie.path);
-    expect(cookie.httpOnly).toEqual(externalApiAuthenticationCookie.httpOnly);
-    expect(new Date(cookie.creation) >= now).toBe(true);
-    expect(new Date(cookie.lastAccessed) >= now).toBe(true);
+    expect(mockedGetCallCookies).toHaveLength(1);
+    const mockedGetCallCookie = mockedGetCallCookies[0];
+    expect(mockedGetCallCookie.key).toEqual(expectedAuthenticationCookie.key);
+    expect(mockedGetCallCookie.value).toEqual(
+      expectedAuthenticationCookie.value
+    );
+    expect(mockedGetCallCookie.maxAge).toEqual(
+      expectedAuthenticationCookie.maxAge
+    );
+    expect(mockedGetCallCookie.path).toEqual(expectedAuthenticationCookie.path);
+    expect(mockedGetCallCookie.expires).toEqual(
+      expectedAuthenticationCookie.expires
+    );
+    expect(mockedGetCallCookie.httpOnly).toEqual(
+      expectedAuthenticationCookie.httpOnly
+    );
   });
 
   it('should fail if external-api measurement request returns error', async () => {
-    setupExternalApiAuthenticationRequest();
+    mockExternalApiAuthenticationRequest();
 
     const errorMessage = 'Token invalid';
     mockedGot.get = jest.fn().mockRejectedValue(new Error(errorMessage));

@@ -1,5 +1,5 @@
 import got from 'got';
-import toughCookie, { CookieJar } from 'tough-cookie';
+import { Cookie, CookieJar } from 'tough-cookie';
 import { promisify } from 'util';
 
 type Measurement = {
@@ -20,7 +20,7 @@ async function getAuthenticationCookie(
   authEmail: string,
   authPassword: string
 ): Promise<{
-  cookie: toughCookie.Cookie | undefined;
+  cookie: Cookie | undefined;
   error: string | undefined;
 }> {
   const { headers: authResponseHeaders } = await got.post(authUrl, {
@@ -38,7 +38,7 @@ async function getAuthenticationCookie(
     };
   }
 
-  const cookie = toughCookie.parse(authResponseHeaders['set-cookie'][0]);
+  const cookie = Cookie.parse(authResponseHeaders['set-cookie'][0]);
   if (!cookie) {
     return {
       cookie: undefined,
@@ -53,7 +53,7 @@ async function getAuthenticationCookie(
 }
 
 async function getMeasurement(
-  cookie: toughCookie.Cookie,
+  cookie: Cookie,
   cookieDomainUrl: string,
   measurementUrl: string,
   muid: string,
@@ -97,7 +97,7 @@ async function authenticateAndGetMeasurement(
   }
 
   const measurements = await getMeasurement(
-    cookie as toughCookie.Cookie,
+    cookie as Cookie,
     process.env.EXTERNAL_API_COOKIE_DOMAIN_URL as string,
     process.env.EXTERNAL_API_MEASUREMENT_URL as string,
     muid,

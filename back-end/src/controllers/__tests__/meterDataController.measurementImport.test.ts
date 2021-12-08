@@ -48,7 +48,9 @@ beforeAll(async () => {
 });
 
 describe('POST /meterdata/measurement/import request', () => {
-  const requestUrl = '/api/v1/meterdata/measurement/import';
+  const requestUrl = `${
+    process.env.BASE_PATH as string
+  }/meterdata/measurement/import`;
 
   it('with no muid body parameter should fail', async () => {
     const response = await request(app).post(requestUrl).send({});

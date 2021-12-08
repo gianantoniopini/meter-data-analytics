@@ -18,8 +18,8 @@ afterEach(() => {
   jest.useRealTimers();
 });
 
-describe('GET /api/v1/meterdata/measurement request', () => {
-  const requestUrl = '/api/v1/meterdata/measurement';
+describe('GET /meterdata/measurement request', () => {
+  const requestUrl = `${process.env.BASE_PATH as string}/meterdata/measurement`;
 
   it('with no access token should fail', async () => {
     const app = initializeApp();

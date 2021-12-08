@@ -54,8 +54,8 @@ beforeAll(async () => {
   }
 });
 
-describe('GET /api/v1/meterdata/measurement request', () => {
-  const requestUrl = '/api/v1/meterdata/measurement';
+describe('GET /meterdata/measurement request', () => {
+  const requestUrl = `${process.env.BASE_PATH as string}/meterdata/measurement`;
 
   it('with no muid query parameter should fail', async () => {
     const response = await request(app).get(requestUrl).send();

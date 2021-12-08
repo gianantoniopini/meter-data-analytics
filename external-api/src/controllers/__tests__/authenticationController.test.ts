@@ -2,8 +2,8 @@ import request from 'supertest';
 import { StatusCodes } from 'http-status-codes';
 import { initialize as initializeApp } from '../../app';
 
-describe('POST /api/v1/authentication/auth request', () => {
-  const requestUrl = '/api/v1/authentication/auth';
+describe('POST /authentication/auth request', () => {
+  const requestUrl = `${process.env.BASE_PATH as string}/authentication/auth`;
 
   it('with no email and password should fail', async () => {
     const app = initializeApp();

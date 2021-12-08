@@ -1,15 +1,12 @@
-import { connect } from 'mongoose';
+import { connect, Connection, disconnect } from 'mongoose';
 
-async function openConnection(): Promise<void> {
-  try {
-    const { connection } = await connect(process.env.MONGO_URI as string);
-    console.log('MongoDB connected Successfully!');
-    console.log(`MongoDB connection host: ${connection.host}`);
-  } catch (error) {
-    console.log('Could not open connection to MongoDB');
-    console.log(error);
-    throw error;
-  }
-}
+export const openConnection = async (
+  connectionString: string
+): Promise<Connection> => {
+  const { connection } = await connect(connectionString);
+  return connection;
+};
 
-export default openConnection;
+export const closeConnection = async (): Promise<void> => {
+  await disconnect();
+};

@@ -1,8 +1,8 @@
 import { Application } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { connect, disconnect } from 'mongoose';
 import request from 'supertest';
 import { MongoMemoryServer } from 'mongodb-memory-server';
+import { openConnection, closeConnection } from '../../database';
 import got from 'got';
 import { CookieJar } from 'tough-cookie';
 import { mocked } from 'ts-jest/utils';
@@ -51,7 +51,7 @@ const setupExternalApiAuthenticationRequest = (): {
 beforeAll(async () => {
   try {
     mongoServer = await MongoMemoryServer.create();
-    await connect(mongoServer.getUri());
+    await openConnection(mongoServer.getUri());
 
     app = initializeApp();
   } catch (error) {
@@ -156,6 +156,6 @@ afterEach(async () => {
 });
 
 afterAll(async () => {
-  await disconnect();
+  await closeConnection();
   await mongoServer.stop();
 });

@@ -1,8 +1,8 @@
 import { Application } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { connect, disconnect } from 'mongoose';
 import request from 'supertest';
 import { MongoMemoryServer } from 'mongodb-memory-server';
+import { openConnection, closeConnection } from '../../database';
 import { initialize as initializeApp } from '../../app';
 import { Measurement } from '../../interfaces/Measurement';
 import MeasurementModel from '../../models/MeasurementModel';
@@ -45,7 +45,7 @@ const setupMeasurements = async (
 beforeAll(async () => {
   try {
     mongoServer = await MongoMemoryServer.create();
-    await connect(mongoServer.getUri());
+    await openConnection(mongoServer.getUri());
 
     app = initializeApp();
   } catch (error) {
@@ -168,6 +168,6 @@ afterEach(async () => {
 });
 
 afterAll(async () => {
-  await disconnect();
+  await closeConnection();
   await mongoServer.stop();
 });

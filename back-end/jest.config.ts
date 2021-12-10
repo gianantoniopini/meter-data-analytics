@@ -1,7 +1,7 @@
 export default {
   clearMocks: true,
   collectCoverage: true,
-  collectCoverageFrom: ['./src/**'],
+  collectCoverageFrom: ['./src/**', '!**/__tests__/**'],
   coverageDirectory: 'coverage',
   coverageThreshold: {
     global: {

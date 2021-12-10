@@ -98,15 +98,24 @@ export const importMeasurements = async (
       req.body.limit as string | undefined
     );
 
-    await MeasurementModel.deleteMany({ tags: { muid } });
+    const deleteResult = await MeasurementModel.deleteMany({ tags: { muid } });
+
     const measurements = measurementsFromExternalApi.map((em) =>
       mapExternalApiMeasurement(em)
     );
-    const result = await MeasurementModel.collection.insertMany(measurements);
 
+    let insertedCount = 0;
+    if (measurements.length > 0) {
+      const insertResult = await MeasurementModel.collection.insertMany(
+        measurements
+      );
+      insertedCount = insertResult.insertedCount;
+    }
+
+    const message = `${deleteResult.deletedCount} measurements deleted - ${insertedCount} measurements inserted`;
     res.status(StatusCodes.OK).json({
       status: res.statusCode,
-      message: `${result.insertedCount} measurements imported successfully!`
+      message
     });
   } catch (error: unknown) {
     handleUnknownError(error, next);

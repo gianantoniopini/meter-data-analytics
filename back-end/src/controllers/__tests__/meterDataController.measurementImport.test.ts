@@ -190,7 +190,7 @@ describe('POST /meterdata/measurement/import request', () => {
     expect(response.body.message).toEqual(errorMessage);
   });
 
-  it('should delete all measurements with the same muid already in the database', async () => {
+  it('should delete all pre-existing measurements with the same muid', async () => {
     const muid = '09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1';
     const timestamp = new Date('2021-05-01T00:00:00Z');
     const existingMeasurementsWithSameMuid = await setupMeasurements(
@@ -215,6 +215,81 @@ describe('POST /meterdata/measurement/import request', () => {
     expect(
       await MeasurementModel.find({ tags: { muid: otherMuid } })
     ).toHaveLength(20);
+  });
+
+  it('should insert the measurements returned from external-api', async () => {
+    const muid = '09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1';
+    const timestamp = new Date('2021-05-01T00:00:00Z');
+
+    mockExternalApiAuthenticationRequest();
+    const externalApiMeasurements = mockExternalApiMeasurementRequest(
+      muid,
+      timestamp,
+      30
+    );
+
+    await request(app).post(requestUrl).send({ muid });
+
+    expect(await MeasurementModel.count({})).toEqual(30);
+    expect(await MeasurementModel.find({ tags: { muid: muid } })).toHaveLength(
+      30
+    );
+    for (const externalApiMeasurement of externalApiMeasurements) {
+      const actualMeasurements = await MeasurementModel.find({
+        timestamp: externalApiMeasurement.timestamp
+      });
+      expect(actualMeasurements).toHaveLength(1);
+      const actualMeasurement = actualMeasurements[0];
+      expect(actualMeasurement.measurement).toEqual(
+        externalApiMeasurement.measurement
+      );
+      expect(actualMeasurement.timestamp).toEqual(
+        externalApiMeasurement.timestamp
+      );
+      expect(actualMeasurement.tags).toEqual(externalApiMeasurement.tags);
+      expect(actualMeasurement['0100010700FF']).toEqual(
+        externalApiMeasurement['0100010700FF']
+      );
+      expect(actualMeasurement['0100020700FF']).toEqual(
+        externalApiMeasurement['0100020700FF']
+      );
+      expect(actualMeasurement['0100100700FF']).toEqual(
+        externalApiMeasurement['0100100700FF']
+      );
+    }
+  });
+
+  it('should succeed even if external-api returns no measurements', async () => {
+    const muid = '09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1';
+    const timestamp = new Date('2021-05-01T00:00:00Z');
+
+    mockExternalApiAuthenticationRequest();
+    mockExternalApiMeasurementRequest(muid, timestamp, 0);
+
+    const response = await request(app).post(requestUrl).send({ muid });
+
+    expect(response.status).toEqual(StatusCodes.OK);
+    expect(response.body.status).toEqual(StatusCodes.OK);
+    expect(response.body.message).toEqual(
+      '0 measurements deleted - 0 measurements inserted'
+    );
+  });
+
+  it('should return number of measurements deleted and inserted', async () => {
+    const muid = '09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1';
+    const timestamp = new Date('2021-05-01T00:00:00Z');
+    await setupMeasurements(muid, timestamp, 10);
+
+    mockExternalApiAuthenticationRequest();
+    mockExternalApiMeasurementRequest(muid, timestamp, 20);
+
+    const response = await request(app).post(requestUrl).send({ muid });
+
+    expect(response.status).toEqual(StatusCodes.OK);
+    expect(response.body.status).toEqual(StatusCodes.OK);
+    expect(response.body.message).toEqual(
+      '10 measurements deleted - 20 measurements inserted'
+    );
   });
 });
 

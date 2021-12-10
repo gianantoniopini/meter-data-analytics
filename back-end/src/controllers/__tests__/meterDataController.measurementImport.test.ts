@@ -8,6 +8,9 @@ import { Cookie, CookieJar } from 'tough-cookie';
 import { mocked } from 'ts-jest/utils';
 import { initialize as initializeApp } from '../../app';
 import MeasurementModel from '../../models/MeasurementModel';
+import { ExternalApiMeasurementResponse } from '../../interfaces/ExternalApiMeasurementResponse';
+import { ExternalApiMeasurement } from '../../interfaces/ExternalApiMeasurement';
+import { setupMeasurements } from './helpers/meterDataControllerHelper';
 
 jest.mock('got');
 const mockedGot = mocked(got);
@@ -33,6 +36,42 @@ const mockExternalApiAuthenticationRequest = (): Cookie => {
   });
 
   return cookie;
+};
+
+export const mockExternalApiMeasurementRequest = (
+  muid: string,
+  timestampStart: Date,
+  count: number
+): ExternalApiMeasurement[] => {
+  const measurements: ExternalApiMeasurement[] = [];
+
+  const indexes = [...Array(count).keys()].map((i) => i);
+  for (const index of indexes) {
+    // One measurement every 15 minutes
+    const timestamp = new Date(timestampStart.getTime() + 15 * index * 60000);
+
+    // Random power value between 0 and 5000
+    const powerValue = Math.random() * 5000;
+
+    const measurement: ExternalApiMeasurement = {
+      measurement: 'power',
+      timestamp: timestamp,
+      tags: { muid: muid },
+      '0100010700FF': powerValue,
+      '0100020700FF': 0,
+      '0100100700FF': powerValue
+    };
+
+    measurements.push(measurement);
+  }
+
+  const responseBody: ExternalApiMeasurementResponse = { data: measurements };
+
+  mockedGot.get = jest.fn().mockResolvedValue({
+    body: responseBody
+  });
+
+  return measurements;
 };
 
 beforeAll(async () => {
@@ -149,6 +188,33 @@ describe('POST /meterdata/measurement/import request', () => {
     expect(response.status).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
     expect(response.body.status).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
     expect(response.body.message).toEqual(errorMessage);
+  });
+
+  it('should delete all measurements with the same muid already in the database', async () => {
+    const muid = '09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1';
+    const timestamp = new Date('2021-05-01T00:00:00Z');
+    const existingMeasurementsWithSameMuid = await setupMeasurements(
+      muid,
+      timestamp,
+      10
+    );
+    const otherMuid = 'other-muid';
+    await setupMeasurements(otherMuid, timestamp, 20);
+
+    mockExternalApiAuthenticationRequest();
+    mockExternalApiMeasurementRequest(muid, timestamp, 30);
+
+    await request(app).post(requestUrl).send({ muid });
+
+    expect(await MeasurementModel.count({})).toEqual(50);
+    expect(
+      await MeasurementModel.find({
+        _id: { $in: existingMeasurementsWithSameMuid.map((m) => m._id) }
+      })
+    ).toHaveLength(0);
+    expect(
+      await MeasurementModel.find({ tags: { muid: otherMuid } })
+    ).toHaveLength(20);
   });
 });
 

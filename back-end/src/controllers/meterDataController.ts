@@ -1,22 +1,22 @@
 import express, { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { handleUnknownError } from '../utils/controllerUtils';
-import {
-  authenticateAndGetMeasurement,
-  Measurement as ExternalMeasurement
-} from '../utils/externalApiProxy';
+import { authenticateAndGetMeasurement } from '../utils/externalApiProxy';
+import { ExternalApiMeasurement } from '../interfaces/ExternalApiMeasurement';
 import MeasurementModel from '../models/MeasurementModel';
 
-const mapExternalMeasurement = (externalMeasurement: ExternalMeasurement) => {
+const mapExternalApiMeasurement = (
+  externalApiMeasurement: ExternalApiMeasurement
+) => {
   return new MeasurementModel({
-    measurement: externalMeasurement.measurement,
-    timestamp: externalMeasurement.timestamp,
+    measurement: externalApiMeasurement.measurement,
+    timestamp: externalApiMeasurement.timestamp,
     tags: {
-      muid: externalMeasurement.tags.muid
+      muid: externalApiMeasurement.tags.muid
     },
-    '0100010700FF': externalMeasurement['0100010700FF'],
-    '0100020700FF': externalMeasurement['0100020700FF'],
-    '0100100700FF': externalMeasurement['0100100700FF']
+    '0100010700FF': externalApiMeasurement['0100010700FF'],
+    '0100020700FF': externalApiMeasurement['0100020700FF'],
+    '0100100700FF': externalApiMeasurement['0100100700FF']
   });
 };
 
@@ -25,7 +25,7 @@ const _getMeasurementsFromExternalApi = async (
   start: string | undefined,
   stop: string | undefined,
   limit: string | undefined
-): Promise<[ExternalMeasurement]> => {
+): Promise<ExternalApiMeasurement[]> => {
   const { measurements, error } = await authenticateAndGetMeasurement(
     muid,
     start,
@@ -81,7 +81,9 @@ export const importMeasurements = async (
   next: express.NextFunction
 ): Promise<void> => {
   try {
-    if (!req.body.muid) {
+    const muid = req.body.muid as string | undefined;
+
+    if (!muid) {
       res.status(StatusCodes.BAD_REQUEST).json({
         status: res.statusCode,
         message: 'muid body parameter not present'
@@ -90,16 +92,16 @@ export const importMeasurements = async (
     }
 
     const measurementsFromExternalApi = await _getMeasurementsFromExternalApi(
-      req.body.muid as string,
+      muid,
       req.body.start as string | undefined,
       req.body.stop as string | undefined,
       req.body.limit as string | undefined
     );
 
+    await MeasurementModel.deleteMany({ tags: { muid } });
     const measurements = measurementsFromExternalApi.map((em) =>
-      mapExternalMeasurement(em)
+      mapExternalApiMeasurement(em)
     );
-    await MeasurementModel.deleteMany();
     const result = await MeasurementModel.collection.insertMany(measurements);
 
     res.status(StatusCodes.OK).json({

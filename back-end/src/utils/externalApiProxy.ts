@@ -1,19 +1,8 @@
 import got from 'got';
 import { Cookie, CookieJar } from 'tough-cookie';
 import { promisify } from 'util';
-
-type Measurement = {
-  measurement: string;
-  timestamp: Date;
-  tags: { muid: string };
-  '0100010700FF': number;
-  '0100020700FF': number;
-  '0100100700FF': number;
-};
-
-type MeasurementResponse = {
-  data: [Measurement];
-};
+import { ExternalApiMeasurement } from '../interfaces/ExternalApiMeasurement';
+import { ExternalApiMeasurementResponse } from '../interfaces/ExternalApiMeasurementResponse';
 
 async function getAuthenticationCookie(
   authUrl: string,
@@ -60,12 +49,12 @@ async function getMeasurement(
   start: string | undefined,
   stop: string | undefined,
   limit: number | undefined
-): Promise<[Measurement]> {
+): Promise<ExternalApiMeasurement[]> {
   const cookieJar = new CookieJar();
   const setCookie = promisify(cookieJar.setCookie.bind(cookieJar));
   await setCookie(cookie, cookieDomainUrl);
 
-  const { body: responseBody } = await got.get<MeasurementResponse>(
+  const { body: responseBody } = await got.get<ExternalApiMeasurementResponse>(
     `${measurementUrl}?muid=${muid}&start=${start ?? ''}&stop=${
       stop ?? ''
     }&limit=${limit ?? ''}`,
@@ -84,7 +73,7 @@ async function authenticateAndGetMeasurement(
   stop: string | undefined,
   limit: number | undefined
 ): Promise<{
-  measurements: [Measurement] | undefined;
+  measurements: ExternalApiMeasurement[] | undefined;
   error: string | undefined;
 }> {
   const { cookie, error: authError } = await getAuthenticationCookie(
@@ -108,4 +97,4 @@ async function authenticateAndGetMeasurement(
   return { measurements, error: undefined };
 }
 
-export { authenticateAndGetMeasurement, Measurement };
+export { authenticateAndGetMeasurement };

@@ -11,22 +11,22 @@
           >
             <li class="nav-item">
               <a href="#filters" class="nav-link py-3 px-2">
-                <i>Filters</i>
+                Filters <i class="bi bi-filter"></i>
               </a>
             </li>
             <li>
               <a href="#timeSeries" class="nav-link py-3 px-2">
-                <i>Time Series</i>
+                Time Series <i class="bi bi-graph-up"></i>
               </a>
             </li>
             <li>
               <a href="#analytics" class="nav-link py-3 px-2">
-                <i>Analytics</i>
+                Analytics <i class="bi bi-graph-up"></i>
               </a>
             </li>
             <li>
               <a href="#rawData" class="nav-link py-3 px-2">
-                <i>Raw Data</i>
+                Raw Data <i class="bi bi-table"></i>
               </a>
             </li>
           </ul>

@@ -50,19 +50,15 @@
                   >
                   <input
                     id="smartMeterIdFilter"
-                    v-model="v$.smartMeterIdFilter.$model"
+                    v-model="smartMeterIdFilter"
                     placeholder="Enter Smart Meter Id"
                     type="text"
                     class="form-control"
                     :class="{
-                      'is-invalid': v$.smartMeterIdFilter.$errors.length,
+                      'is-invalid': this.validationErrors.smartMeterIdFilter,
                     }"
                     data-toggle="tooltip"
-                    :title="
-                      v$.smartMeterIdFilter.$errors.length
-                        ? v$.smartMeterIdFilter.$errors[0].$message
-                        : null
-                    "
+                    :title="this.validationErrors.smartMeterIdFilter"
                   />
                 </div>
                 <div class="form-group col-md-3">
@@ -89,7 +85,7 @@
                 </div>
                 <div class="col-md-2 align-self-end">
                   <button
-                    :disabled="v$.$invalid"
+                    :disabled="invalid"
                     v-on:click="applyFilters"
                     type="button"
                     class="btn btn-primary"
@@ -196,17 +192,11 @@ import MeterDataService from "@/services/MeterDataService";
 import MeasurementAnalyticsService from "@/services/MeasurementAnalyticsService";
 import Measurement from "@/types/Measurement";
 import BasicLineChart, { Dataset } from "./BasicLineChart.vue";
-import useVuelidate from "@vuelidate/core";
-import { required } from "@vuelidate/validators";
 
 export default defineComponent({
   name: "MeterData",
 
   components: { BasicLineChart },
-
-  setup() {
-    return { v$: useVuelidate() };
-  },
 
   data() {
     return {
@@ -221,15 +211,22 @@ export default defineComponent({
       averagePowerByWeekdayChartDataSets: [] as Dataset[],
       averagePowerByHourChartLabels: [] as string[],
       averagePowerByHourChartDataSets: [] as Dataset[],
+      validationErrors: {
+        smartMeterIdFilter: "",
+      },
     };
   },
 
-  validations() {
-    return {
-      smartMeterIdFilter: {
-        required,
-      },
-    };
+  watch: {
+    smartMeterIdFilter() {
+      this.validateSmartMeterIdFilter();
+    },
+  },
+
+  computed: {
+    invalid(): boolean {
+      return this.validationErrors.smartMeterIdFilter.length > 0;
+    },
   },
 
   methods: {
@@ -309,6 +306,11 @@ export default defineComponent({
     },
 
     applyFilters() {
+      this.validateSmartMeterIdFilter();
+      if (this.invalid) {
+        return;
+      }
+
       const timestampFromFilter = this.timestampFromFilter as string | null;
       let timestampFromDate: Date | null = null;
       const timestampToFilter = this.timestampToFilter as string | null;
@@ -368,6 +370,14 @@ export default defineComponent({
       isoWeekdays[6] = "Sunday";
 
       return isoWeekdays[isoWeekday - 1];
+    },
+
+    validateSmartMeterIdFilter() {
+      this.validationErrors.smartMeterIdFilter = "";
+
+      if (!this.smartMeterIdFilter || !this.smartMeterIdFilter.trim()) {
+        this.validationErrors.smartMeterIdFilter = "Value is required";
+      }
     },
   },
 

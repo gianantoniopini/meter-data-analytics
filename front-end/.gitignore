@@ -24,3 +24,6 @@ pnpm-debug.log*
 
 # Code coverage
 coverage/
+
+# Links file
+links.txt

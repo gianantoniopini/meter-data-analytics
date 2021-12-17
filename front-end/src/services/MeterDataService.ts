@@ -1,5 +1,5 @@
-import http from "@/http-common";
-import Measurement from "@/types/Measurement";
+import http from '@/http-common';
+import Measurement from '@/types/Measurement';
 
 class MeterDataService {
   async getMeasurements(
@@ -8,9 +8,9 @@ class MeterDataService {
     timestampTo: string | null
   ): Promise<Measurement[]> {
     const muidQueryString = `muid=${smartMeterId}`;
-    const startQueryString = timestampFrom ? `&start=${timestampFrom}` : "";
-    const stopQueryString = timestampTo ? `&stop=${timestampTo}` : "";
-    const limitQueryString = "&limit=100000";
+    const startQueryString = timestampFrom ? `&start=${timestampFrom}` : '';
+    const stopQueryString = timestampTo ? `&stop=${timestampTo}` : '';
+    const limitQueryString = '&limit=100000';
 
     const url = `/meterdata/measurement?${muidQueryString}${startQueryString}${stopQueryString}${limitQueryString}`;
 

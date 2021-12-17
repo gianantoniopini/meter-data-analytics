@@ -3,17 +3,14 @@
   "version": "1.0.0",
   "private": true,
   "description": "Vue app with TypeScript and Axios",
+  "author": "gianantoniopini",
   "scripts": {
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint --no-fix",
     "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "test:unit": "vue-cli-service test:unit",
+    "lint": "vue-cli-service lint --no-fix",
     "serve:production": "http-server ./dist -p 0"
   },
-  "keywords": [
-    "vue"
-  ],
-  "author": "gianantoniopini",
-  "license": "MIT",
   "dependencies": {
     "axios": "^0.21.4",
     "bootstrap": "^5.1.1",
@@ -26,11 +23,14 @@
     "vue-router": "^4.0.11"
   },
   "devDependencies": {
+    "@testing-library/vue": "^6.4.2",
+    "@types/jest": "^24.0.19",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-plugin-typescript": "~4.5.0",
+    "@vue/cli-plugin-unit-jest": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.0.0",
     "@vue/eslint-config-prettier": "^6.0.0",
@@ -39,6 +39,11 @@
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-vue": "^7.0.0",
     "prettier": "^2.2.1",
-    "typescript": "~4.1.5"
-  }
+    "typescript": "~4.1.5",
+    "vue-jest": "^5.0.0-0"
+  },
+  "keywords": [
+    "vue"
+  ],
+  "license": "MIT"
 }

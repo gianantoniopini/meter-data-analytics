@@ -1,6 +1,6 @@
-import Measurement from "@/types/Measurement";
-import WeekdayAveragePower from "@/types/WeekdayAveragePower";
-import HourAveragePower from "@/types/HourAveragePower";
+import Measurement from '@/types/Measurement';
+import WeekdayAveragePower from '@/types/WeekdayAveragePower';
+import HourAveragePower from '@/types/HourAveragePower';
 
 const mapWeekdayToIsoWeekday = (weekday: number): number => {
   switch (weekday) {
@@ -16,7 +16,7 @@ const mapWeekdayToIsoWeekday = (weekday: number): number => {
 
 const calculateAveragePower = (measurements: Measurement[]): number => {
   const averagePower =
-    measurements.reduce((sum, current) => sum + current["0100100700FF"], 0) /
+    measurements.reduce((sum, current) => sum + current['0100100700FF'], 0) /
     measurements.length;
 
   return averagePower;
@@ -42,7 +42,7 @@ class MeasurementAnalyticsService {
 
       results.push({
         isoWeekday: mapWeekdayToIsoWeekday(weekday),
-        averagePower: averagePower,
+        averagePower: averagePower
       });
     }
 
@@ -68,7 +68,7 @@ class MeasurementAnalyticsService {
 
       results.push({
         hour: hour,
-        averagePower: averagePower,
+        averagePower: averagePower
       });
     }
 

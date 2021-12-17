@@ -55,7 +55,7 @@
                     type="text"
                     class="form-control"
                     :class="{
-                      'is-invalid': this.validationErrors.smartMeterIdFilter,
+                      'is-invalid': this.validationErrors.smartMeterIdFilter
                     }"
                     data-toggle="tooltip"
                     :title="this.validationErrors.smartMeterIdFilter"
@@ -169,13 +169,13 @@
                   {{ measurement.measurement }}
                 </div>
                 <div class="col-md-2 border text-end">
-                  {{ formatNumber(measurement["0100010700FF"]) }}
+                  {{ formatNumber(measurement['0100010700FF']) }}
                 </div>
                 <div class="col-md-2 border text-end">
-                  {{ formatNumber(measurement["0100020700FF"]) }}
+                  {{ formatNumber(measurement['0100020700FF']) }}
                 </div>
                 <div class="col-md-2 border text-end">
-                  {{ formatNumber(measurement["0100100700FF"]) }}
+                  {{ formatNumber(measurement['0100100700FF']) }}
                 </div>
               </div>
             </div>
@@ -187,14 +187,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import MeterDataService from "@/services/MeterDataService";
-import MeasurementAnalyticsService from "@/services/MeasurementAnalyticsService";
-import Measurement from "@/types/Measurement";
-import BasicLineChart, { Dataset } from "./BasicLineChart.vue";
+import { defineComponent } from 'vue';
+import MeterDataService from '@/services/MeterDataService';
+import MeasurementAnalyticsService from '@/services/MeasurementAnalyticsService';
+import Measurement from '@/types/Measurement';
+import BasicLineChart, { Dataset } from './BasicLineChart.vue';
 
 export default defineComponent({
-  name: "MeterData",
+  name: 'MeterData',
 
   components: { BasicLineChart },
 
@@ -212,21 +212,21 @@ export default defineComponent({
       averagePowerByHourChartLabels: [] as string[],
       averagePowerByHourChartDataSets: [] as Dataset[],
       validationErrors: {
-        smartMeterIdFilter: "",
-      },
+        smartMeterIdFilter: ''
+      }
     };
   },
 
   watch: {
     smartMeterIdFilter() {
       this.validateSmartMeterIdFilter();
-    },
+    }
   },
 
   computed: {
     invalid(): boolean {
       return this.validationErrors.smartMeterIdFilter.length > 0;
-    },
+    }
   },
 
   methods: {
@@ -253,23 +253,23 @@ export default defineComponent({
       );
       this.timeSeriesChartDataSets = [
         {
-          label: "0100010700FF (W)",
-          data: this.measurements.map((m) => m["0100010700FF"]),
-          backgroundColor: "rgba(255, 99, 132, 0.2)",
-          borderColor: "rgb(255, 99, 132)",
+          label: '0100010700FF (W)',
+          data: this.measurements.map((m) => m['0100010700FF']),
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          borderColor: 'rgb(255, 99, 132)'
         },
         {
-          label: "0100020700FF (W)",
-          data: this.measurements.map((m) => m["0100020700FF"]),
-          backgroundColor: "rgba(255, 159, 64, 0.2)",
-          borderColor: "rgb(255, 159, 64)",
+          label: '0100020700FF (W)',
+          data: this.measurements.map((m) => m['0100020700FF']),
+          backgroundColor: 'rgba(255, 159, 64, 0.2)',
+          borderColor: 'rgb(255, 159, 64)'
         },
         {
-          label: "0100100700FF (W)",
-          data: this.measurements.map((m) => m["0100100700FF"]),
-          backgroundColor: "rgba(54, 162, 235, 0.2)",
-          borderColor: "rgb(54, 162, 235)",
-        },
+          label: '0100100700FF (W)',
+          data: this.measurements.map((m) => m['0100100700FF']),
+          backgroundColor: 'rgba(54, 162, 235, 0.2)',
+          borderColor: 'rgb(54, 162, 235)'
+        }
       ];
 
       const averagePowerByWeekday =
@@ -281,11 +281,11 @@ export default defineComponent({
       );
       this.averagePowerByWeekdayChartDataSets = [
         {
-          label: "Average Power Value (W)",
+          label: 'Average Power Value (W)',
           data: averagePowerByWeekday.map((apbw) => apbw.averagePower),
-          backgroundColor: "rgba(255, 99, 132, 0.2)",
-          borderColor: "rgb(255, 99, 132)",
-        },
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          borderColor: 'rgb(255, 99, 132)'
+        }
       ];
 
       const averagePowerByHour =
@@ -297,11 +297,11 @@ export default defineComponent({
       );
       this.averagePowerByHourChartDataSets = [
         {
-          label: "Average Power Value (W)",
+          label: 'Average Power Value (W)',
           data: averagePowerByHour.map((apbh) => apbh.averagePower),
-          backgroundColor: "rgba(255, 159, 64, 0.2)",
-          borderColor: "rgb(255, 159, 64)",
-        },
+          backgroundColor: 'rgba(255, 159, 64, 0.2)',
+          borderColor: 'rgb(255, 159, 64)'
+        }
       ];
     },
 
@@ -361,28 +361,28 @@ export default defineComponent({
 
     getIsoWeekdayAsString(isoWeekday: number): string {
       const isoWeekdays = new Array(7);
-      isoWeekdays[0] = "Monday";
-      isoWeekdays[1] = "Tuesday";
-      isoWeekdays[2] = "Wednesday";
-      isoWeekdays[3] = "Thursday";
-      isoWeekdays[4] = "Friday";
-      isoWeekdays[5] = "Saturday";
-      isoWeekdays[6] = "Sunday";
+      isoWeekdays[0] = 'Monday';
+      isoWeekdays[1] = 'Tuesday';
+      isoWeekdays[2] = 'Wednesday';
+      isoWeekdays[3] = 'Thursday';
+      isoWeekdays[4] = 'Friday';
+      isoWeekdays[5] = 'Saturday';
+      isoWeekdays[6] = 'Sunday';
 
       return isoWeekdays[isoWeekday - 1];
     },
 
     validateSmartMeterIdFilter() {
-      this.validationErrors.smartMeterIdFilter = "";
+      this.validationErrors.smartMeterIdFilter = '';
 
       if (!this.smartMeterIdFilter || !this.smartMeterIdFilter.trim()) {
-        this.validationErrors.smartMeterIdFilter = "Value is required";
+        this.validationErrors.smartMeterIdFilter = 'Value is required';
       }
-    },
+    }
   },
 
   mounted() {
     this.applyFilters();
-  },
+  }
 });
 </script>

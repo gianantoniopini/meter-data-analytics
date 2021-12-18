@@ -133,13 +133,19 @@ See file [.env.example][8] for an example.
 npm run serve
 ```
 
-#### 3.5 Compiles and minifies for production
+#### 3.5 Runs tests
+
+```sh
+npm run test:unit
+```
+
+#### 3.6 Compiles and minifies for production
 
 ```sh
 npm run build
 ```
 
-#### 3.6 Starts production
+#### 3.7 Starts production
 
 ```sh
 npm run serve:production

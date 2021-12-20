@@ -26,6 +26,9 @@ beforeAll(async () => {
 describe('GET /meterdata/measurement request', () => {
   const requestUrl = `${process.env.BASE_PATH as string}/meterdata/measurement`;
 
+  const muid = '09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1';
+  const timestamp = new Date('2021-05-01T00:00:00Z');
+
   it('with no muid query parameter should fail', async () => {
     const response = await request(app).get(requestUrl).send();
 
@@ -36,8 +39,6 @@ describe('GET /meterdata/measurement request', () => {
   });
 
   it('should return measurements filtered by muid', async () => {
-    const muid = '09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1';
-    const timestamp = new Date('2021-05-01T00:00:00Z');
     const expectedMeasurements = await setupMeasurements(muid, timestamp, 1);
     const expectedMeasurement = expectedMeasurements[0];
 
@@ -74,8 +75,7 @@ describe('GET /meterdata/measurement request', () => {
   });
 
   it('should return a max number of measurements as per limit query parameter', async () => {
-    const muid = '09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1';
-    await setupMeasurements(muid, new Date('2021-05-01T00:00:00Z'), 100);
+    await setupMeasurements(muid, timestamp, 100);
 
     const limit = 10;
 
@@ -91,12 +91,7 @@ describe('GET /meterdata/measurement request', () => {
   });
 
   it('with start and stop query parameters should return measurements filtered by timestamp', async () => {
-    const muid = '09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1';
-    const measurements = await setupMeasurements(
-      muid,
-      new Date('2021-05-01T00:00:00Z'),
-      100
-    );
+    const measurements = await setupMeasurements(muid, timestamp, 100);
     const expectedFirstMeasurement = measurements[10];
     const expectedLastMeasurement = measurements[30];
 

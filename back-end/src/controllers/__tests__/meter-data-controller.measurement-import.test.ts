@@ -93,6 +93,9 @@ describe('POST /meterdata/measurement/import request', () => {
     process.env.BASE_PATH as string
   }/meterdata/measurement/import`;
 
+  const muid = '09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1';
+  const timestamp = new Date('2021-05-01T00:00:00Z');
+
   it('with no muid body parameter should fail', async () => {
     const response = await request(app).post(requestUrl).send({});
 
@@ -102,8 +105,6 @@ describe('POST /meterdata/measurement/import request', () => {
   });
 
   it('should make external-api authentication request', async () => {
-    const muid = '09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1';
-
     await request(app).post(requestUrl).send({ muid });
 
     expect(mockedGot.post).toHaveBeenCalledTimes(1);
@@ -123,8 +124,6 @@ describe('POST /meterdata/measurement/import request', () => {
     const errorMessage = 'Invalid email address or password';
     mockedGot.post = jest.fn().mockRejectedValue(new Error(errorMessage));
 
-    const muid = '09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1';
-
     const response = await request(app).post(requestUrl).send({ muid });
 
     expect(response.status).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
@@ -138,7 +137,6 @@ describe('POST /meterdata/measurement/import request', () => {
 
     const expectedAuthenticationCookie = mockExternalApiAuthenticationRequest();
 
-    const muid = '09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1';
     const start = '2021-04-30T23:59:59Z';
     const stop = '2021-07-01T23:59:59Z';
     const limit = 100_000;
@@ -183,8 +181,6 @@ describe('POST /meterdata/measurement/import request', () => {
     const errorMessage = 'Token invalid';
     mockedGot.get = jest.fn().mockRejectedValue(new Error(errorMessage));
 
-    const muid = '09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1';
-
     const response = await request(app).post(requestUrl).send({ muid });
 
     expect(response.status).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
@@ -193,8 +189,6 @@ describe('POST /meterdata/measurement/import request', () => {
   });
 
   it('should delete all pre-existing measurements with the same muid', async () => {
-    const muid = '09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1';
-    const timestamp = new Date('2021-05-01T00:00:00Z');
     const existingMeasurementsWithSameMuid = await setupMeasurements(
       muid,
       timestamp,
@@ -220,9 +214,6 @@ describe('POST /meterdata/measurement/import request', () => {
   });
 
   it('should insert the measurements returned from external-api', async () => {
-    const muid = '09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1';
-    const timestamp = new Date('2021-05-01T00:00:00Z');
-
     mockExternalApiAuthenticationRequest();
     const externalApiMeasurements = mockExternalApiMeasurementRequest(
       muid,
@@ -262,9 +253,6 @@ describe('POST /meterdata/measurement/import request', () => {
   });
 
   it('should succeed even if external-api returns no measurements', async () => {
-    const muid = '09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1';
-    const timestamp = new Date('2021-05-01T00:00:00Z');
-
     mockExternalApiAuthenticationRequest();
     mockExternalApiMeasurementRequest(muid, timestamp, 0);
 
@@ -278,8 +266,6 @@ describe('POST /meterdata/measurement/import request', () => {
   });
 
   it('should return number of measurements deleted and inserted', async () => {
-    const muid = '09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1';
-    const timestamp = new Date('2021-05-01T00:00:00Z');
     await setupMeasurements(muid, timestamp, 10);
 
     mockExternalApiAuthenticationRequest();

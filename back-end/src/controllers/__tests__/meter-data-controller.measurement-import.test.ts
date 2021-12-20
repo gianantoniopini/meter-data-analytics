@@ -7,10 +7,10 @@ import got, { OptionsOfJSONResponseBody } from 'got';
 import { Cookie, CookieJar } from 'tough-cookie';
 import { mocked } from 'ts-jest/utils';
 import { initialize as initializeApp } from '../../app';
-import MeasurementModel from '../../models/MeasurementModel';
-import { ExternalApiMeasurementResponse } from '../../interfaces/ExternalApiMeasurementResponse';
-import { ExternalApiMeasurement } from '../../interfaces/ExternalApiMeasurement';
-import { setupMeasurements } from './helpers/meterDataControllerHelper';
+import MeasurementModel from '../../models/measurement.model';
+import { ExternalApiMeasurementResponse } from '../../interfaces/external-api-measurement-response.interface';
+import { ExternalApiMeasurement } from '../../interfaces/external-api-measurement.interface';
+import { setupMeasurements } from './helpers/meter-data-controller-helper';
 
 jest.mock('got');
 const mockedGot = mocked(got);
@@ -24,7 +24,7 @@ const mockExternalApiAuthenticationRequest = (): Cookie => {
     'veryLongAlphanumericString.skdfjskfjskafjskafjskadfjs3485783skfskfjskfjsf.skadfksdfjdfk_fdjdskafjsdfjsfkjsafjsdkfJJkasjdfkjsfj89';
   const maxAge = 600;
   const path = '/';
-  const expires = new Date(new Date().getTime() + maxAge * 1000);
+  const expires = new Date(Date.now() + maxAge * 1000);
 
   const cookieString = `${accessTokenKey}=${accessTokenValue}; Max-Age=${maxAge}; Path=${path}; Expires=${expires.toUTCString()}; HttpOnly`;
   const cookie = Cookie.parse(cookieString) as Cookie;
@@ -45,10 +45,12 @@ export const mockExternalApiMeasurementRequest = (
 ): ExternalApiMeasurement[] => {
   const measurements: ExternalApiMeasurement[] = [];
 
-  const indexes = [...Array(count).keys()].map((i) => i);
+  const indexes = [...Array.from({ length: count }).keys()].map(
+    (index) => index
+  );
   for (const index of indexes) {
     // One measurement every 15 minutes
-    const timestamp = new Date(timestampStart.getTime() + 15 * index * 60000);
+    const timestamp = new Date(timestampStart.getTime() + 15 * index * 60_000);
 
     // Random power value between 0 and 5000
     const powerValue = Math.random() * 5000;
@@ -139,7 +141,7 @@ describe('POST /meterdata/measurement/import request', () => {
     const muid = '09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1';
     const start = '2021-04-30T23:59:59Z';
     const stop = '2021-07-01T23:59:59Z';
-    const limit = 100000;
+    const limit = 100_000;
 
     await request(app).post(requestUrl).send({ muid, start, stop, limit });
 

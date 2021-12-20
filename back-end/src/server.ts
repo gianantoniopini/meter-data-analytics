@@ -5,13 +5,12 @@ import { openConnection } from './database';
 dotenv.config();
 
 if (!process.env.PORT) {
-  console.error(`no PORT found in process.env`);
-  process.exit(1);
+  throw new Error(`no PORT found in process.env`);
 }
 
 const app = initializeApp();
 
-const port: number = parseInt(process.env.PORT as string, 10);
+const port: number = Number.parseInt(process.env.PORT as string, 10);
 
 openConnection(process.env.MONGO_URI as string)
   .then((connection) => {
@@ -25,7 +24,7 @@ openConnection(process.env.MONGO_URI as string)
       console.log(`app running here -> http://localhost:${port}`);
     });
   })
-  .catch((reason) => {
+  .catch((error) => {
     console.error('could not open connection to MongoDB');
-    console.error(reason);
+    console.error(error);
   });

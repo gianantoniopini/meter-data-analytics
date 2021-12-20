@@ -4,9 +4,9 @@ import request from 'supertest';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { openConnection, closeConnection } from '../../database';
 import { initialize as initializeApp } from '../../app';
-import { Measurement } from '../../interfaces/Measurement';
-import MeasurementModel from '../../models/MeasurementModel';
-import { setupMeasurements } from './helpers/meterDataControllerHelper';
+import { Measurement } from '../../interfaces/measurement.interface';
+import MeasurementModel from '../../models/measurement.model';
+import { setupMeasurements } from './helpers/meter-data-controller-helper';
 
 let mongoServer: MongoMemoryServer;
 let app: Application;
@@ -111,18 +111,24 @@ describe('GET /meterdata/measurement request', () => {
     expect(response.body.data).toBeDefined();
     const actualMeasurements = response.body.data as Measurement[];
     expect(actualMeasurements).toHaveLength(21);
-    const actualFirstMeasurement = actualMeasurements.reduce(function (a, b) {
-      return a.timestamp < b.timestamp ? a : b;
-    });
+    const actualFirstMeasurementTimestamp = Math.min(
+      ...actualMeasurements.map((m) => new Date(m.timestamp).getTime())
+    );
+    const actualFirstMeasurement = actualMeasurements.find(
+      (m) => new Date(m.timestamp).getTime() === actualFirstMeasurementTimestamp
+    ) as Measurement;
     expect(actualFirstMeasurement._id.toString()).toEqual(
       expectedFirstMeasurement._id.toString()
     );
     expect(new Date(actualFirstMeasurement.timestamp)).toEqual(
       expectedFirstMeasurement.timestamp
     );
-    const actualLastMeasurement = actualMeasurements.reduce(function (a, b) {
-      return a.timestamp > b.timestamp ? a : b;
-    });
+    const actualLastMeasurementTimestamp = Math.max(
+      ...actualMeasurements.map((m) => new Date(m.timestamp).getTime())
+    );
+    const actualLastMeasurement = actualMeasurements.find(
+      (m) => new Date(m.timestamp).getTime() === actualLastMeasurementTimestamp
+    ) as Measurement;
     expect(actualLastMeasurement._id.toString()).toEqual(
       expectedLastMeasurement._id.toString()
     );

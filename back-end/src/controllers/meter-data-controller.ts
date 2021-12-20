@@ -1,9 +1,9 @@
 import express, { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { handleUnknownError } from '../utils/controllerUtils';
-import { authenticateAndGetMeasurement } from '../utils/externalApiProxy';
-import { ExternalApiMeasurement } from '../interfaces/ExternalApiMeasurement';
-import MeasurementModel from '../models/MeasurementModel';
+import { handleUnknownError } from '../utils/controller-utils';
+import { authenticateAndGetMeasurement } from '../utils/external-api-proxy';
+import { ExternalApiMeasurement } from '../interfaces/external-api-measurement.interface';
+import MeasurementModel from '../models/measurement.model';
 
 const mapExternalApiMeasurement = (
   externalApiMeasurement: ExternalApiMeasurement
@@ -30,7 +30,7 @@ const _getMeasurementsFromExternalApi = async (
     muid,
     start,
     stop,
-    limit ? parseInt(limit, 10) : undefined
+    limit ? Number.parseInt(limit, 10) : undefined
   );
 
   if (error) {
@@ -45,28 +45,28 @@ const _getMeasurementsFromExternalApi = async (
 };
 
 export const getMeasurementsFromExternalApi = async (
-  req: Request,
-  res: Response,
+  request: Request,
+  response: Response,
   next: express.NextFunction
 ): Promise<void> => {
   try {
-    if (!req.query.muid) {
-      res.status(StatusCodes.BAD_REQUEST).json({
-        status: res.statusCode,
+    if (!request.query.muid) {
+      response.status(StatusCodes.BAD_REQUEST).json({
+        status: response.statusCode,
         message: 'muid query parameter not present'
       });
       return;
     }
 
     const measurements = await _getMeasurementsFromExternalApi(
-      req.query.muid as string,
-      req.query.start as string | undefined,
-      req.query.stop as string | undefined,
-      req.query.limit as string | undefined
+      request.query.muid as string,
+      request.query.start as string | undefined,
+      request.query.stop as string | undefined,
+      request.query.limit as string | undefined
     );
 
-    res.status(StatusCodes.OK).json({
-      status: res.statusCode,
+    response.status(StatusCodes.OK).json({
+      status: response.statusCode,
       data: measurements
     });
   } catch (error: unknown) {
@@ -76,16 +76,16 @@ export const getMeasurementsFromExternalApi = async (
 };
 
 export const importMeasurements = async (
-  req: Request,
-  res: Response,
+  request: Request,
+  response: Response,
   next: express.NextFunction
 ): Promise<void> => {
   try {
-    const muid = req.body.muid as string | undefined;
+    const muid = request.body.muid as string | undefined;
 
     if (!muid) {
-      res.status(StatusCodes.BAD_REQUEST).json({
-        status: res.statusCode,
+      response.status(StatusCodes.BAD_REQUEST).json({
+        status: response.statusCode,
         message: 'muid body parameter not present'
       });
       return;
@@ -93,9 +93,9 @@ export const importMeasurements = async (
 
     const measurementsFromExternalApi = await _getMeasurementsFromExternalApi(
       muid,
-      req.body.start as string | undefined,
-      req.body.stop as string | undefined,
-      req.body.limit as string | undefined
+      request.body.start as string | undefined,
+      request.body.stop as string | undefined,
+      request.body.limit as string | undefined
     );
 
     const deleteResult = await MeasurementModel.deleteMany({ tags: { muid } });
@@ -113,8 +113,8 @@ export const importMeasurements = async (
     }
 
     const message = `${deleteResult.deletedCount} measurements deleted - ${insertedCount} measurements inserted`;
-    res.status(StatusCodes.OK).json({
-      status: res.statusCode,
+    response.status(StatusCodes.OK).json({
+      status: response.statusCode,
       message
     });
   } catch (error: unknown) {
@@ -124,23 +124,23 @@ export const importMeasurements = async (
 };
 
 export const getMeasurements = async (
-  req: Request,
-  res: Response,
+  request: Request,
+  response: Response,
   next: express.NextFunction
 ): Promise<void> => {
   try {
-    if (!req.query.muid) {
-      res.status(StatusCodes.BAD_REQUEST).json({
-        status: res.statusCode,
+    if (!request.query.muid) {
+      response.status(StatusCodes.BAD_REQUEST).json({
+        status: response.statusCode,
         message: 'muid query parameter not present'
       });
       return;
     }
 
-    const muid = req.query.muid as string;
-    const start = req.query.start as string | undefined;
-    const stop = req.query.stop as string | undefined;
-    const limit = req.query.limit as string | undefined;
+    const muid = request.query.muid as string;
+    const start = request.query.start as string | undefined;
+    const stop = request.query.stop as string | undefined;
+    const limit = request.query.limit as string | undefined;
 
     const conditions = [];
     conditions.push({ tags: { muid: muid } });
@@ -151,16 +151,14 @@ export const getMeasurements = async (
       conditions.push({ timestamp: { $lte: new Date(stop) } });
     }
 
-    const andConditons = conditions.length ? { $and: conditions } : {};
+    const limitAsNumber = limit ? Number.parseInt(limit, 10) : 1;
 
-    const limitAsNumber = limit ? parseInt(limit, 10) : 1;
+    const measurements = await MeasurementModel.find({
+      $and: conditions
+    }).limit(limitAsNumber);
 
-    const measurements = await MeasurementModel.find(andConditons).limit(
-      limitAsNumber
-    );
-
-    res.status(StatusCodes.OK).json({
-      status: res.statusCode,
+    response.status(StatusCodes.OK).json({
+      status: response.statusCode,
       data: measurements
     });
   } catch (error: unknown) {

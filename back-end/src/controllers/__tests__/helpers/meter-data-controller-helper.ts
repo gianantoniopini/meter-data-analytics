@@ -1,5 +1,5 @@
-import { Measurement } from '../../../interfaces/Measurement';
-import MeasurementModel from '../../../models/MeasurementModel';
+import { Measurement } from '../../../interfaces/measurement.interface';
+import MeasurementModel from '../../../models/measurement.model';
 
 export const setupMeasurements = async (
   muid: string,
@@ -8,10 +8,12 @@ export const setupMeasurements = async (
 ): Promise<Measurement[]> => {
   const measurements: Measurement[] = [];
 
-  const indexes = [...Array(count).keys()].map((i) => i);
+  const indexes = [...Array.from({ length: count }).keys()].map(
+    (index) => index
+  );
   for (const index of indexes) {
     // One measurement every 15 minutes
-    const timestamp = new Date(timestampStart.getTime() + 15 * index * 60000);
+    const timestamp = new Date(timestampStart.getTime() + 15 * index * 60_000);
 
     // Random power value between 0 and 5000
     const powerValue = Math.random() * 5000;

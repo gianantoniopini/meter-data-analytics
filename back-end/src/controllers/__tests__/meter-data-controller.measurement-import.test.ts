@@ -38,7 +38,7 @@ const mockExternalApiAuthenticationRequest = (): Cookie => {
   return cookie;
 };
 
-export const mockExternalApiMeasurementRequest = (
+const mockExternalApiMeasurementRequest = (
   muid: string,
   timestampStart: Date,
   count: number

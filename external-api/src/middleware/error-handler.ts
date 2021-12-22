@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import HttpException from './HttpException';
+import HttpException from './http-exception';
 
 export const errorHandler = (
   error: HttpException,

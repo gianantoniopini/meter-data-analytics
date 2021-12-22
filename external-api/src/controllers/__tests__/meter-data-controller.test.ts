@@ -2,7 +2,7 @@ import { Application } from 'express';
 import request from 'supertest';
 import { StatusCodes } from 'http-status-codes';
 import { initialize as initializeApp } from '../../app';
-import Measurement from '../../interfaces/Measurement';
+import Measurement from '../../interfaces/measurement.interface';
 
 const getAccessToken = async (app: Application): Promise<string> => {
   const authResponse = await request(app)
@@ -144,13 +144,9 @@ describe('GET /meterdata/measurement request', () => {
     const measurements = response.body.data as Measurement[];
     expect(measurements).toHaveLength(96);
     const timestamps = measurements.map((m) => new Date(m.timestamp));
-    const minTimestamp = timestamps.reduce(function (a, b) {
-      return a < b ? a : b;
-    });
-    expect(minTimestamp).toEqual(new Date('2021-05-01T00:00:00Z'));
-    const maxTimestamp = timestamps.reduce(function (a, b) {
-      return a > b ? a : b;
-    });
-    expect(maxTimestamp).toEqual(new Date('2021-05-01T23:45:00Z'));
+    const minTimestamp = Math.min(...timestamps.map((t) => t.getTime()));
+    expect(new Date(minTimestamp)).toEqual(new Date('2021-05-01T00:00:00Z'));
+    const maxTimestamp = Math.max(...timestamps.map((t) => t.getTime()));
+    expect(new Date(maxTimestamp)).toEqual(new Date('2021-05-01T23:45:00Z'));
   });
 });

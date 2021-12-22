@@ -4,13 +4,12 @@ import { initialize as initializeApp } from './app';
 dotenv.config();
 
 if (!process.env.PORT) {
-  console.log(`no PORT found in process.env`);
-  process.exit(1);
+  throw new Error(`no PORT found in process.env`);
 }
 
 const app = initializeApp();
 
-const port: number = parseInt(process.env.PORT as string, 10);
+const port: number = Number.parseInt(process.env.PORT as string, 10);
 
 // Server Listening
 app.listen(port, () => {

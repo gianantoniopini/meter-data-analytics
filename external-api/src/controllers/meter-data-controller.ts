@@ -1,24 +1,24 @@
 import express, { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import fs from 'fs/promises';
-import { constants as fsConstants } from 'fs';
-import { handleUnknownError } from '../utils/controllerUtils';
-import Measurement from '../interfaces/Measurement';
+import fs from 'node:fs/promises';
+import { constants as fsConstants } from 'node:fs';
+import { handleUnknownError } from '../utils/controller-utils';
+import Measurement from '../interfaces/measurement.interface';
 
 export const getMeasurements = async (
-  req: Request,
-  res: Response,
+  request: Request,
+  response: Response,
   next: express.NextFunction
 ): Promise<void> => {
   try {
-    const muid = req.query.muid as string | undefined;
-    const start = req.query.start as string | undefined;
-    const stop = req.query.stop as string | undefined;
-    const limit = req.query.limit as string | undefined;
+    const muid = request.query.muid as string | undefined;
+    const start = request.query.start as string | undefined;
+    const stop = request.query.stop as string | undefined;
+    const limit = request.query.limit as string | undefined;
 
     if (!muid) {
-      res.status(StatusCodes.BAD_REQUEST).json({
-        status: res.statusCode,
+      response.status(StatusCodes.BAD_REQUEST).json({
+        status: response.statusCode,
         message: 'muid query parameter not present'
       });
       return;
@@ -26,6 +26,7 @@ export const getMeasurements = async (
 
     const measurements: Measurement[] = [];
 
+    // eslint-disable-next-line unicorn/prefer-module
     const filePath = `${__dirname}/../../data/measurements/${muid}.json`;
     const fileExists = await exists(filePath);
     if (fileExists) {
@@ -40,11 +41,11 @@ export const getMeasurements = async (
       );
     });
 
-    const limitAsNumber = limit ? parseInt(limit, 10) : 1;
+    const limitAsNumber = limit ? Number.parseInt(limit, 10) : 1;
     const slicedMeasurements = filteredMeasurements.slice(0, limitAsNumber);
 
-    res.status(StatusCodes.OK).json({
-      status: res.statusCode,
+    response.status(StatusCodes.OK).json({
+      status: response.statusCode,
       data: slicedMeasurements
     });
   } catch (error: unknown) {

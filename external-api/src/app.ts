@@ -2,7 +2,7 @@ import express, { Application } from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { router } from './routes/router';
-import { errorHandler } from './middleware/errorHandler';
+import { errorHandler } from './middleware/error-handler';
 
 export const initialize = (): Application => {
   const basePath = process.env.BASE_PATH as string;

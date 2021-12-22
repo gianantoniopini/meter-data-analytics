@@ -1,6 +1,6 @@
 import express from 'express';
 import { StatusCodes } from 'http-status-codes';
-import HttpException from '../middleware/HttpException';
+import HttpException from '../middleware/http-exception';
 
 export const handleUnknownError = (
   error: unknown,

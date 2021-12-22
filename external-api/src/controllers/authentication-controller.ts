@@ -1,48 +1,48 @@
 import express, { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { handleUnknownError } from '../utils/controllerUtils';
-import User from '../interfaces/User';
+import { handleUnknownError } from '../utils/controller-utils';
+import User from '../interfaces/user.interface';
 import { accessTokenCookieName, generateAccessToken } from '../middleware/auth';
 
 export const authenticate = (
-  req: Request,
-  res: Response,
+  request: Request,
+  response: Response,
   next: express.NextFunction
 ): void => {
   try {
-    const email = req.body.email;
-    const password = req.body.password;
+    const email = request.body.email;
+    const password = request.body.password;
 
     if (!email || !password) {
-      res.status(StatusCodes.BAD_REQUEST).json({
-        status: res.statusCode,
+      response.status(StatusCodes.BAD_REQUEST).json({
+        status: response.statusCode,
         message: 'Email address or password not present'
       });
       return;
     }
 
     if (email !== process.env.AUTH_EMAIL || password !== process.env.AUTH_PWD) {
-      res.status(StatusCodes.BAD_REQUEST).json({
-        status: res.statusCode,
+      response.status(StatusCodes.BAD_REQUEST).json({
+        status: response.statusCode,
         message: 'Invalid email address or password'
       });
       return;
     }
 
     const user: User = { email: email, password: password };
-    const validityPeriodInSeconds = parseInt(
+    const validityPeriodInSeconds = Number.parseInt(
       process.env.AUTH_ACCESS_TOKEN_LIFESPAN_SECONDS as string,
       10
     );
     const accessToken = generateAccessToken(user, validityPeriodInSeconds);
 
     const validityPeriodInMilliseconds = validityPeriodInSeconds * 1000;
-    res.cookie(accessTokenCookieName, accessToken, {
+    response.cookie(accessTokenCookieName, accessToken, {
       maxAge: validityPeriodInMilliseconds,
       httpOnly: true
     });
-    res.status(StatusCodes.OK).json({
-      status: res.statusCode,
+    response.status(StatusCodes.OK).json({
+      status: response.statusCode,
       data: validityPeriodInMilliseconds
     });
   } catch (error: unknown) {

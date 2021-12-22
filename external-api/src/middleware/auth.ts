@@ -1,8 +1,8 @@
 import express, { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import jwt, { VerifyErrors } from 'jsonwebtoken';
-import { handleUnknownError } from '../utils/controllerUtils';
-import User from '../interfaces/User';
+import { handleUnknownError } from '../utils/controller-utils';
+import User from '../interfaces/user.interface';
 
 export const accessTokenCookieName = 'access_token';
 
@@ -22,16 +22,16 @@ export const generateAccessToken = (
 };
 
 export const validateAccessToken = (
-  req: Request,
-  res: Response,
+  request: Request,
+  response: Response,
   next: express.NextFunction
 ): void => {
   try {
-    const accessToken = req.cookies[accessTokenCookieName] as string;
+    const accessToken = request.cookies[accessTokenCookieName] as string;
 
     if (!accessToken) {
-      res.status(StatusCodes.BAD_REQUEST).json({
-        status: res.statusCode,
+      response.status(StatusCodes.BAD_REQUEST).json({
+        status: response.statusCode,
         message: 'Token not present'
       });
       return;
@@ -40,10 +40,10 @@ export const validateAccessToken = (
     jwt.verify(
       accessToken,
       process.env.AUTH_ACCESS_TOKEN_SECRET as jwt.Secret,
-      (err: VerifyErrors | null) => {
-        if (err) {
-          res.status(StatusCodes.FORBIDDEN).json({
-            status: res.statusCode,
+      (error: VerifyErrors | null) => {
+        if (error) {
+          response.status(StatusCodes.FORBIDDEN).json({
+            status: response.statusCode,
             message: 'Token invalid'
           });
         } else {

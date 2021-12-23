@@ -10,15 +10,9 @@ export const generateAccessToken = (
   user: User,
   validityPeriodInSeconds: number
 ) => {
-  const accessToken = jwt.sign(
-    user,
-    process.env.AUTH_ACCESS_TOKEN_SECRET as jwt.Secret,
-    {
-      expiresIn: validityPeriodInSeconds
-    }
-  );
-
-  return accessToken;
+  return jwt.sign(user, process.env.AUTH_ACCESS_TOKEN_SECRET as jwt.Secret, {
+    expiresIn: validityPeriodInSeconds
+  });
 };
 
 export const validateAccessToken = (

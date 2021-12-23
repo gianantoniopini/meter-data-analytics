@@ -4,6 +4,8 @@ import { initialize as initializeApp } from '../../app';
 
 describe('POST /authentication/auth request', () => {
   const requestUrl = `${process.env.BASE_PATH as string}/authentication/auth`;
+  const validEmail = 'user123@noemail.com';
+  const validPassword = 'password123';
 
   it('with no email and password should fail', async () => {
     const app = initializeApp();
@@ -22,7 +24,7 @@ describe('POST /authentication/auth request', () => {
 
     const response = await request(app)
       .post(requestUrl)
-      .send({ email: 'invalidEmail', password: 'password123' });
+      .send({ email: 'invalidEmail', password: validPassword });
 
     expect(response.status).toEqual(StatusCodes.BAD_REQUEST);
     expect(response.body.status).toEqual(StatusCodes.BAD_REQUEST);
@@ -34,7 +36,7 @@ describe('POST /authentication/auth request', () => {
 
     const response = await request(app)
       .post(requestUrl)
-      .send({ email: 'user123@noemail.com', password: 'invalidPassword' });
+      .send({ email: validEmail, password: 'invalidPassword' });
 
     expect(response.status).toEqual(StatusCodes.BAD_REQUEST);
     expect(response.body.status).toEqual(StatusCodes.BAD_REQUEST);
@@ -46,7 +48,7 @@ describe('POST /authentication/auth request', () => {
 
     const response = await request(app)
       .post(requestUrl)
-      .send({ email: 'user123@noemail.com', password: 'password123' });
+      .send({ email: validEmail, password: validPassword });
 
     expect(response.status).toEqual(StatusCodes.OK);
     expect(response.body.status).toEqual(StatusCodes.OK);
@@ -54,14 +56,17 @@ describe('POST /authentication/auth request', () => {
 
   it('with valid email and password should return cookie with access token', async () => {
     const app = initializeApp();
+    const setCookieHeaderName = 'set-cookie';
 
     const response = await request(app)
       .post(requestUrl)
-      .send({ email: 'user123@noemail.com', password: 'password123' });
+      .send({ email: validEmail, password: validPassword });
 
-    expect(response.headers['set-cookie']).toBeTruthy();
-    expect(response.headers['set-cookie']).toHaveLength(1);
-    const accessTokenCookie = response.headers['set-cookie'][0] as string;
+    expect(response.headers[setCookieHeaderName]).toBeTruthy();
+    expect(response.headers[setCookieHeaderName]).toHaveLength(1);
+    const accessTokenCookie = response.headers[
+      setCookieHeaderName
+    ][0] as string;
     expect(accessTokenCookie).toBeTruthy();
     const accessToken = accessTokenCookie.split(';')[0];
     expect(accessToken.split('=')).toHaveLength(2);
@@ -85,7 +90,7 @@ describe('POST /authentication/auth request', () => {
 
     const response = await request(app)
       .post(requestUrl)
-      .send({ email: 'user123@noemail.com', password: 'password123' });
+      .send({ email: validEmail, password: validPassword });
 
     expect(response.status).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
     expect(response.body.status).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);

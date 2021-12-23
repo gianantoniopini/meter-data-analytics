@@ -9,9 +9,7 @@ const getAccessToken = async (app: Application): Promise<string> => {
     .post('/api/v1/authentication/auth')
     .send({ email: 'user123@noemail.com', password: 'password123' });
 
-  const accessTokenCookie = authResponse.headers['set-cookie'][0] as string;
-
-  return accessTokenCookie;
+  return authResponse.headers['set-cookie'][0] as string;
 };
 
 afterEach(() => {

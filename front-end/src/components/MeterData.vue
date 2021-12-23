@@ -5,28 +5,57 @@
         <!-- sidebar -->
         <div
           class="d-flex flex-sm-column flex-row flex-nowrap bg-light align-items-center sticky-top"
+          role="navigation"
         >
           <ul
-            class="nav nav-pills nav-flush flex-sm-column flex-row flex-nowrap mb-auto mx-auto text-left align-items-left"
+            class="nav nav-pills nav-flush flex-sm-column flex-row flex-nowrap mb-auto mx-auto text-center justify-content-between w-100 px-3 align-items-center"
           >
             <li class="nav-item">
-              <a href="#filters" class="nav-link py-3 px-2">
-                Filters <i class="bi bi-filter"></i>
+              <a
+                href="#filters"
+                class="nav-link py-3 px-2"
+                title="Filters"
+                data-bs-toggle="tooltip"
+                data-bs-placement="right"
+                data-bs-original-title="Filters"
+              >
+                <i class="fs-2 bi-filter"></i>
               </a>
             </li>
-            <li>
-              <a href="#timeSeries" class="nav-link py-3 px-2">
-                Time Series <i class="bi bi-graph-up"></i>
+            <li class="nav-item">
+              <a
+                href="#timeSeries"
+                class="nav-link py-3 px-2"
+                title="Time Series"
+                data-bs-toggle="tooltip"
+                data-bs-placement="right"
+                data-bs-original-title="Time Series"
+              >
+                <i class="fs-2 bi-graph-up"></i>
               </a>
             </li>
-            <li>
-              <a href="#analytics" class="nav-link py-3 px-2">
-                Analytics <i class="bi bi-graph-up"></i>
+            <li class="nav-item">
+              <a
+                href="#analytics"
+                class="nav-link py-3 px-2"
+                title="Analytics"
+                data-bs-toggle="tooltip"
+                data-bs-placement="right"
+                data-bs-original-title="Analytics"
+              >
+                <i class="fs-2 bi-heart"></i>
               </a>
             </li>
-            <li>
-              <a href="#rawData" class="nav-link py-3 px-2">
-                Raw Data <i class="bi bi-table"></i>
+            <li class="nav-item">
+              <a
+                href="#rawData"
+                class="nav-link py-3 px-2"
+                title="Raw Data"
+                data-bs-toggle="tooltip"
+                data-bs-placement="right"
+                data-bs-original-title="Raw Data"
+              >
+                <i class="fs-2 bi-table"></i>
               </a>
             </li>
           </ul>

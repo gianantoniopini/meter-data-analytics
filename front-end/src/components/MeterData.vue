@@ -63,12 +63,7 @@
       </div>
       <div class="col-sm p-3 min-vh-100">
         <!-- content -->
-        <div v-if="loading">
-          <div class="d-flex justify-content-center align-items-center">
-            Loading data, please wait...
-          </div>
-        </div>
-        <div v-else>
+        <div>
           <div class="row pb-3" id="filters">
             <div class="col-md-12">
               <h4>Filters</h4>
@@ -217,6 +212,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { createToast, clearToasts } from 'mosha-vue-toastify';
 import MeterDataService from '@/services/MeterDataService';
 import MeasurementAnalyticsService from '@/services/MeasurementAnalyticsService';
 import Measurement from '@/types/Measurement';
@@ -229,7 +225,6 @@ export default defineComponent({
 
   data() {
     return {
-      loading: false,
       smartMeterIdFilter: process.env.VUE_APP_DEFAULT_SMART_METER_ID as string,
       timestampFromFilter: null,
       timestampToFilter: null,
@@ -259,21 +254,34 @@ export default defineComponent({
   },
 
   methods: {
-    retrieveMeasurements(
+    async retrieveMeasurements(
       smartMeterId: string,
       timestampFrom: string | null,
       timestampTo: string | null
     ) {
-      this.loading = true;
-      MeterDataService.getMeasurements(smartMeterId, timestampFrom, timestampTo)
-        .then((measurements: Measurement[]) => {
-          this.measurements = measurements;
-          this.refreshChartsData();
-        })
-        .catch((e: Error) => {
-          console.log(e);
-        })
-        .finally(() => (this.loading = false));
+      createToast('Loading data...', {
+        position: 'top-center',
+        showCloseButton: false,
+        timeout: -1,
+        type: 'info'
+      });
+
+      try {
+        const measurements: Measurement[] =
+          await MeterDataService.getMeasurements(
+            smartMeterId,
+            timestampFrom,
+            timestampTo
+          );
+
+        this.measurements = measurements;
+
+        this.refreshChartsData();
+      } catch (error) {
+        console.log(error);
+      } finally {
+        clearToasts();
+      }
     },
 
     refreshChartsData() {
@@ -334,7 +342,7 @@ export default defineComponent({
       ];
     },
 
-    applyFilters() {
+    async applyFilters() {
       this.validateSmartMeterIdFilter();
       if (this.invalid) {
         return;
@@ -373,7 +381,7 @@ export default defineComponent({
         );
       }
 
-      this.retrieveMeasurements(
+      await this.retrieveMeasurements(
         this.smartMeterIdFilter,
         timestampFromDate ? timestampFromDate.toISOString() : null,
         timestampToDate ? timestampToDate.toISOString() : null
@@ -410,8 +418,8 @@ export default defineComponent({
     }
   },
 
-  mounted() {
-    this.applyFilters();
+  async mounted() {
+    await this.applyFilters();
   }
 });
 </script>

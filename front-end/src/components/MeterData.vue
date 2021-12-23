@@ -109,7 +109,7 @@
                 </div>
                 <div class="col-md-2 align-self-end">
                   <button
-                    :disabled="invalid"
+                    :disabled="applyFiltersDisabled"
                     v-on:click="applyFilters"
                     type="button"
                     class="btn btn-primary"
@@ -212,7 +212,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { createToast, clearToasts } from 'mosha-vue-toastify';
+import { createToast } from 'mosha-vue-toastify';
 import MeterDataService from '@/services/MeterDataService';
 import MeasurementAnalyticsService from '@/services/MeasurementAnalyticsService';
 import Measurement from '@/types/Measurement';
@@ -225,6 +225,7 @@ export default defineComponent({
 
   data() {
     return {
+      loading: false,
       smartMeterIdFilter: process.env.VUE_APP_DEFAULT_SMART_METER_ID as string,
       timestampFromFilter: null,
       timestampToFilter: null,
@@ -250,6 +251,10 @@ export default defineComponent({
   computed: {
     invalid(): boolean {
       return this.validationErrors.smartMeterIdFilter.length > 0;
+    },
+
+    applyFiltersDisabled(): boolean {
+      return this.loading || this.invalid;
     }
   },
 
@@ -259,28 +264,28 @@ export default defineComponent({
       timestampFrom: string | null,
       timestampTo: string | null
     ) {
-      createToast('Loading data...', {
+      this.loading = true;
+      const { close: closeToast } = createToast('Loading...', {
         position: 'top-center',
         showCloseButton: false,
         timeout: -1,
+        transition: 'slide',
         type: 'info'
       });
 
       try {
-        const measurements: Measurement[] =
-          await MeterDataService.getMeasurements(
-            smartMeterId,
-            timestampFrom,
-            timestampTo
-          );
-
-        this.measurements = measurements;
+        this.measurements = await MeterDataService.getMeasurements(
+          smartMeterId,
+          timestampFrom,
+          timestampTo
+        );
 
         this.refreshChartsData();
       } catch (error) {
         console.log(error);
       } finally {
-        clearToasts();
+        closeToast();
+        this.loading = false;
       }
     },
 

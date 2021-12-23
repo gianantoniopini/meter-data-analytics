@@ -1,13 +1,14 @@
 {
   "root": true,
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint", "prettier", "unicorn", "sonarjs"],
+  "plugins": ["@typescript-eslint", "prettier", "unicorn", "sonarjs", "jest"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:unicorn/recommended",
     "plugin:sonarjs/recommended",
+    "plugin:jest/recommended",
     "prettier"
   ],
   "rules": {

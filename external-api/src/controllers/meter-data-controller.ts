@@ -26,8 +26,7 @@ export const getMeasurements = async (
 
     const measurements: Measurement[] = [];
 
-    // eslint-disable-next-line unicorn/prefer-module
-    const filePath = `${__dirname}/../../data/measurements/${muid}.json`;
+    const filePath = `./data/measurements/${muid}.json`;
     const fileExists = await exists(filePath);
     if (fileExists) {
       const fileData = await fs.readFile(filePath, { encoding: 'utf8' });

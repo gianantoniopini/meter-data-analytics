@@ -10,9 +10,10 @@ module.exports = {
     'eslint:recommended',
     '@vue/typescript/recommended',
     'plugin:sonarjs/recommended',
+    'plugin:jest/recommended',
+    'plugin:jest-dom/recommended',
     '@vue/prettier',
-    '@vue/prettier/@typescript-eslint',
-    'plugin:jest-dom/recommended'
+    '@vue/prettier/@typescript-eslint'
   ],
 
   overrides: [

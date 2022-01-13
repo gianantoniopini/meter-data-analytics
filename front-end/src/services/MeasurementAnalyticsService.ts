@@ -3,23 +3,19 @@ import WeekdayAveragePower from '@/types/WeekdayAveragePower';
 import HourAveragePower from '@/types/HourAveragePower';
 
 const mapWeekdayToIsoWeekday = (weekday: number): number => {
-  switch (weekday) {
-    case 0: {
-      // Sunday
-      return 7;
-    }
-    default: {
-      return weekday;
-    }
+  if (weekday === 0) {
+    // Sunday
+    return 7;
   }
+
+  return weekday;
 };
 
 const calculateAveragePower = (measurements: Measurement[]): number => {
-  const averagePower =
+  return (
     measurements.reduce((sum, current) => sum + current['0100100700FF'], 0) /
-    measurements.length;
-
-  return averagePower;
+    measurements.length
+  );
 };
 
 class MeasurementAnalyticsService {

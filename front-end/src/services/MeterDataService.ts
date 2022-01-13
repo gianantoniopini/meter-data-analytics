@@ -19,15 +19,11 @@ class MeterDataService {
       data: Measurement[];
     }>(url);
 
-    const sortedMeasurements = responseBody.data.sort(
-      (m1: Measurement, m2: Measurement) => {
-        return (
-          new Date(m1.timestamp).getTime() - new Date(m2.timestamp).getTime()
-        );
-      }
-    );
-
-    return sortedMeasurements;
+    return responseBody.data.sort((m1: Measurement, m2: Measurement) => {
+      return (
+        new Date(m1.timestamp).getTime() - new Date(m2.timestamp).getTime()
+      );
+    });
   }
 }
 

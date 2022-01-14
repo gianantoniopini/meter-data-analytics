@@ -1,6 +1,6 @@
-//import { render, screen } from '@testing-library/vue';
+import { render, screen } from '@testing-library/vue';
 import { mocked } from 'ts-jest/utils';
-//import MeterData from '../MeterData.vue';
+import MeterData from '../MeterData.vue';
 import MeterDataSerice from '../../services/MeterDataService';
 import Measurement from '../../types/Measurement';
 
@@ -18,11 +18,8 @@ const mockMeterDataSericeGetMeasurementsRequest = (
 it('renders sidebar menu', () => {
   mockMeterDataSericeGetMeasurementsRequest([]);
 
-  /*
   render(MeterData);
 
   expect(screen.queryByRole('navigation')).toBeInTheDocument();
-  */
-
-  expect(true).toBeTruthy();
+  // TODO: more assertions
 });

@@ -1,22 +1,18 @@
 import { render, screen, queryAllByRole } from '@testing-library/vue';
 import { mocked } from 'ts-jest/utils';
-import MeterData from '../MeterData.vue';
 import MeterDataSerice from '../../services/MeterDataService';
-import Measurement from '../../types/Measurement';
+import {
+  mockMeterDataSericeGetMeasurementsRequest,
+  waitForLoadingMessageToAppear,
+  waitForLoadingMessageToDisappear
+} from './helpers/MeterData.helper';
+import MeterData from '../MeterData.vue';
 
 jest.mock('../../services/MeterDataService');
 const mockedMeterDataSerice = mocked(MeterDataSerice);
 
-const mockMeterDataSericeGetMeasurementsRequest = (
-  measurements: Measurement[]
-): void => {
-  mockedMeterDataSerice.getMeasurements = jest
-    .fn()
-    .mockResolvedValue(measurements);
-};
-
 it('renders sidebar menu', () => {
-  mockMeterDataSericeGetMeasurementsRequest([]);
+  mockMeterDataSericeGetMeasurementsRequest(mockedMeterDataSerice, []);
 
   render(MeterData);
 
@@ -30,8 +26,17 @@ it('renders sidebar menu', () => {
   expect(navigationLinks[3].title).toEqual('Raw Data');
 });
 
+it('displays Loading message', async () => {
+  mockMeterDataSericeGetMeasurementsRequest(mockedMeterDataSerice, []);
+
+  render(MeterData);
+
+  const loadingMessage = await waitForLoadingMessageToAppear();
+  expect(loadingMessage).toBeInTheDocument();
+});
+
 it('sets default value for Smart Meter Id filter', () => {
-  mockMeterDataSericeGetMeasurementsRequest([]);
+  mockMeterDataSericeGetMeasurementsRequest(mockedMeterDataSerice, []);
   const expectedValue = process.env.VUE_APP_DEFAULT_SMART_METER_ID;
 
   render(MeterData);
@@ -41,4 +46,8 @@ it('sets default value for Smart Meter Id filter', () => {
   });
   expect(smartMeterIdFilter).toBeInTheDocument();
   expect(smartMeterIdFilter).toHaveDisplayValue(expectedValue);
+});
+
+afterEach(async () => {
+  await waitForLoadingMessageToDisappear();
 });

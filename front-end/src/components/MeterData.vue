@@ -123,7 +123,7 @@
           <div class="row" id="rawData">
             <div class="col-md-12">
               <h4>Raw Data - {{ measurements.length }} Measurements</h4>
-              <div class="row">
+              <div class="row bg-light fw-bold">
                 <div class="col-md-3 border border-dark text-start">
                   Smart Meter Id
                 </div>

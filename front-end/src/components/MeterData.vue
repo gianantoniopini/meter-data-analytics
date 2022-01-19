@@ -3,63 +3,26 @@
     <div class="row">
       <div class="col-sm-auto bg-light sticky-top">
         <!-- sidebar -->
-        <div
-          class="d-flex flex-sm-column flex-row flex-nowrap bg-light align-items-center sticky-top"
-          role="navigation"
-        >
-          <ul
-            class="nav nav-pills nav-flush flex-sm-column flex-row flex-nowrap mb-auto mx-auto text-center justify-content-between w-100 px-3 align-items-center"
-          >
-            <li class="nav-item">
-              <a
-                href="#filters"
-                class="nav-link py-3 px-2"
-                title="Filters"
-                data-bs-toggle="tooltip"
-                data-bs-placement="right"
-                data-bs-original-title="Filters"
-              >
-                <i class="fs-2 bi-filter"></i>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a
-                href="#timeSeries"
-                class="nav-link py-3 px-2"
-                title="Time Series"
-                data-bs-toggle="tooltip"
-                data-bs-placement="right"
-                data-bs-original-title="Time Series"
-              >
-                <i class="fs-2 bi-graph-up"></i>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a
-                href="#analytics"
-                class="nav-link py-3 px-2"
-                title="Analytics"
-                data-bs-toggle="tooltip"
-                data-bs-placement="right"
-                data-bs-original-title="Analytics"
-              >
-                <i class="fs-2 bi-heart"></i>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a
-                href="#rawData"
-                class="nav-link py-3 px-2"
-                title="Raw Data"
-                data-bs-toggle="tooltip"
-                data-bs-placement="right"
-                data-bs-original-title="Raw Data"
-              >
-                <i class="fs-2 bi-table"></i>
-              </a>
-            </li>
-          </ul>
-        </div>
+        <Sidebar
+          :menuItems="[
+            { href: '#filters', title: 'Filters', biClass: 'bi-filter' },
+            {
+              href: '#timeSeries',
+              title: 'Time Series',
+              biClass: 'bi-graph-up'
+            },
+            {
+              href: '#analytics',
+              title: 'Analytics',
+              biClass: 'bi-heart'
+            },
+            {
+              href: '#rawData',
+              title: 'Raw Data',
+              biClass: 'bi-table'
+            }
+          ]"
+        />
       </div>
       <div class="col-sm p-3 min-vh-100">
         <!-- content -->
@@ -216,12 +179,13 @@ import { createToast } from 'mosha-vue-toastify';
 import MeterDataService from '@/services/MeterDataService';
 import MeasurementAnalyticsService from '@/services/MeasurementAnalyticsService';
 import Measurement from '@/types/Measurement';
+import Sidebar from './Sidebar.vue';
 import BasicLineChart, { Dataset } from './BasicLineChart.vue';
 
 export default defineComponent({
   name: 'MeterData',
 
-  components: { BasicLineChart },
+  components: { BasicLineChart, Sidebar },
 
   data() {
     return {

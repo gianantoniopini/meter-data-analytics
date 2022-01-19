@@ -7,14 +7,22 @@ import {
   waitForLoadingMessageToDisappear
 } from './helpers/MeterData.helper';
 import MeterData from '../MeterData.vue';
+import Measurement from '@/types/Measurement';
 
 jest.mock('../../services/MeterDataService');
 const mockedMeterDataSerice = mocked(MeterDataSerice);
 
-it('renders sidebar menu', () => {
-  mockMeterDataSericeGetMeasurementsRequest(mockedMeterDataSerice, []);
+const setup = (measurements: Measurement[]): void => {
+  mockMeterDataSericeGetMeasurementsRequest(
+    mockedMeterDataSerice,
+    measurements
+  );
 
   render(MeterData);
+};
+
+it('renders sidebar menu', () => {
+  setup([]);
 
   const navigation = screen.queryByRole('navigation');
   expect(navigation).toBeInTheDocument();
@@ -27,19 +35,38 @@ it('renders sidebar menu', () => {
 });
 
 it('displays Loading message', async () => {
-  mockMeterDataSericeGetMeasurementsRequest(mockedMeterDataSerice, []);
-
-  render(MeterData);
+  setup([]);
 
   const loadingMessage = await waitForLoadingMessageToAppear();
   expect(loadingMessage).toBeInTheDocument();
 });
 
-it('sets default value for Smart Meter Id filter', () => {
-  mockMeterDataSericeGetMeasurementsRequest(mockedMeterDataSerice, []);
-  const expectedValue = process.env.VUE_APP_DEFAULT_SMART_METER_ID;
+it('disables Apply button while loading', async () => {
+  setup([]);
 
-  render(MeterData);
+  await waitForLoadingMessageToAppear();
+
+  const applyButton = screen.getByRole('button', {
+    name: 'Apply'
+  });
+  expect(applyButton).toBeDisabled();
+});
+
+it('enables Apply button after loading', async () => {
+  setup([]);
+
+  await waitForLoadingMessageToAppear();
+  await waitForLoadingMessageToDisappear();
+
+  const applyButton = screen.getByRole('button', {
+    name: 'Apply'
+  });
+  expect(applyButton).toBeEnabled();
+});
+
+it('sets default value for Smart Meter Id filter', () => {
+  setup([]);
+  const expectedValue = process.env.VUE_APP_DEFAULT_SMART_METER_ID;
 
   const smartMeterIdFilter = screen.queryByRole('textbox', {
     name: 'Smart Meter Id:'

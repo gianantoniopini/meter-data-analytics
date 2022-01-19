@@ -121,47 +121,49 @@
             </div>
           </div>
           <div class="row" id="rawData">
-            <div class="col-md-12">
+            <div class="col-lg-12">
               <h4>Raw Data - {{ measurements.length }} Measurements</h4>
-              <div class="row bg-light fw-bold">
-                <div class="col-md-3 border border-dark text-start">
+              <div class="row border border-dark bg-light fw-bold">
+                <div class="col-lg-3 border border-dark text-lg-start">
                   Smart Meter Id
                 </div>
-                <div class="col-md-2 border border-dark text-end">
+                <div class="col-lg-2 border border-dark text-lg-end">
                   Timestamp
                 </div>
-                <div class="col-md-1 border border-dark text-start">Meas.</div>
-                <div class="col-md-2 border border-dark text-end">
+                <div class="col-lg-1 border border-dark text-lg-start">
+                  Meas.
+                </div>
+                <div class="col-lg-2 border border-dark text-lg-end">
                   0100010700FF
                 </div>
-                <div class="col-md-2 border border-dark text-end">
+                <div class="col-lg-2 border border-dark text-lg-end">
                   0100020700FF
                 </div>
-                <div class="col-md-2 border border-dark text-end">
+                <div class="col-lg-2 border border-dark text-lg-end">
                   0100100700FF
                 </div>
               </div>
               <div
-                class="row"
+                class="row border"
                 v-for="(measurement, index) in measurements"
                 :key="index"
               >
-                <div class="col-md-3 border text-start">
+                <div class="col-lg-3 border text-lg-start">
                   {{ measurement.tags.muid }}
                 </div>
-                <div class="col-md-2 border text-end">
+                <div class="col-lg-2 border text-lg-end">
                   {{ formatDate(measurement.timestamp) }}
                 </div>
-                <div class="col-md-1 border text-start">
+                <div class="col-lg-1 border text-lg-start">
                   {{ measurement.measurement }}
                 </div>
-                <div class="col-md-2 border text-end">
+                <div class="col-lg-2 border text-lg-end">
                   {{ formatNumber(measurement['0100010700FF']) }}
                 </div>
-                <div class="col-md-2 border text-end">
+                <div class="col-lg-2 border text-lg-end">
                   {{ formatNumber(measurement['0100020700FF']) }}
                 </div>
-                <div class="col-md-2 border text-end">
+                <div class="col-lg-2 border text-lg-end">
                   {{ formatNumber(measurement['0100100700FF']) }}
                 </div>
               </div>

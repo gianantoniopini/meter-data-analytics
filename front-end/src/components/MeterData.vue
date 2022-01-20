@@ -27,11 +27,11 @@
       <div class="col-sm p-3 min-vh-100">
         <!-- content -->
         <div>
-          <div class="row pb-3" id="filters">
-            <div class="col-md-12">
+          <div class="row border rounded p-2 mb-2" id="filters">
+            <div class="col-12">
               <h4>Filters</h4>
               <form @submit.prevent="onSubmit" class="row form">
-                <div class="form-group col-md-4">
+                <div class="form-group col-lg-4">
                   <label for="smartMeterIdFilter" class="form-label"
                     >Smart Meter Id:</label
                   >
@@ -48,7 +48,7 @@
                     :title="this.validationErrors.smartMeterIdFilter"
                   />
                 </div>
-                <div class="form-group col-md-3">
+                <div class="form-group col-lg-3">
                   <label for="timestampFromFilter" class="form-label"
                     >Timestamp From:</label
                   >
@@ -59,7 +59,7 @@
                     v-model="timestampFromFilter"
                   />
                 </div>
-                <div class="form-group col-md-3">
+                <div class="form-group col-lg-3">
                   <label for="timestampToFilter" class="form-label"
                     >Timestamp To:</label
                   >
@@ -70,11 +70,11 @@
                     v-model="timestampToFilter"
                   />
                 </div>
-                <div class="col-md-2 align-self-end">
+                <div class="col-lg-2 align-self-end">
                   <button
                     :disabled="applyFiltersDisabled"
                     v-on:click="applyFilters"
-                    type="button"
+                    type="submit"
                     class="btn btn-primary"
                   >
                     Apply
@@ -83,45 +83,34 @@
               </form>
             </div>
           </div>
-          <div class="row pb-3" id="timeSeries">
-            <div class="col-md-12">
+          <div class="row border rounded p-2 mb-2" id="timeSeries">
+            <div class="col-12">
               <h4>Time Series</h4>
-              <div class="row">
-                <div class="col-md-12">
-                  <BasicLineChart
-                    :labels="timeSeriesChartLabels"
-                    :datasets="timeSeriesChartDataSets"
-                    title="Instantaneous Power"
-                  />
-                </div>
-              </div>
+              <BasicLineChart
+                :labels="timeSeriesChartLabels"
+                :datasets="timeSeriesChartDataSets"
+                title="Instantaneous Power"
+              />
             </div>
           </div>
-          <div class="row pb-3" id="analytics">
-            <div class="col-md-12">
+          <div class="row border rounded p-2 mb-2" id="analytics">
+            <div class="col-12">
               <h4>Analytics</h4>
-              <div class="row pb-4">
-                <div class="col-md-12">
-                  <BasicLineChart
-                    :labels="averagePowerByWeekdayChartLabels"
-                    :datasets="averagePowerByWeekdayChartDataSets"
-                    title="Power by Day of the Week"
-                  />
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-12">
-                  <BasicLineChart
-                    :labels="averagePowerByHourChartLabels"
-                    :datasets="averagePowerByHourChartDataSets"
-                    title="Power by Hour of the Day"
-                  />
-                </div>
-              </div>
+              <BasicLineChart
+                class="mb-3"
+                :labels="averagePowerByWeekdayChartLabels"
+                :datasets="averagePowerByWeekdayChartDataSets"
+                title="Power by Day of the Week"
+              />
+              <BasicLineChart
+                :labels="averagePowerByHourChartLabels"
+                :datasets="averagePowerByHourChartDataSets"
+                title="Power by Hour of the Day"
+              />
             </div>
           </div>
-          <div class="row" id="rawData">
-            <div class="col-lg-12">
+          <div class="row border rounded p-2" id="rawData">
+            <div class="col-12">
               <h4>Raw Data - {{ measurements.length }} Measurements</h4>
               <div class="row border border-dark bg-light fw-bold">
                 <div class="col-lg-3 border border-dark text-lg-start">

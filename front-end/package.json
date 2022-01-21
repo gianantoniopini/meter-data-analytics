@@ -9,7 +9,7 @@
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit --verbose",
     "lint": "vue-cli-service lint --no-fix",
-    "serve:production": "http-server ./dist -p 0"
+    "serve:production": "http-server ./dist --port 0 --brotli --gzip"
   },
   "dependencies": {
     "axios": "^0.21.4",
@@ -45,6 +45,7 @@
     "jest-canvas-mock": "^2.3.1",
     "prettier": "^2.2.1",
     "typescript": "~4.1.5",
+    "vue-cli-plugin-compression": "^1.1.5",
     "vue-jest": "^5.0.0-0"
   },
   "keywords": [

@@ -2,9 +2,7 @@
   <div id="nav">
     <nav class="navbar navbar-expand-sm navbar-light bg-light">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">
-          <img src="../assets/logo.png" alt="Navbar" width="24" height="24" />
-        </a>
+        <a class="navbar-brand" href="#">MEVN Stack App</a>
         <button
           class="navbar-toggler"
           type="button"

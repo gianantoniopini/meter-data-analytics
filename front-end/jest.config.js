@@ -5,7 +5,7 @@ module.exports = {
   coverageDirectory: 'coverage',
   coverageThreshold: {
     global: {
-      lines: 54
+      lines: 53
     }
   },
   preset: '@vue/cli-plugin-unit-jest/presets/typescript-and-babel',

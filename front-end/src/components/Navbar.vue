@@ -2,7 +2,7 @@
   <div id="nav">
     <nav class="navbar navbar-expand-sm navbar-light bg-light">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">MEVN Stack App</a>
+        <a class="navbar-brand" href="#">Meter Data Analytics</a>
         <button
           class="navbar-toggler"
           type="button"

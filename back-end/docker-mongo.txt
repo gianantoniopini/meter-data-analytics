@@ -3,17 +3,17 @@ docker pull mongo
 docker pull mongo-express
 
 -- Create containers
-docker run -v /data/db:/data/db -p 27017:27017 --name mevn-stack-app_mongo -d mongo:latest
-docker run --link mevn-stack-app_mongo:mongo -p 8081:8081 --name mevn-stack-app_mongo-express -e ME_CONFIG_MONGODB_URL="mongodb://mongo:27017" mongo-express:latest
+docker run -v /data/db:/data/db -p 27017:27017 --name meter-data-analytics_mongo -d mongo:latest
+docker run --link meter-data-analytics_mongo:mongo -p 8081:8081 --name meter-data-analytics_mongo-express -e ME_CONFIG_MONGODB_URL="mongodb://mongo:27017" mongo-express:latest
 
 -- Start containers
-docker container start mevn-stack-app_mongo
-docker container start mevn-stack-app_mongo-express
+docker container start meter-data-analytics_mongo
+docker container start meter-data-analytics_mongo-express
 
 -- Stop containers
 docker stop $(docker ps -a -q)
 
 -- Import json file into mongo
-docker cp measurements.json mevn-stack-app_mongo:/tmp/measurements.json
-docker exec mevn-stack-app_mongo mongoimport --db=mevn-stack-app_db --collection=measurements --file=/tmp/measurements.json
-docker exec mevn-stack-app_mongo rm -rf /tmp/measurements.json
+docker cp measurements.json meter-data-analytics_mongo:/tmp/measurements.json
+docker exec meter-data-analytics_mongo mongoimport --db=meter-data-analytics_db --collection=measurements --file=/tmp/measurements.json
+docker exec meter-data-analytics_mongo rm -rf /tmp/measurements.json

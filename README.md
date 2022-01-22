@@ -1,6 +1,6 @@
-# MEVN Stack App
+# Meter Data Analytics
 
-Repository for learning the MEVN stack (MongoDB, Express, Vue, Node.js).
+Smart meter data analytics app built with the MEVN stack (MongoDB, Express, Vue, Node.js).
 
 The app visualizes smart meter measurements time-series data and provides simple analytics.
 
@@ -82,7 +82,7 @@ See file [.env.example][6] for an example
 File [measurements.json.example][7] contains some sample data and the following `mongoimport` command could be used to import it:
 
 ```sh
-mongoimport --db=mevn-stack-app_db --collection=measurements --file=measurements.json.example
+mongoimport --db=meter-data-analytics_db --collection=measurements --file=measurements.json.example
 ```
 
 #### 2.5 Compiles and hot-reloads for development

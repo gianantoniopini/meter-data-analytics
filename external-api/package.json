@@ -1,5 +1,5 @@
 {
-  "name": "mevn-stack-app-external-api",
+  "name": "meter-data-analytics-external-api",
   "version": "1.0.0",
   "private": true,
   "description": "Node.js External Restful API with Node.js and Express",

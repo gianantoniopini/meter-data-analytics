@@ -1,4 +1,4 @@
-use('mevn-stack-app_db');
+use('meter-data-analytics_db');
 
 db.measurements.find({ timestamp: { $gte: new Date('2021-05-01'), $lte: new Date('2021-06-01') } });
 

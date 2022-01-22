@@ -1,5 +1,5 @@
 {
-  "name": "mevn-stack-app-back-end",
+  "name": "meter-data-analytics-back-end",
   "version": "1.0.0",
   "private": true,
   "description": "Node.js Restful API with Node.js, Express and MongoDB",

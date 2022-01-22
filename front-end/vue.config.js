@@ -9,7 +9,7 @@ module.exports = {
   pages: {
     index: {
       entry: 'src/main.ts',
-      title: 'MEVN Stack App'
+      title: 'Meter Data Analytics'
     }
   },
   pluginOptions: {

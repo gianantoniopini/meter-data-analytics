@@ -1,19 +1,9 @@
 import { fireEvent, render, screen } from '@testing-library/vue';
-import { mocked } from 'ts-jest/utils';
-import MeterDataSerice from '../../services/MeterDataService';
-import {
-  mockMeterDataSericeGetMeasurementsRequest,
-  waitForLoadingMessageToDisappear
-} from './helpers/MeterData.helper';
 import MeterData from '../MeterData.vue';
 
-jest.mock('../../services/MeterDataService');
-const mockedMeterDataSerice = mocked(MeterDataSerice);
-
 const setup = async (smartMeterIdFilterValue: string): Promise<HTMLElement> => {
-  mockMeterDataSericeGetMeasurementsRequest(mockedMeterDataSerice, []);
   render(MeterData);
-  await waitForLoadingMessageToDisappear();
+
   const smartMeterIdFilter = screen.getByRole('textbox', {
     name: 'Smart Meter Id:'
   });
@@ -38,8 +28,4 @@ describe('if Smart Meter Id filter is cleared', () => {
 
     expect(applyButton).toBeDisabled();
   });
-});
-
-afterEach(async () => {
-  await waitForLoadingMessageToDisappear();
 });

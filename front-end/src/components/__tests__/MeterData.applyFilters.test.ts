@@ -19,8 +19,6 @@ const setup = async (measurements: Measurement[]): Promise<HTMLElement> => {
   );
 
   render(MeterData);
-  await waitForLoadingMessageToAppear();
-  await waitForLoadingMessageToDisappear();
 
   return screen.getByRole('button', {
     name: 'Apply'

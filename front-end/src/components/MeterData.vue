@@ -378,8 +378,8 @@ export default defineComponent({
     }
   },
 
-  async mounted() {
-    await this.applyFilters();
+  mounted() {
+    this.refreshChartsData();
   }
 });
 </script>

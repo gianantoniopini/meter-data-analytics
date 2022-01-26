@@ -1,7 +1,16 @@
 <template>
   <nav class="navbar navbar-expand-sm navbar-light bg-light">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Meter Data Analytics</a>
+      <a class="navbar-brand" href="#">
+        <img
+          src="../assets/logo.png"
+          alt=""
+          width="24"
+          height="24"
+          class="d-inline-block align-text-top"
+        />
+        Meter Data Analytics
+      </a>
       <button
         class="navbar-toggler"
         type="button"

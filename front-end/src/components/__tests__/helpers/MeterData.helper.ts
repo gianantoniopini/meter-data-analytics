@@ -1,17 +1,27 @@
 import { screen, waitFor } from '@testing-library/vue';
-import MeterDataSerice from '../../../services/MeterDataService';
+import AxiosMockAdapter from 'axios-mock-adapter';
+import { StatusCodes } from 'http-status-codes';
 import Measurement from '../../../types/Measurement';
 
 const loadingMessage = 'Loading...';
 
-export const mockMeterDataSericeGetMeasurementsRequest = (
-  mockedMeterDataSerice: typeof MeterDataSerice,
+export const mockAxiosGetMeasurementsRequest = (
+  axiosMockAdapter: AxiosMockAdapter,
+  smartMeterId: string,
+  timestampFrom: string | null,
+  timestampTo: string | null,
   measurements: Measurement[]
 ): void => {
-  mockedMeterDataSerice.getMeasurements = jest.fn().mockImplementation(() => {
-    return new Promise<Measurement[]>((resolve) =>
-      setTimeout(() => resolve(measurements), 1000)
-    );
+  const muidQueryString = `muid=${smartMeterId}`;
+  const startQueryString = timestampFrom ? `&start=${timestampFrom}` : '';
+  const stopQueryString = timestampTo ? `&stop=${timestampTo}` : '';
+  const limitQueryString = '&limit=100000';
+
+  const url = `/meterdata/measurement?${muidQueryString}${startQueryString}${stopQueryString}${limitQueryString}`;
+
+  axiosMockAdapter.onGet(url).reply(StatusCodes.OK, {
+    status: StatusCodes.OK,
+    data: measurements
   });
 };
 

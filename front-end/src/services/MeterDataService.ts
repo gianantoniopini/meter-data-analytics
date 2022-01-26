@@ -1,4 +1,4 @@
-import http from '@/http-common';
+import axiosInstance from '@/http-common';
 import Measurement from '@/types/Measurement';
 
 class MeterDataService {
@@ -14,7 +14,7 @@ class MeterDataService {
 
     const url = `/meterdata/measurement?${muidQueryString}${startQueryString}${stopQueryString}${limitQueryString}`;
 
-    const { data: responseBody } = await http.get<{
+    const { data: responseBody } = await axiosInstance.get<{
       status: string;
       data: Measurement[];
     }>(url);

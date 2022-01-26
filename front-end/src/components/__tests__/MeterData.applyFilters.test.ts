@@ -1,20 +1,24 @@
 import { fireEvent, render, screen } from '@testing-library/vue';
-import { mocked } from 'ts-jest/utils';
-import MeterDataSerice from '../../services/MeterDataService';
+import AxiosMockAdapter from 'axios-mock-adapter';
+import axiosInstance from '@/http-common';
 import {
-  mockMeterDataSericeGetMeasurementsRequest,
+  mockAxiosGetMeasurementsRequest,
   waitForLoadingMessageToAppear,
   waitForLoadingMessageToDisappear
 } from './helpers/MeterData.helper';
 import MeterData from '../MeterData.vue';
 import Measurement from '@/types/Measurement';
 
-jest.mock('../../services/MeterDataService');
-const mockedMeterDataSerice = mocked(MeterDataSerice);
+const axiosMockAdapter = new AxiosMockAdapter(axiosInstance, {
+  delayResponse: 1000
+});
 
 const setup = async (measurements: Measurement[]): Promise<HTMLElement> => {
-  mockMeterDataSericeGetMeasurementsRequest(
-    mockedMeterDataSerice,
+  mockAxiosGetMeasurementsRequest(
+    axiosMockAdapter,
+    process.env.VUE_APP_DEFAULT_SMART_METER_ID as string,
+    null,
+    null,
     measurements
   );
 
@@ -55,4 +59,5 @@ it('enables button after loading', async () => {
 
 afterEach(async () => {
   await waitForLoadingMessageToDisappear();
+  axiosMockAdapter.reset();
 });

@@ -1,7 +1,7 @@
 import { screen, waitFor } from '@testing-library/vue';
 import AxiosMockAdapter from 'axios-mock-adapter';
 import { StatusCodes } from 'http-status-codes';
-import Measurement from '../../../types/Measurement';
+import BackEndMeasurement from '@/types/BackEndMeasurement';
 
 const loadingMessage = 'Loading...';
 
@@ -10,7 +10,7 @@ export const mockAxiosGetMeasurementsRequest = (
   smartMeterId: string,
   timestampFrom: string | null,
   timestampTo: string | null,
-  measurements: Measurement[]
+  measurements: BackEndMeasurement[]
 ): void => {
   const muidQueryString = `muid=${smartMeterId}`;
   const startQueryString = timestampFrom ? `&start=${timestampFrom}` : '';

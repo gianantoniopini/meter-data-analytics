@@ -1,4 +1,4 @@
-export default interface Measurement {
+export default interface BackEndMeasurement {
   measurement: string;
   timestamp: string;
   tags: { muid: string };

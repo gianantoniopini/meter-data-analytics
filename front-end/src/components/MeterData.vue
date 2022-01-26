@@ -111,49 +111,34 @@
           </div>
           <div class="row border rounded p-2" id="rawData">
             <div class="col-12">
-              <h4>Raw Data - {{ measurements.length }} Measurements</h4>
+              <h4>
+                Raw Data -
+                {{ instantaneousPowerMeasurements.length }} Power Measurements
+              </h4>
               <div class="row border border-dark bg-light fw-bold">
-                <div class="col-lg-3 border border-dark text-lg-start">
+                <div class="col-lg-5 border border-dark text-lg-start">
                   Smart Meter Id
                 </div>
-                <div class="col-lg-2 border border-dark text-lg-end">
+                <div class="col-lg-4 border border-dark text-lg-end">
                   Timestamp
                 </div>
-                <div class="col-lg-1 border border-dark text-lg-start">
-                  Meas.
-                </div>
-                <div class="col-lg-2 border border-dark text-lg-end">
-                  0100010700FF
-                </div>
-                <div class="col-lg-2 border border-dark text-lg-end">
-                  0100020700FF
-                </div>
-                <div class="col-lg-2 border border-dark text-lg-end">
-                  0100100700FF
+                <div class="col-lg-3 border border-dark text-lg-end">
+                  Instantaneous Power (W)
                 </div>
               </div>
               <div
                 class="row border"
-                v-for="(measurement, index) in measurements"
+                v-for="(measurement, index) in instantaneousPowerMeasurements"
                 :key="index"
               >
-                <div class="col-lg-3 border text-lg-start">
-                  {{ measurement.tags.muid }}
+                <div class="col-lg-5 border text-lg-start">
+                  {{ measurement.muid }}
                 </div>
-                <div class="col-lg-2 border text-lg-end">
+                <div class="col-lg-4 border text-lg-end">
                   {{ formatDate(measurement.timestamp) }}
                 </div>
-                <div class="col-lg-1 border text-lg-start">
-                  {{ measurement.measurement }}
-                </div>
-                <div class="col-lg-2 border text-lg-end">
-                  {{ formatNumber(measurement['0100010700FF']) }}
-                </div>
-                <div class="col-lg-2 border text-lg-end">
-                  {{ formatNumber(measurement['0100020700FF']) }}
-                </div>
-                <div class="col-lg-2 border text-lg-end">
-                  {{ formatNumber(measurement['0100100700FF']) }}
+                <div class="col-lg-3 border text-lg-end">
+                  {{ formatNumber(measurement.valueInWatts) }}
                 </div>
               </div>
             </div>
@@ -169,7 +154,7 @@ import { defineComponent } from 'vue';
 import { createToast } from 'mosha-vue-toastify';
 import MeterDataService from '@/services/MeterDataService';
 import MeasurementAnalyticsService from '@/services/MeasurementAnalyticsService';
-import Measurement from '@/types/Measurement';
+import InstantaneousPowerMeasurement from '@/types/InstantaneousPowerMeasurement';
 import Sidebar from './Sidebar.vue';
 import BasicLineChart, { Dataset } from './BasicLineChart.vue';
 
@@ -184,7 +169,7 @@ export default defineComponent({
       smartMeterIdFilter: process.env.VUE_APP_DEFAULT_SMART_METER_ID as string,
       timestampFromFilter: null,
       timestampToFilter: null,
-      measurements: [] as Measurement[],
+      instantaneousPowerMeasurements: [] as InstantaneousPowerMeasurement[],
       timeSeriesChartLabels: [] as string[],
       timeSeriesChartDataSets: [] as Dataset[],
       averagePowerByWeekdayChartLabels: [] as string[],
@@ -214,7 +199,7 @@ export default defineComponent({
   },
 
   methods: {
-    async retrieveMeasurements(
+    async retrieveInstantaneousPowerMeasurements(
       smartMeterId: string,
       timestampFrom: string | null,
       timestampTo: string | null
@@ -229,11 +214,12 @@ export default defineComponent({
       });
 
       try {
-        this.measurements = await MeterDataService.getMeasurements(
-          smartMeterId,
-          timestampFrom,
-          timestampTo
-        );
+        this.instantaneousPowerMeasurements =
+          await MeterDataService.getInstantaneousPowerMeasurements(
+            smartMeterId,
+            timestampFrom,
+            timestampTo
+          );
 
         this.refreshChartsData();
       } catch (error) {
@@ -245,25 +231,13 @@ export default defineComponent({
     },
 
     refreshChartsData() {
-      this.timeSeriesChartLabels = this.measurements.map((m) =>
-        this.formatDate(m.timestamp)
+      this.timeSeriesChartLabels = this.instantaneousPowerMeasurements.map(
+        (m) => this.formatDate(m.timestamp)
       );
       this.timeSeriesChartDataSets = [
         {
-          label: '0100010700FF (W)',
-          data: this.measurements.map((m) => m['0100010700FF']),
-          backgroundColor: 'rgba(255, 99, 132, 0.2)',
-          borderColor: 'rgb(255, 99, 132)'
-        },
-        {
-          label: '0100020700FF (W)',
-          data: this.measurements.map((m) => m['0100020700FF']),
-          backgroundColor: 'rgba(255, 159, 64, 0.2)',
-          borderColor: 'rgb(255, 159, 64)'
-        },
-        {
-          label: '0100100700FF (W)',
-          data: this.measurements.map((m) => m['0100100700FF']),
+          label: 'Instantaneous Power (W)',
+          data: this.instantaneousPowerMeasurements.map((m) => m.valueInWatts),
           backgroundColor: 'rgba(54, 162, 235, 0.2)',
           borderColor: 'rgb(54, 162, 235)'
         }
@@ -271,7 +245,7 @@ export default defineComponent({
 
       const averagePowerByWeekday =
         MeasurementAnalyticsService.calculateAveragePowerByWeekday(
-          this.measurements
+          this.instantaneousPowerMeasurements
         );
       this.averagePowerByWeekdayChartLabels = averagePowerByWeekday.map(
         (apbw) => this.getIsoWeekdayAsString(apbw.isoWeekday)
@@ -287,7 +261,7 @@ export default defineComponent({
 
       const averagePowerByHour =
         MeasurementAnalyticsService.calculateAveragePowerByHour(
-          this.measurements
+          this.instantaneousPowerMeasurements
         );
       this.averagePowerByHourChartLabels = averagePowerByHour.map((apbh) =>
         apbh.hour.toString()
@@ -341,7 +315,7 @@ export default defineComponent({
         );
       }
 
-      await this.retrieveMeasurements(
+      await this.retrieveInstantaneousPowerMeasurements(
         this.smartMeterIdFilter,
         timestampFromDate ? timestampFromDate.toISOString() : null,
         timestampToDate ? timestampToDate.toISOString() : null

@@ -1,19 +1,21 @@
 import { fireEvent, render, screen } from '@testing-library/vue';
 import AxiosMockAdapter from 'axios-mock-adapter';
 import axiosInstance from '@/http-common';
+import BackEndMeasurement from '@/types/BackEndMeasurement';
 import {
   mockAxiosGetMeasurementsRequest,
   waitForLoadingMessageToAppear,
   waitForLoadingMessageToDisappear
 } from './helpers/MeterData.helper';
 import MeterData from '../MeterData.vue';
-import Measurement from '@/types/Measurement';
 
 const axiosMockAdapter = new AxiosMockAdapter(axiosInstance, {
   delayResponse: 1000
 });
 
-const setup = async (measurements: Measurement[]): Promise<HTMLElement> => {
+const setup = async (
+  measurements: BackEndMeasurement[]
+): Promise<HTMLElement> => {
   mockAxiosGetMeasurementsRequest(
     axiosMockAdapter,
     process.env.VUE_APP_DEFAULT_SMART_METER_ID as string,

@@ -1,12 +1,25 @@
 import axiosInstance from '@/http-common';
-import Measurement from '@/types/Measurement';
+import BackEndMeasurement from '@/types/BackEndMeasurement';
+import InstantaneousPowerMeasurement from '@/types/InstantaneousPowerMeasurement';
+
+const mapToInstantaneousPowerMeasurement = (
+  backEndMeasurement: BackEndMeasurement
+): InstantaneousPowerMeasurement => {
+  const measurement: InstantaneousPowerMeasurement = {
+    muid: backEndMeasurement.tags.muid,
+    timestamp: backEndMeasurement.timestamp,
+    valueInWatts: backEndMeasurement['0100100700FF']
+  };
+
+  return measurement;
+};
 
 class MeterDataService {
-  async getMeasurements(
+  async getInstantaneousPowerMeasurements(
     smartMeterId: string,
     timestampFrom: string | null,
     timestampTo: string | null
-  ): Promise<Measurement[]> {
+  ): Promise<InstantaneousPowerMeasurement[]> {
     const muidQueryString = `muid=${smartMeterId}`;
     const startQueryString = timestampFrom ? `&start=${timestampFrom}` : '';
     const stopQueryString = timestampTo ? `&stop=${timestampTo}` : '';
@@ -16,14 +29,23 @@ class MeterDataService {
 
     const { data: responseBody } = await axiosInstance.get<{
       status: string;
-      data: Measurement[];
+      data: BackEndMeasurement[];
     }>(url);
 
-    return responseBody.data.sort((m1: Measurement, m2: Measurement) => {
-      return (
-        new Date(m1.timestamp).getTime() - new Date(m2.timestamp).getTime()
-      );
-    });
+    const instantaneousPowerMeasurements = responseBody.data
+      .filter((m) => m.measurement === 'power')
+      .map(mapToInstantaneousPowerMeasurement);
+
+    return instantaneousPowerMeasurements.sort(
+      (
+        m1: InstantaneousPowerMeasurement,
+        m2: InstantaneousPowerMeasurement
+      ) => {
+        return (
+          new Date(m1.timestamp).getTime() - new Date(m2.timestamp).getTime()
+        );
+      }
+    );
   }
 }
 

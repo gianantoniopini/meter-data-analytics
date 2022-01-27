@@ -131,6 +131,19 @@ describe('GET /meterdata/measurement request', () => {
       expectedLastMeasurement.timestamp
     );
   });
+
+  it('should fail if more than 100 requests are made from the same IP within 15 minutes', async () => {
+    let index = 0;
+    while (index < 100) {
+      await request(app).get(requestUrl).send();
+      index++;
+    }
+
+    const response = await request(app).get(requestUrl).send();
+
+    expect(response.status).toEqual(StatusCodes.TOO_MANY_REQUESTS);
+    expect(response.text).toEqual('Too many requests, please try again later.');
+  });
 });
 
 afterEach(async () => {

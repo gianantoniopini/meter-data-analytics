@@ -279,6 +279,21 @@ describe('POST /meterdata/measurement/import request', () => {
       '10 measurements deleted - 20 measurements inserted'
     );
   });
+
+  it('should fail if more than 100 requests are made from the same IP within 15 minutes', async () => {
+    mockExternalApiAuthenticationRequest();
+    mockExternalApiMeasurementRequest(muid, timestamp, 10);
+
+    let index = 0;
+    while (index < 100) {
+      await request(app).post(requestUrl).send({ muid });
+      index++;
+    }
+
+    const response = await request(app).post(requestUrl).send({ muid });
+    expect(response.status).toEqual(StatusCodes.TOO_MANY_REQUESTS);
+    expect(response.text).toEqual('Too many requests, please try again later.');
+  });
 });
 
 afterEach(async () => {

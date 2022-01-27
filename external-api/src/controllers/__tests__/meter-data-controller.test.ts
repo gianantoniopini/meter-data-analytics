@@ -12,10 +12,6 @@ const getAccessToken = async (app: Application): Promise<string> => {
   return authResponse.headers['set-cookie'][0] as string;
 };
 
-afterEach(() => {
-  jest.useRealTimers();
-});
-
 describe('GET /meterdata/measurement request', () => {
   const requestUrl = `${process.env.BASE_PATH as string}/meterdata/measurement`;
 
@@ -172,4 +168,8 @@ describe('GET /meterdata/measurement request', () => {
     expect(response.status).toEqual(StatusCodes.TOO_MANY_REQUESTS);
     expect(response.text).toEqual('Too many requests, please try again later.');
   });
+});
+
+afterEach(() => {
+  jest.useRealTimers();
 });

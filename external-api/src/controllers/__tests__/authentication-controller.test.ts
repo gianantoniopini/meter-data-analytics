@@ -98,4 +98,26 @@ describe('POST /authentication/auth request', () => {
       'secretOrPrivateKey must have a value'
     );
   });
+
+  it('should fail if more than 100 requests are made from the same IP within 15 minutes', async () => {
+    const app = initializeApp();
+    const indexes = [...Array.from({ length: 100 }).keys()].map(
+      (index) => index
+    );
+
+    for (const index of indexes) {
+      const response = await request(app)
+        .post(requestUrl)
+        .send({ email: validEmail, password: `invalidPassword-${index}` });
+
+      expect(response.status).toEqual(StatusCodes.BAD_REQUEST);
+    }
+
+    const response = await request(app)
+      .post(requestUrl)
+      .send({ email: validEmail, password: 'invalidPassword' });
+
+    expect(response.status).toEqual(StatusCodes.TOO_MANY_REQUESTS);
+    expect(response.text).toEqual('Too many requests, please try again later.');
+  });
 });

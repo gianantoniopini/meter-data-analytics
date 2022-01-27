@@ -147,4 +147,29 @@ describe('GET /meterdata/measurement request', () => {
     const maxTimestamp = Math.max(...timestamps.map((t) => t.getTime()));
     expect(new Date(maxTimestamp)).toEqual(new Date('2021-05-01T23:45:00Z'));
   });
+
+  it('should fail if more than 100 requests are made from the same IP within 15 minutes', async () => {
+    const app = initializeApp();
+    const accessTokenCookie = await getAccessToken(app); // 1 request is already done here
+    const indexes = [...Array.from({ length: 99 }).keys()].map(
+      (index) => index
+    );
+
+    for (const index of indexes) {
+      const response = await request(app)
+        .get(`${requestUrl}?muid=${index}`)
+        .set('Cookie', accessTokenCookie)
+        .send();
+
+      expect(response.status).toEqual(StatusCodes.OK);
+    }
+
+    const response = await request(app)
+      .get(`${requestUrl}?muid=09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1`)
+      .set('Cookie', accessTokenCookie)
+      .send();
+
+    expect(response.status).toEqual(StatusCodes.TOO_MANY_REQUESTS);
+    expect(response.text).toEqual('Too many requests, please try again later.');
+  });
 });

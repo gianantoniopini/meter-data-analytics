@@ -91,6 +91,30 @@ describe('GET /meterdata/measurement/instantaneouspower request', () => {
     );
   });
 
+  it('should filter out non-power measurements', async () => {
+    await setupMeasurements(muid, timestamp, powerMeasurement, 10);
+    await setupMeasurements(muid, timestamp, 'water', 20);
+
+    const response = await request(app)
+      .get(`${requestUrl}?muid=${muid}&limit=100000`)
+      .send();
+
+    expect(response.status).toEqual(StatusCodes.OK);
+    expect(response.body.status).toEqual(StatusCodes.OK);
+    expect(response.body.data).toBeDefined();
+    expect(response.body.data.timeSeries).toBeDefined();
+    const actualMeasurements = response.body.data.timeSeries as Measurement[];
+    expect(actualMeasurements).toHaveLength(10);
+    const actualPowerMeasurements = actualMeasurements.filter(
+      (m) => m.measurement === powerMeasurement
+    );
+    expect(actualPowerMeasurements).toHaveLength(10);
+    const actualWaterMeasurements = actualMeasurements.filter(
+      (m) => m.measurement === 'water'
+    );
+    expect(actualWaterMeasurements).toHaveLength(0);
+  });
+
   it('should return a max number of measurements as per limit query parameter', async () => {
     await setupMeasurements(muid, timestamp, powerMeasurement, 100);
 

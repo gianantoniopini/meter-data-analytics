@@ -186,7 +186,6 @@ export const getInstantaneousPowerMeasurements = async (
 
     const averagePowerByWeekday =
       MeasurementAnalyticsService.calculateAveragePowerByWeekday(measurements);
-
     const averagePowerByHour =
       MeasurementAnalyticsService.calculateAveragePowerByHour(measurements);
 

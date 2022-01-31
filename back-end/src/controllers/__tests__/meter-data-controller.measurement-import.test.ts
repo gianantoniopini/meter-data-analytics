@@ -296,6 +296,7 @@ describe('POST /meterdata/measurement/import request', () => {
     }
 
     const response = await request(app).post(requestUrl).send({ muid });
+
     expect(response.status).toEqual(StatusCodes.TOO_MANY_REQUESTS);
     expect(response.text).toEqual('Too many requests, please try again later.');
   });

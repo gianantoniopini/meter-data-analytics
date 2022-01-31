@@ -3,7 +3,14 @@ import { StatusCodes } from 'http-status-codes';
 import { handleUnknownError } from '../utils/controller-utils';
 import { authenticateAndGetMeasurement } from '../utils/external-api-proxy';
 import { ExternalApiMeasurement } from '../interfaces/external-api-measurement.interface';
-import MeasurementModel from '../models/measurement.model';
+import MeasurementModel, {
+  powerMeasurement,
+  query
+} from '../models/measurement.model';
+import MeasurementAnalyticsService from '../services/measurement-analytics.service';
+
+const muidParameterNotPresentInRequest =
+  'muid parameter not present in request';
 
 const mapExternalApiMeasurement = (
   externalApiMeasurement: ExternalApiMeasurement
@@ -53,7 +60,7 @@ export const getMeasurementsFromExternalApi = async (
     if (!request.query.muid) {
       response.status(StatusCodes.BAD_REQUEST).json({
         status: response.statusCode,
-        message: 'muid query parameter not present'
+        message: muidParameterNotPresentInRequest
       });
       return;
     }
@@ -86,7 +93,7 @@ export const importMeasurements = async (
     if (!muid) {
       response.status(StatusCodes.BAD_REQUEST).json({
         status: response.statusCode,
-        message: 'muid body parameter not present'
+        message: muidParameterNotPresentInRequest
       });
       return;
     }
@@ -132,34 +139,63 @@ export const getMeasurements = async (
     if (!request.query.muid) {
       response.status(StatusCodes.BAD_REQUEST).json({
         status: response.statusCode,
-        message: 'muid query parameter not present'
+        message: muidParameterNotPresentInRequest
       });
       return;
     }
 
-    const muid = request.query.muid as string;
-    const start = request.query.start as string | undefined;
-    const stop = request.query.stop as string | undefined;
-    const limit = request.query.limit as string | undefined;
-
-    const conditions = [];
-    conditions.push({ tags: { muid: muid } });
-    if (start) {
-      conditions.push({ timestamp: { $gte: new Date(start) } });
-    }
-    if (stop) {
-      conditions.push({ timestamp: { $lte: new Date(stop) } });
-    }
-
-    const limitAsNumber = limit ? Number.parseInt(limit, 10) : 1;
-
-    const measurements = await MeasurementModel.find({
-      $and: conditions
-    }).limit(limitAsNumber);
+    const measurements = await query(
+      request.query.muid as string,
+      request.query.start as string | undefined,
+      request.query.stop as string | undefined,
+      undefined,
+      request.query.limit as string | undefined
+    );
 
     response.status(StatusCodes.OK).json({
       status: response.statusCode,
       data: measurements
+    });
+  } catch (error: unknown) {
+    handleUnknownError(error, next);
+    return;
+  }
+};
+
+export const getInstantaneousPowerMeasurements = async (
+  request: Request,
+  response: Response,
+  next: express.NextFunction
+): Promise<void> => {
+  try {
+    if (!request.query.muid) {
+      response.status(StatusCodes.BAD_REQUEST).json({
+        status: response.statusCode,
+        message: muidParameterNotPresentInRequest
+      });
+      return;
+    }
+
+    const measurements = await query(
+      request.query.muid as string,
+      request.query.start as string | undefined,
+      request.query.stop as string | undefined,
+      powerMeasurement,
+      request.query.limit as string | undefined
+    );
+
+    const averagePowerByWeekday =
+      MeasurementAnalyticsService.calculateAveragePowerByWeekday(measurements);
+
+    const averagePowerByHour =
+      MeasurementAnalyticsService.calculateAveragePowerByHour(measurements);
+
+    response.status(StatusCodes.OK).json({
+      status: response.statusCode,
+      data: {
+        timeSeries: measurements,
+        analytics: { averagePowerByWeekday, averagePowerByHour }
+      }
     });
   } catch (error: unknown) {
     handleUnknownError(error, next);

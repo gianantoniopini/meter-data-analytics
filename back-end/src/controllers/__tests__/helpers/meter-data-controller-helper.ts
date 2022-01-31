@@ -4,6 +4,7 @@ import MeasurementModel from '../../../models/measurement.model';
 export const setupMeasurements = async (
   muid: string,
   timestampStart: Date,
+  measurement: string,
   count: number
 ): Promise<Measurement[]> => {
   const measurements: Measurement[] = [];
@@ -19,7 +20,7 @@ export const setupMeasurements = async (
     const powerValue = Math.random() * 5000;
 
     const measurementModel = new MeasurementModel({
-      measurement: 'power',
+      measurement: measurement,
       timestamp: timestamp,
       tags: { muid: muid },
       '0100010700FF': powerValue,

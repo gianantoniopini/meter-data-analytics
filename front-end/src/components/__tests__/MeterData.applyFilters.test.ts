@@ -3,7 +3,7 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 import axiosInstance from '@/http-common';
 import BackEndMeasurement from '@/types/BackEndMeasurement';
 import {
-  mockAxiosGetMeasurementsRequest,
+  mockGetInstantaneousPowerMeasurementsRequest,
   waitForLoadingMessageToAppear,
   waitForLoadingMessageToDisappear
 } from './helpers/MeterData.helper';
@@ -16,7 +16,7 @@ const axiosMockAdapter = new AxiosMockAdapter(axiosInstance, {
 const setup = async (
   measurements: BackEndMeasurement[]
 ): Promise<HTMLElement> => {
-  mockAxiosGetMeasurementsRequest(
+  mockGetInstantaneousPowerMeasurementsRequest(
     axiosMockAdapter,
     process.env.VUE_APP_DEFAULT_SMART_METER_ID as string,
     null,

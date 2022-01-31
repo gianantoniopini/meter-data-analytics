@@ -2,10 +2,12 @@ import { screen, waitFor } from '@testing-library/vue';
 import AxiosMockAdapter from 'axios-mock-adapter';
 import { StatusCodes } from 'http-status-codes';
 import BackEndMeasurement from '@/types/BackEndMeasurement';
+import WeekdayAveragePower from '@/types/WeekdayAveragePower';
+import HourAveragePower from '@/types/HourAveragePower';
 
 const loadingMessage = 'Loading...';
 
-export const mockAxiosGetMeasurementsRequest = (
+export const mockGetInstantaneousPowerMeasurementsRequest = (
   axiosMockAdapter: AxiosMockAdapter,
   smartMeterId: string,
   timestampFrom: string | null,
@@ -17,11 +19,17 @@ export const mockAxiosGetMeasurementsRequest = (
   const stopQueryString = timestampTo ? `&stop=${timestampTo}` : '';
   const limitQueryString = '&limit=100000';
 
-  const url = `/meterdata/measurement?${muidQueryString}${startQueryString}${stopQueryString}${limitQueryString}`;
+  const url = `/meterdata/measurement/instantaneouspower?${muidQueryString}${startQueryString}${stopQueryString}${limitQueryString}`;
 
   axiosMockAdapter.onGet(url).reply(StatusCodes.OK, {
     status: StatusCodes.OK,
-    data: measurements
+    data: {
+      timeSeries: measurements,
+      analytics: {
+        averagePowerByWeekday: [] as WeekdayAveragePower[],
+        averagePowerByHour: [] as HourAveragePower[]
+      }
+    }
   });
 };
 

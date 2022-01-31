@@ -25,8 +25,10 @@ beforeAll(async () => {
   }
 });
 
-describe('GET /meterdata/measurement request', () => {
-  const requestUrl = `${process.env.BASE_PATH as string}/meterdata/measurement`;
+describe('GET /meterdata/measurement/instantaneouspower request', () => {
+  const requestUrl = `${
+    process.env.BASE_PATH as string
+  }/meterdata/measurement/instantaneouspower`;
 
   const muid = '09a2bc02-2f88-4d01-ae59-a7f60c4a0dd1';
   const timestamp = new Date('2021-05-01T00:00:00Z');
@@ -65,7 +67,8 @@ describe('GET /meterdata/measurement request', () => {
     expect(response.status).toEqual(StatusCodes.OK);
     expect(response.body.status).toEqual(StatusCodes.OK);
     expect(response.body.data).toBeDefined();
-    const actualMeasurements = response.body.data as Measurement[];
+    expect(response.body.data.timeSeries).toBeDefined();
+    const actualMeasurements = response.body.data.timeSeries as Measurement[];
     expect(actualMeasurements).toHaveLength(1);
     const actualMeasurement = actualMeasurements[0];
     expect(actualMeasurement._id).toBeDefined();
@@ -100,7 +103,8 @@ describe('GET /meterdata/measurement request', () => {
     expect(response.status).toEqual(StatusCodes.OK);
     expect(response.body.status).toEqual(StatusCodes.OK);
     expect(response.body.data).toBeDefined();
-    const actualMeasurements = response.body.data as Measurement[];
+    expect(response.body.data.timeSeries).toBeDefined();
+    const actualMeasurements = response.body.data.timeSeries as Measurement[];
     expect(actualMeasurements).toHaveLength(limit);
   });
 
@@ -123,7 +127,8 @@ describe('GET /meterdata/measurement request', () => {
     expect(response.status).toEqual(StatusCodes.OK);
     expect(response.body.status).toEqual(StatusCodes.OK);
     expect(response.body.data).toBeDefined();
-    const actualMeasurements = response.body.data as Measurement[];
+    expect(response.body.data.timeSeries).toBeDefined();
+    const actualMeasurements = response.body.data.timeSeries as Measurement[];
     expect(actualMeasurements).toHaveLength(21);
     const actualFirstMeasurementTimestamp = Math.min(
       ...actualMeasurements.map((m) => new Date(m.timestamp).getTime())

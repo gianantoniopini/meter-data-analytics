@@ -7,7 +7,9 @@ import got, { OptionsOfJSONResponseBody } from 'got';
 import { Cookie, CookieJar } from 'tough-cookie';
 import { mocked } from 'ts-jest/utils';
 import { initialize as initializeApp } from '../../app';
-import MeasurementModel from '../../models/measurement.model';
+import MeasurementModel, {
+  powerMeasurement
+} from '../../models/measurement.model';
 import { ExternalApiMeasurementResponse } from '../../interfaces/external-api-measurement-response.interface';
 import { ExternalApiMeasurement } from '../../interfaces/external-api-measurement.interface';
 import { setupMeasurements } from './helpers/meter-data-controller-helper';
@@ -56,7 +58,7 @@ const mockExternalApiMeasurementRequest = (
     const powerValue = Math.random() * 5000;
 
     const measurement: ExternalApiMeasurement = {
-      measurement: 'power',
+      measurement: powerMeasurement,
       timestamp: timestamp,
       tags: { muid: muid },
       '0100010700FF': powerValue,
@@ -101,7 +103,9 @@ describe('POST /meterdata/measurement/import request', () => {
 
     expect(response.status).toEqual(StatusCodes.BAD_REQUEST);
     expect(response.body.status).toEqual(StatusCodes.BAD_REQUEST);
-    expect(response.body.message).toEqual('muid body parameter not present');
+    expect(response.body.message).toEqual(
+      'muid parameter not present in request'
+    );
   });
 
   it('should make external-api authentication request', async () => {
@@ -192,10 +196,11 @@ describe('POST /meterdata/measurement/import request', () => {
     const existingMeasurementsWithSameMuid = await setupMeasurements(
       muid,
       timestamp,
+      powerMeasurement,
       10
     );
     const otherMuid = 'other-muid';
-    await setupMeasurements(otherMuid, timestamp, 20);
+    await setupMeasurements(otherMuid, timestamp, powerMeasurement, 20);
 
     mockExternalApiAuthenticationRequest();
     mockExternalApiMeasurementRequest(muid, timestamp, 30);
@@ -266,7 +271,7 @@ describe('POST /meterdata/measurement/import request', () => {
   });
 
   it('should return number of measurements deleted and inserted', async () => {
-    await setupMeasurements(muid, timestamp, 10);
+    await setupMeasurements(muid, timestamp, powerMeasurement, 10);
 
     mockExternalApiAuthenticationRequest();
     mockExternalApiMeasurementRequest(muid, timestamp, 20);

@@ -113,7 +113,7 @@
             <div class="col-12">
               <h4>
                 Raw Data -
-                {{ instantaneousPowerMeasurements.length }} Power Measurements
+                {{ timeSeries.length }} Power Measurements
               </h4>
               <div class="row border border-dark bg-light fw-bold">
                 <div class="col-lg-5 border border-dark text-lg-start">
@@ -128,7 +128,7 @@
               </div>
               <div
                 class="row border"
-                v-for="(measurement, index) in instantaneousPowerMeasurements"
+                v-for="(measurement, index) in timeSeries"
                 :key="index"
               >
                 <div class="col-lg-5 border text-lg-start">
@@ -153,8 +153,9 @@
 import { defineComponent } from 'vue';
 import { createToast } from 'mosha-vue-toastify';
 import MeterDataService from '@/services/MeterDataService';
-import MeasurementAnalyticsService from '@/services/MeasurementAnalyticsService';
 import InstantaneousPowerMeasurement from '@/types/InstantaneousPowerMeasurement';
+import HourAveragePower from '@/types/HourAveragePower';
+import WeekdayAveragePower from '@/types/WeekdayAveragePower';
 import Sidebar from './Sidebar.vue';
 import BasicLineChart, { Dataset } from './BasicLineChart.vue';
 
@@ -169,7 +170,9 @@ export default defineComponent({
       smartMeterIdFilter: process.env.VUE_APP_DEFAULT_SMART_METER_ID as string,
       timestampFromFilter: null,
       timestampToFilter: null,
-      instantaneousPowerMeasurements: [] as InstantaneousPowerMeasurement[],
+      timeSeries: [] as InstantaneousPowerMeasurement[],
+      averagePowerByWeekday: [] as WeekdayAveragePower[],
+      averagePowerByHour: [] as HourAveragePower[],
       timeSeriesChartLabels: [] as string[],
       timeSeriesChartDataSets: [] as Dataset[],
       averagePowerByWeekdayChartLabels: [] as string[],
@@ -214,12 +217,18 @@ export default defineComponent({
       });
 
       try {
-        this.instantaneousPowerMeasurements =
+        const instantaneousPowerMeasurements =
           await MeterDataService.getInstantaneousPowerMeasurements(
             smartMeterId,
             timestampFrom,
             timestampTo
           );
+
+        this.timeSeries = instantaneousPowerMeasurements.timeSeries;
+        this.averagePowerByWeekday =
+          instantaneousPowerMeasurements.analytics.averagePowerByWeekday;
+        this.averagePowerByHour =
+          instantaneousPowerMeasurements.analytics.averagePowerByHour;
 
         this.refreshChartsData();
       } catch (error) {
@@ -231,45 +240,37 @@ export default defineComponent({
     },
 
     refreshChartsData() {
-      this.timeSeriesChartLabels = this.instantaneousPowerMeasurements.map(
-        (m) => this.formatDate(m.timestamp)
+      this.timeSeriesChartLabels = this.timeSeries.map((m) =>
+        this.formatDate(m.timestamp)
       );
       this.timeSeriesChartDataSets = [
         {
           label: 'Instantaneous Power (W)',
-          data: this.instantaneousPowerMeasurements.map((m) => m.valueInWatts),
+          data: this.timeSeries.map((m) => m.valueInWatts),
           backgroundColor: 'rgba(54, 162, 235, 0.2)',
           borderColor: 'rgb(54, 162, 235)'
         }
       ];
 
-      const averagePowerByWeekday =
-        MeasurementAnalyticsService.calculateAveragePowerByWeekday(
-          this.instantaneousPowerMeasurements
-        );
-      this.averagePowerByWeekdayChartLabels = averagePowerByWeekday.map(
+      this.averagePowerByWeekdayChartLabels = this.averagePowerByWeekday.map(
         (apbw) => this.getIsoWeekdayAsString(apbw.isoWeekday)
       );
       this.averagePowerByWeekdayChartDataSets = [
         {
           label: 'Average Power Value (W)',
-          data: averagePowerByWeekday.map((apbw) => apbw.averagePower),
+          data: this.averagePowerByWeekday.map((apbw) => apbw.averagePower),
           backgroundColor: 'rgba(255, 99, 132, 0.2)',
           borderColor: 'rgb(255, 99, 132)'
         }
       ];
 
-      const averagePowerByHour =
-        MeasurementAnalyticsService.calculateAveragePowerByHour(
-          this.instantaneousPowerMeasurements
-        );
-      this.averagePowerByHourChartLabels = averagePowerByHour.map((apbh) =>
+      this.averagePowerByHourChartLabels = this.averagePowerByHour.map((apbh) =>
         apbh.hour.toString()
       );
       this.averagePowerByHourChartDataSets = [
         {
           label: 'Average Power Value (W)',
-          data: averagePowerByHour.map((apbh) => apbh.averagePower),
+          data: this.averagePowerByHour.map((apbh) => apbh.averagePower),
           backgroundColor: 'rgba(255, 159, 64, 0.2)',
           borderColor: 'rgb(255, 159, 64)'
         }

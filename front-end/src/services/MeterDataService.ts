@@ -1,6 +1,6 @@
 import axiosInstance from '@/http-common';
 import BackEndMeasurement from '@/types/BackEndMeasurement';
-import HourAveragePower from '@/types/HourAveragePower';
+import HourAveragePower from '@shared/interfaces/hour-average-power.interface';
 import InstantaneousPowerMeasurement from '@/types/InstantaneousPowerMeasurement';
 import WeekdayAveragePower from '@/types/WeekdayAveragePower';
 

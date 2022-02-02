@@ -3,7 +3,7 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 import { StatusCodes } from 'http-status-codes';
 import BackEndMeasurement from '@/types/BackEndMeasurement';
 import WeekdayAveragePower from '@/types/WeekdayAveragePower';
-import HourAveragePower from '@/types/HourAveragePower';
+import HourAveragePower from '@shared/interfaces/hour-average-power.interface';
 
 const loadingMessage = 'Loading...';
 

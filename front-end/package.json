@@ -9,7 +9,7 @@
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit --verbose",
     "lint": "vue-cli-service lint --no-fix",
-    "serve:production": "http-server ./dist --port 8081 --brotli --gzip --proxy http://localhost:8081?"
+    "serve:production": "http-server ./dist --port 8082 --brotli --gzip --proxy http://localhost:8082?"
   },
   "dependencies": {
     "axios": "^0.21.4",

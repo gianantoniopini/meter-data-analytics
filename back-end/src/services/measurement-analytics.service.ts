@@ -1,4 +1,4 @@
-import { Measurement } from '../interfaces/measurement.interface';
+import { Measurement } from '../models/measurement.model';
 import { WeekdayAveragePower } from '../interfaces/weekday-average-power.interface';
 import { HourAveragePower } from '../interfaces/hour-average-power.interface';
 

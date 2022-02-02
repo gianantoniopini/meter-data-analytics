@@ -1,5 +1,6 @@
-import { Measurement } from '../../../interfaces/measurement.interface';
-import MeasurementModel from '../../../models/measurement.model';
+import MeasurementModel, {
+  Measurement
+} from '../../../models/measurement.model';
 
 export const setupMeasurements = async (
   muid: string,

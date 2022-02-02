@@ -1,5 +1,4 @@
-import { model, Schema, Model } from 'mongoose';
-import { Measurement } from '../interfaces/measurement.interface';
+import mongoose, { Document, model, Model, Schema } from 'mongoose';
 
 const MeasurementSchema: Schema = new Schema(
   {
@@ -33,14 +32,24 @@ const MeasurementSchema: Schema = new Schema(
   { collection: 'measurements' }
 );
 
+interface Measurement extends Document {
+  _id: mongoose.Types.ObjectId;
+  measurement: string;
+  timestamp: Date;
+  tags: { muid: string };
+  '0100010700FF': number;
+  '0100020700FF': number;
+  '0100100700FF': number;
+}
+
 const MeasurementModel: Model<Measurement> = model(
   'Measurement',
   MeasurementSchema
 );
 
-export const powerMeasurement = 'power';
+const powerMeasurement = 'power';
 
-export const query = async (
+const query = async (
   muid: string,
   start: string | undefined,
   stop: string | undefined,
@@ -71,3 +80,4 @@ export const query = async (
 };
 
 export default MeasurementModel;
+export { Measurement, powerMeasurement, query };

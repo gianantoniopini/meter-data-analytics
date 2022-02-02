@@ -1,5 +1,5 @@
 import { Measurement } from '../models/measurement.model';
-import { WeekdayAveragePower } from '../interfaces/weekday-average-power.interface';
+import WeekdayAveragePower from '@shared/interfaces/weekday-average-power.interface';
 import HourAveragePower from '@shared/interfaces/hour-average-power.interface';
 
 const mapWeekdayToIsoWeekday = (weekday: number): number => {

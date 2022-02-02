@@ -155,7 +155,7 @@ import { createToast } from 'mosha-vue-toastify';
 import MeterDataService from '@/services/MeterDataService';
 import InstantaneousPowerMeasurement from '@/types/InstantaneousPowerMeasurement';
 import HourAveragePower from '@shared/interfaces/hour-average-power.interface';
-import WeekdayAveragePower from '@/types/WeekdayAveragePower';
+import WeekdayAveragePower from '@shared/interfaces/weekday-average-power.interface';
 import Sidebar from './Sidebar.vue';
 import BasicLineChart, { Dataset } from './BasicLineChart.vue';
 

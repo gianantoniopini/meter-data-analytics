@@ -2,7 +2,7 @@ import axiosInstance from '@/http-common';
 import BackEndMeasurement from '@/types/BackEndMeasurement';
 import HourAveragePower from '@shared/interfaces/hour-average-power.interface';
 import InstantaneousPowerMeasurement from '@/types/InstantaneousPowerMeasurement';
-import WeekdayAveragePower from '@/types/WeekdayAveragePower';
+import WeekdayAveragePower from '@shared/interfaces/weekday-average-power.interface';
 
 const mapToInstantaneousPowerMeasurement = (
   backEndMeasurement: BackEndMeasurement

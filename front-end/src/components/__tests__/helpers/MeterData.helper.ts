@@ -2,7 +2,7 @@ import { screen, waitFor } from '@testing-library/vue';
 import AxiosMockAdapter from 'axios-mock-adapter';
 import { StatusCodes } from 'http-status-codes';
 import BackEndMeasurement from '@/types/BackEndMeasurement';
-import WeekdayAveragePower from '@/types/WeekdayAveragePower';
+import WeekdayAveragePower from '@shared/interfaces/weekday-average-power.interface';
 import HourAveragePower from '@shared/interfaces/hour-average-power.interface';
 
 const loadingMessage = 'Loading...';

@@ -1,7 +1,7 @@
 import got from 'got';
 import { Cookie, CookieJar } from 'tough-cookie';
 import { promisify } from 'node:util';
-import { ExternalApiMeasurement } from '../interfaces/external-api-measurement.interface';
+import ExternalApiMeasurement from '@shared/interfaces/external-api-measurement.interface';
 import { ExternalApiMeasurementResponse } from '../interfaces/external-api-measurement-response.interface';
 
 async function getAuthenticationCookie(

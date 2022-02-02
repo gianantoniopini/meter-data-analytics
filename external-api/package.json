@@ -10,7 +10,7 @@
     "lint": "eslint . --ext .ts",
     "prettier-format": "prettier --config .prettierrc 'src/**/*.ts' --write",
     "start": "nodemon src/server.ts",
-    "start:production": "ts-node build/src/server.js",
+    "start:production": "ts-node build/external-api/src/server.js",
     "test": "jest --runInBand --verbose"
   },
   "keywords": [

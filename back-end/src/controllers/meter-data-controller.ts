@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { handleUnknownError } from '../utils/controller-utils';
 import { authenticateAndGetMeasurement } from '../utils/external-api-proxy';
-import { ExternalApiMeasurement } from '../interfaces/external-api-measurement.interface';
+import ExternalApiMeasurement from '@shared/interfaces/external-api-measurement.interface';
 import MeasurementModel, {
   powerMeasurement,
   query

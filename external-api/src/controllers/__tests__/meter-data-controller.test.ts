@@ -2,7 +2,7 @@ import { Application } from 'express';
 import request from 'supertest';
 import { StatusCodes } from 'http-status-codes';
 import { initialize as initializeApp } from '../../app';
-import Measurement from '../../interfaces/measurement.interface';
+import Measurement from '@shared/interfaces/external-api-measurement.interface';
 
 const getAccessToken = async (app: Application): Promise<string> => {
   const authResponse = await request(app)

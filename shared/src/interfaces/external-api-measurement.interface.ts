@@ -1,4 +1,4 @@
-export interface ExternalApiMeasurement {
+export default interface ExternalApiMeasurement {
   measurement: string;
   timestamp: Date;
   tags: { muid: string };

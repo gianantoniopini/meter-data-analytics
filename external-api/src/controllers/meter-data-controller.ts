@@ -3,7 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 import fs from 'node:fs/promises';
 import { constants as fsConstants } from 'node:fs';
 import { handleUnknownError } from '../utils/controller-utils';
-import Measurement from '../interfaces/measurement.interface';
+import Measurement from '@shared/interfaces/external-api-measurement.interface';
 
 export const getMeasurements = async (
   request: Request,

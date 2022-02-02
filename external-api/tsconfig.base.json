@@ -2,8 +2,8 @@
   "compilerOptions": {
     "target": "es6",
     "module": "commonjs",
-    "rootDir": "./",
     "outDir": "./build",
+    "paths": { "@shared/*": ["../shared/src/*"] },
     "esModuleInterop": true,
     "strict": true
   }

@@ -1,5 +1,5 @@
 export default interface InstantaneousPowerMeasurement {
   muid: string;
-  timestamp: string;
+  timestamp: Date;
   valueInWatts: number;
 }

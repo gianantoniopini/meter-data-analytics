@@ -1,11 +1,11 @@
 import axiosInstance from '@/http-common';
-import BackEndMeasurement from '@/types/BackEndMeasurement';
+import Measurement from '@shared/interfaces/measurement.interface';
 import HourAveragePower from '@shared/interfaces/hour-average-power.interface';
 import InstantaneousPowerMeasurement from '@/types/InstantaneousPowerMeasurement';
 import WeekdayAveragePower from '@shared/interfaces/weekday-average-power.interface';
 
 const mapToInstantaneousPowerMeasurement = (
-  backEndMeasurement: BackEndMeasurement
+  backEndMeasurement: Measurement
 ): InstantaneousPowerMeasurement => {
   const measurement: InstantaneousPowerMeasurement = {
     muid: backEndMeasurement.tags.muid,
@@ -38,7 +38,7 @@ class MeterDataService {
     const { data: responseBody } = await axiosInstance.get<{
       status: string;
       data: {
-        timeSeries: BackEndMeasurement[];
+        timeSeries: Measurement[];
         analytics: {
           averagePowerByWeekday: WeekdayAveragePower[];
           averagePowerByHour: HourAveragePower[];

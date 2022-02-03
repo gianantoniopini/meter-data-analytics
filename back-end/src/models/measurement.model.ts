@@ -1,6 +1,7 @@
-import mongoose, { Document, model, Model, Schema } from 'mongoose';
+import { model, Model, Schema } from 'mongoose';
+import Measurement from '@shared/interfaces/measurement.interface';
 
-const MeasurementSchema: Schema = new Schema(
+const MeasurementSchema: Schema = new Schema<Measurement>(
   {
     measurement: {
       type: String,
@@ -31,16 +32,6 @@ const MeasurementSchema: Schema = new Schema(
   },
   { collection: 'measurements' }
 );
-
-interface Measurement extends Document {
-  _id: mongoose.Types.ObjectId;
-  measurement: string;
-  timestamp: Date;
-  tags: { muid: string };
-  '0100010700FF': number;
-  '0100020700FF': number;
-  '0100100700FF': number;
-}
 
 const MeasurementModel: Model<Measurement> = model(
   'Measurement',
@@ -80,4 +71,4 @@ const query = async (
 };
 
 export default MeasurementModel;
-export { Measurement, powerMeasurement, query };
+export { powerMeasurement, query };

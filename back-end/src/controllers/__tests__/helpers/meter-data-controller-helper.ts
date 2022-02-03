@@ -1,6 +1,5 @@
-import MeasurementModel, {
-  Measurement
-} from '../../../models/measurement.model';
+import Measurement from '@shared/interfaces/measurement.interface';
+import MeasurementModel from '../../../models/measurement.model';
 
 export const setupMeasurements = async (
   muid: string,

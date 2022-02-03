@@ -4,8 +4,8 @@ import request from 'supertest';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { openConnection, closeConnection } from '../../database';
 import { initialize as initializeApp } from '../../app';
+import Measurement from '@shared/interfaces/measurement.interface';
 import MeasurementModel, {
-  Measurement,
   powerMeasurement
 } from '../../models/measurement.model';
 import { setupMeasurements } from './helpers/meter-data-controller-helper';

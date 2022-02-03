@@ -323,7 +323,7 @@ export default defineComponent({
       );
     },
 
-    formatDate(value: string) {
+    formatDate(value: Date) {
       return new Date(value).toUTCString();
     },
 

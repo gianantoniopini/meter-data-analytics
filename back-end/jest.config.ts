@@ -8,6 +8,9 @@ export default {
       lines: 82
     }
   },
+  moduleNameMapper: {
+    '@shared/(.*)': '<rootDir>/../shared/src/$1'
+  },
   preset: 'ts-jest',
   roots: ['<rootDir>/src'],
   setupFiles: ['./jest.setup.ts'],

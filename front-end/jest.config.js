@@ -8,8 +8,12 @@ module.exports = {
       lines: 60
     }
   },
+  moduleNameMapper: {
+    '@shared/(.*)': '<rootDir>/../shared/src/$1'
+  },
   preset: '@vue/cli-plugin-unit-jest/presets/typescript-and-babel',
   setupFilesAfterEnv: ['<rootDir>/jest-setup.ts'],
+  testMatch: ['**/__tests__/**/*.test.ts'],
   transform: {
     '^.+\\.vue$': 'vue-jest'
   }

@@ -6,6 +6,7 @@ import { openConnection, closeConnection } from '../../database';
 import { initialize as initializeApp } from '../../app';
 import Measurement from '@shared/interfaces/measurement.interface';
 import WeekdayAveragePower from '@shared/interfaces/weekday-average-power.interface';
+import HourAveragePower from '@shared/interfaces/hour-average-power.interface';
 import MeasurementModel, {
   powerMeasurement
 } from '../../models/measurement.model';
@@ -194,7 +195,7 @@ describe('GET /meterdata/measurement/instantaneouspower request', () => {
     expect(response.body.data.analytics.averagePowerByWeekday).toBeDefined();
     const actualAveragePowerByWeekdayArray = response.body.data.analytics
       .averagePowerByWeekday as WeekdayAveragePower[];
-    expect(actualAveragePowerByWeekdayArray).toHaveLength(7);
+    expect(actualAveragePowerByWeekdayArray).toHaveLength(isoWeekdays.length);
     for (const isoWeekday of isoWeekdays) {
       const averagePowerByWeekday = actualAveragePowerByWeekdayArray.find(
         (wap) => wap.isoWeekday === isoWeekday
@@ -202,6 +203,29 @@ describe('GET /meterdata/measurement/instantaneouspower request', () => {
       expect(averagePowerByWeekday).toBeDefined();
       expect(
         (averagePowerByWeekday as WeekdayAveragePower).averagePower
+      ).toBeGreaterThan(0);
+    }
+  });
+
+  it('should return average power by hour analytics', async () => {
+    await setupMeasurements(muid, timestamp, powerMeasurement, 100);
+    const hours = [...Array.from({ length: 24 }).keys()].map((index) => index);
+
+    const response = await request(app)
+      .get(`${requestUrl}?muid=${muid}&limit=100000`)
+      .send();
+
+    expect(response.body.data.analytics.averagePowerByHour).toBeDefined();
+    const actualAveragePowerByHourArray = response.body.data.analytics
+      .averagePowerByHour as HourAveragePower[];
+    expect(actualAveragePowerByHourArray).toHaveLength(hours.length);
+    for (const hour of hours) {
+      const averagePowerByHour = actualAveragePowerByHourArray.find(
+        (hap) => hap.hour === hour
+      );
+      expect(averagePowerByHour).toBeDefined();
+      expect(
+        (averagePowerByHour as HourAveragePower).averagePower
       ).toBeGreaterThan(0);
     }
   });

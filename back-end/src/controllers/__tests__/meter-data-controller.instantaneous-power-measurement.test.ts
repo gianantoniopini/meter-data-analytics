@@ -5,6 +5,7 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
 import { openConnection, closeConnection } from '../../database';
 import { initialize as initializeApp } from '../../app';
 import Measurement from '@shared/interfaces/measurement.interface';
+import WeekdayAveragePower from '@shared/interfaces/weekday-average-power.interface';
 import MeasurementModel, {
   powerMeasurement
 } from '../../models/measurement.model';
@@ -178,6 +179,31 @@ describe('GET /meterdata/measurement/instantaneouspower request', () => {
     expect(new Date(actualLastMeasurement.timestamp)).toEqual(
       expectedLastMeasurement.timestamp
     );
+  });
+
+  it('should return average power by weekday analytics', async () => {
+    await setupMeasurements(muid, timestamp, powerMeasurement, 1000);
+    const isoWeekdays = [...Array.from({ length: 7 }).keys()].map(
+      (index) => index + 1
+    );
+
+    const response = await request(app)
+      .get(`${requestUrl}?muid=${muid}&limit=100000`)
+      .send();
+
+    expect(response.body.data.analytics.averagePowerByWeekday).toBeDefined();
+    const actualAveragePowerByWeekdayArray = response.body.data.analytics
+      .averagePowerByWeekday as WeekdayAveragePower[];
+    expect(actualAveragePowerByWeekdayArray).toHaveLength(7);
+    for (const isoWeekday of isoWeekdays) {
+      const averagePowerByWeekday = actualAveragePowerByWeekdayArray.find(
+        (wap) => wap.isoWeekday === isoWeekday
+      );
+      expect(averagePowerByWeekday).toBeDefined();
+      expect(
+        (averagePowerByWeekday as WeekdayAveragePower).averagePower
+      ).toBeGreaterThan(0);
+    }
   });
 
   it('should fail if more than 100 requests are made from the same IP within 15 minutes', async () => {

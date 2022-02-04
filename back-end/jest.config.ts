@@ -5,7 +5,7 @@ export default {
   coverageDirectory: 'coverage',
   coverageThreshold: {
     global: {
-      lines: 82
+      lines: 83
     }
   },
   moduleNameMapper: {

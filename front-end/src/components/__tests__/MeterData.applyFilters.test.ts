@@ -15,7 +15,8 @@ const axiosMockAdapter = new AxiosMockAdapter(axiosInstance, {
 });
 
 const setup = async (
-  measurementsCount: number
+  measurementsCount: number,
+  apiRequestNetworkError?: boolean
 ): Promise<{ measurements: Measurement[]; applyButton: HTMLElement }> => {
   render(MeterData);
 
@@ -35,7 +36,8 @@ const setup = async (
     smartMeterId,
     null,
     null,
-    measurements
+    measurements,
+    apiRequestNetworkError
   );
 
   const applyButton = screen.getByRole('button', {
@@ -105,9 +107,26 @@ describe('clicking the filters Apply button', () => {
       expect(instantaneousPowerTableCell).toBeInTheDocument();
     }
   });
+
+  it('renders Error message if api request fails', async () => {
+    const { applyButton } = await setup(0, true);
+    jest.spyOn(console, 'error').mockImplementationOnce(() => {
+      // do nothing
+    });
+
+    await fireEvent.click(applyButton);
+    await waitForLoadingMessageToAppear();
+
+    const errorMessage = await screen.findByText(
+      'An unexpected error occurred. Please try again.'
+    );
+    expect(errorMessage).toBeInTheDocument();
+  });
 });
 
 afterEach(async () => {
   await waitForLoadingMessageToDisappear();
+
   axiosMockAdapter.reset();
+  jest.restoreAllMocks();
 });

@@ -17,13 +17,20 @@ const setup = (): {
   return { smartMeterIdFilter, applyButton };
 };
 
+const smartMeterIdFilterValidationError = "'Smart Meter Id' filter is required";
+
 describe('if Smart Meter Id filter is cleared', () => {
-  it('gives validation error', async () => {
+  it('renders validation error', async () => {
     const { smartMeterIdFilter } = setup();
 
     await fireEvent.update(smartMeterIdFilter, '');
 
-    expect(smartMeterIdFilter.title).toEqual('Value is required');
+    const validationError = screen
+      .queryAllByRole('alert')
+      .find(
+        (element) => element.textContent === smartMeterIdFilterValidationError
+      );
+    expect(validationError).toBeInTheDocument();
   });
 
   it('disables Apply button', async () => {
@@ -38,13 +45,16 @@ describe('if Smart Meter Id filter is cleared', () => {
 describe('if Smart Meter Id filter is updated with a value', () => {
   const smartMeterIdFilterValue = 'abcd-1234';
 
-  it('does not give validation error', async () => {
+  it('does not render validation error', async () => {
     const { smartMeterIdFilter } = setup();
 
     await fireEvent.update(smartMeterIdFilter, '');
     await fireEvent.update(smartMeterIdFilter, smartMeterIdFilterValue);
 
-    expect(smartMeterIdFilter.title).toHaveLength(0);
+    const validationError = screen.queryByText(
+      smartMeterIdFilterValidationError
+    );
+    expect(validationError).not.toBeInTheDocument();
   });
 
   it('enables Apply button', async () => {

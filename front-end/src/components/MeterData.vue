@@ -41,14 +41,20 @@
                     placeholder="Enter Smart Meter Id"
                     type="text"
                     class="form-control"
+                    aria-describedby="smartMeterIdFilterInvalidFeedback"
                     :class="{
                       'is-invalid': this.validationErrors.smartMeterIdFilter
                     }"
-                    data-toggle="tooltip"
-                    :title="this.validationErrors.smartMeterIdFilter"
                   />
+                  <div
+                    id="smartMeterIdFilterInvalidFeedback"
+                    class="invalid-feedback"
+                    role="alert"
+                  >
+                    {{ this.validationErrors.smartMeterIdFilter }}
+                  </div>
                 </div>
-                <div class="form-group col-lg-3">
+                <div class="form-group col-lg-4">
                   <label for="timestampFromFilter" class="form-label"
                     >Timestamp From:</label
                   >
@@ -59,7 +65,7 @@
                     v-model="timestampFromFilter"
                   />
                 </div>
-                <div class="form-group col-lg-3">
+                <div class="form-group col-lg-4">
                   <label for="timestampToFilter" class="form-label"
                     >Timestamp To:</label
                   >
@@ -70,7 +76,7 @@
                     v-model="timestampToFilter"
                   />
                 </div>
-                <div class="col-lg-2 align-self-end">
+                <div class="col-12 pt-2">
                   <button
                     :disabled="applyFiltersDisabled"
                     v-on:click="applyFilters"
@@ -208,7 +214,7 @@ export default defineComponent({
       timestampTo: string | null
     ) {
       this.loading = true;
-      const { close: closeToast } = createToast('Loading...', {
+      const { close: closeToast } = createToast('Loading data...', {
         position: 'top-center',
         showCloseButton: false,
         timeout: -1,
@@ -232,7 +238,7 @@ export default defineComponent({
 
         this.refreshChartsData();
       } catch (error) {
-        console.log(error);
+        this.onError(error);
       } finally {
         closeToast();
         this.loading = false;
@@ -344,11 +350,23 @@ export default defineComponent({
       return isoWeekdays[isoWeekday - 1];
     },
 
+    onError(error: unknown) {
+      createToast('An unexpected error occurred. Please try again.', {
+        position: 'top-center',
+        showCloseButton: true,
+        timeout: 4000,
+        transition: 'slide',
+        type: 'warning'
+      });
+      console.error(error);
+    },
+
     validateSmartMeterIdFilter() {
       this.validationErrors.smartMeterIdFilter = '';
 
       if (!this.smartMeterIdFilter || !this.smartMeterIdFilter.trim()) {
-        this.validationErrors.smartMeterIdFilter = 'Value is required';
+        this.validationErrors.smartMeterIdFilter =
+          "'Smart Meter Id' filter is required";
       }
     }
   },

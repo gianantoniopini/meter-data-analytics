@@ -5,7 +5,7 @@ import Measurement from '@shared/interfaces/measurement.interface';
 import WeekdayAveragePower from '@shared/interfaces/weekday-average-power.interface';
 import HourAveragePower from '@shared/interfaces/hour-average-power.interface';
 
-const loadingMessage = 'Loading...';
+const loadingMessage = 'Loading data...';
 
 const randomIntFromInterval = (min: number, max: number): number => {
   return Math.floor(Math.random() * (max - min + 1) + min);
@@ -70,7 +70,8 @@ export const mockGetInstantaneousPowerMeasurementsRequest = (
   smartMeterId: string,
   timestampFrom: string | null,
   timestampTo: string | null,
-  measurements: Measurement[]
+  measurements: Measurement[],
+  networkError?: boolean
 ): void => {
   const muidQueryString = `muid=${smartMeterId}`;
   const startQueryString = timestampFrom ? `&start=${timestampFrom}` : '';
@@ -79,12 +80,17 @@ export const mockGetInstantaneousPowerMeasurementsRequest = (
 
   const url = `/meterdata/measurement/instantaneouspower?${muidQueryString}${startQueryString}${stopQueryString}${limitQueryString}`;
 
+  if (networkError) {
+    axiosMockAdapter.onGet(url).networkErrorOnce();
+    return;
+  }
+
   const averagePowerByWeekday =
     measurements.length > 0 ? createAveragePowerByWeekdayArray() : [];
   const averagePowerByHour =
     measurements.length > 0 ? createAveragePowerByHourArray() : [];
 
-  axiosMockAdapter.onGet(url).reply(StatusCodes.OK, {
+  axiosMockAdapter.onGet(url).replyOnce(StatusCodes.OK, {
     status: StatusCodes.OK,
     data: {
       timeSeries: measurements,

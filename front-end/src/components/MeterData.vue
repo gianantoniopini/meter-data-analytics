@@ -164,6 +164,7 @@ import HourAveragePower from '@shared/interfaces/hour-average-power.interface';
 import WeekdayAveragePower from '@shared/interfaces/weekday-average-power.interface';
 import Sidebar from './Sidebar.vue';
 import BasicLineChart, { Dataset } from './BasicLineChart.vue';
+import { parseDateInISOFormat } from '@/utils/date-utils';
 
 export default defineComponent({
   name: 'MeterData',
@@ -295,31 +296,13 @@ export default defineComponent({
       let timestampToDate: Date | null = null;
 
       if (timestampFromFilter) {
-        // timestampFromFilter will be in format YYYY-MM-DD
-        timestampFromDate = new Date(
-          Date.UTC(
-            parseInt(timestampFromFilter.substr(0, 4), 10),
-            parseInt(timestampFromFilter.substr(5, 2), 10) - 1,
-            parseInt(timestampFromFilter.substr(8, 2), 10),
-            0,
-            0,
-            0
-          )
-        );
+        const { year, month, date } = parseDateInISOFormat(timestampFromFilter);
+        timestampFromDate = new Date(Date.UTC(year, month, date, 0, 0, 0));
       }
 
       if (timestampToFilter) {
-        // timestampToFilter will be in format YYYY-MM-DD
-        timestampToDate = new Date(
-          Date.UTC(
-            parseInt(timestampToFilter.substr(0, 4), 10),
-            parseInt(timestampToFilter.substr(5, 2), 10) - 1,
-            parseInt(timestampToFilter.substr(8, 2), 10),
-            23,
-            59,
-            59
-          )
-        );
+        const { year, month, date } = parseDateInISOFormat(timestampToFilter);
+        timestampToDate = new Date(Date.UTC(year, month, date, 23, 59, 59));
       }
 
       await this.retrieveInstantaneousPowerMeasurements(

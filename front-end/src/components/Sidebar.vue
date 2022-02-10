@@ -1,10 +1,10 @@
 <template>
   <div
-    class="d-flex flex-sm-column flex-row flex-nowrap bg-light align-items-center sticky-top"
+    class="d-flex flex-sm-column flex-row flex-nowrap bg-light sticky-top"
     role="navigation"
   >
     <ul
-      class="nav nav-pills nav-flush flex-sm-column flex-row flex-nowrap mb-auto mx-auto text-center justify-content-between w-100 px-3 align-items-center"
+      class="nav nav-pills nav-flush flex-sm-column flex-row flex-nowrap mb-auto mx-auto justify-content-between w-100 px-3"
     >
       <li class="nav-item" v-for="(item, index) in menuItems" :key="index">
         <a
@@ -15,7 +15,8 @@
           data-bs-placement="right"
           :data-bs-original-title="item.title"
         >
-          <i class="fs-2" :class="item.biClass"></i>
+          <i class="fs-4" :class="item.biClass"></i
+          ><span class="ms-1 d-none d-sm-inline">{{ item.title }}</span>
         </a>
       </li>
     </ul>

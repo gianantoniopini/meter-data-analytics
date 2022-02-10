@@ -5,20 +5,20 @@ const setup = (): void => {
   render(MeterData);
 };
 
-it('renders sidebar menu', () => {
+it('renders Sidebar menu', () => {
   setup();
 
   const navigation = screen.queryByRole('navigation');
   expect(navigation).toBeInTheDocument();
   const navigationLinks = queryAllByRole(navigation as HTMLElement, 'link');
   expect(navigationLinks).toHaveLength(4);
-  expect(navigationLinks[0].title).toEqual('Filters');
-  expect(navigationLinks[1].title).toEqual('Time Series');
-  expect(navigationLinks[2].title).toEqual('Analytics');
-  expect(navigationLinks[3].title).toEqual('Raw Data');
+  expect(navigationLinks[0]).toHaveTextContent('Filters');
+  expect(navigationLinks[1]).toHaveTextContent('Time Series');
+  expect(navigationLinks[2]).toHaveTextContent('Analytics');
+  expect(navigationLinks[3]).toHaveTextContent('Raw Data');
 });
 
-it('sets default value for Smart Meter Id filter', () => {
+it('renders Smart Meter Id filter with default value', () => {
   setup();
   const expectedValue = process.env.VUE_APP_DEFAULT_SMART_METER_ID;
 

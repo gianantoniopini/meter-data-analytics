@@ -10,6 +10,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/meterdata',
     name: 'meterData',
     component: () => import('./components/MeterData.vue')
+  },
+  {
+    path: '/settings',
+    name: 'settings',
+    component: () => import('./components/Settings.vue')
   }
 ];
 

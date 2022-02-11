@@ -30,6 +30,9 @@
           <router-link :to="{ name: 'meterData' }" class="nav-link"
             >Meter Data</router-link
           >
+          <router-link :to="{ name: 'settings' }" class="nav-link">{{
+            $t('settings.title')
+          }}</router-link>
         </div>
       </div>
     </div>

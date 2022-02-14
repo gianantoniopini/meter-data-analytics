@@ -5,7 +5,6 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
 import { openConnection, closeConnection } from '../../database';
 import got, { OptionsOfJSONResponseBody } from 'got';
 import { Cookie, CookieJar } from 'tough-cookie';
-import { mocked } from 'ts-jest/utils';
 import { initialize as initializeApp } from '../../app';
 import MeasurementModel, {
   powerMeasurement
@@ -15,7 +14,6 @@ import ExternalApiMeasurement from '@shared/interfaces/external-api-measurement.
 import { setupMeasurements } from './helpers/meter-data-controller-helper';
 
 jest.mock('got');
-const mockedGot = mocked(got);
 
 let mongoServer: MongoMemoryServer;
 let app: Application;
@@ -31,7 +29,7 @@ const mockExternalApiAuthenticationRequest = (): Cookie => {
   const cookieString = `${accessTokenKey}=${accessTokenValue}; Max-Age=${maxAge}; Path=${path}; Expires=${expires.toUTCString()}; HttpOnly`;
   const cookie = Cookie.parse(cookieString) as Cookie;
 
-  mockedGot.post = jest.fn().mockResolvedValue({
+  got.post = jest.fn().mockResolvedValue({
     headers: {
       'set-cookie': [cookieString]
     }
@@ -71,7 +69,7 @@ const mockExternalApiMeasurementRequest = (
 
   const responseBody: ExternalApiMeasurementResponse = { data: measurements };
 
-  mockedGot.get = jest.fn().mockResolvedValue({
+  got.get = jest.fn().mockResolvedValue({
     body: responseBody
   });
 
@@ -111,22 +109,19 @@ describe('POST /meterdata/measurement/import request', () => {
   it('should make external-api authentication request', async () => {
     await request(app).post(requestUrl).send({ muid });
 
-    expect(mockedGot.post).toHaveBeenCalledTimes(1);
-    expect(mockedGot.post).toHaveBeenCalledWith(
-      process.env.EXTERNAL_API_AUTH_URL,
-      {
-        json: {
-          email: process.env.EXTERNAL_API_AUTH_EMAIL,
-          password: process.env.EXTERNAL_API_AUTH_PWD
-        },
-        responseType: 'json'
-      }
-    );
+    expect(got.post).toHaveBeenCalledTimes(1);
+    expect(got.post).toHaveBeenCalledWith(process.env.EXTERNAL_API_AUTH_URL, {
+      json: {
+        email: process.env.EXTERNAL_API_AUTH_EMAIL,
+        password: process.env.EXTERNAL_API_AUTH_PWD
+      },
+      responseType: 'json'
+    });
   });
 
   it('should fail if external-api authentication request returns error', async () => {
     const errorMessage = 'Invalid email address or password';
-    mockedGot.post = jest.fn().mockRejectedValue(new Error(errorMessage));
+    got.post = jest.fn().mockRejectedValue(new Error(errorMessage));
 
     const response = await request(app).post(requestUrl).send({ muid });
 
@@ -147,8 +142,8 @@ describe('POST /meterdata/measurement/import request', () => {
 
     await request(app).post(requestUrl).send({ muid, start, stop, limit });
 
-    expect(mockedGot.get).toHaveBeenCalledTimes(1);
-    const mockedGet = mockedGot.get as jest.Mock;
+    expect(got.get).toHaveBeenCalledTimes(1);
+    const mockedGet = got.get as jest.Mock;
     const mockedGetCallUrl = mockedGet.mock.calls[0][0] as string;
     expect(mockedGetCallUrl).toEqual(
       `${process.env.EXTERNAL_API_MEASUREMENT_URL}?muid=${muid}&start=${start}&stop=${stop}&limit=${limit}`
@@ -183,7 +178,7 @@ describe('POST /meterdata/measurement/import request', () => {
     mockExternalApiAuthenticationRequest();
 
     const errorMessage = 'Token invalid';
-    mockedGot.get = jest.fn().mockRejectedValue(new Error(errorMessage));
+    got.get = jest.fn().mockRejectedValue(new Error(errorMessage));
 
     const response = await request(app).post(requestUrl).send({ muid });
 

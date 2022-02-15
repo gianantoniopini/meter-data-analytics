@@ -14,7 +14,8 @@
 import { defineComponent, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
-import { LayoutLanguages } from '@/i18n/config/locales';
+import { LayoutLanguages, Locales } from '@/i18n/config/locales';
+import { setHtmlLang } from '@/i18n';
 
 export default defineComponent({
   name: 'Settings',
@@ -28,14 +29,10 @@ export default defineComponent({
         get() {
           return store.getters.selectedLanguage;
         },
-        set(value: string) {
-          locale.value = value;
+        set(value: Locales) {
+          locale.value = value as string;
           store.dispatch('selectNewDefaultLanguage', value);
-
-          const htmlElement = document.querySelector('html');
-          if (htmlElement) {
-            htmlElement.setAttribute('lang', value);
-          }
+          setHtmlLang(value);
         }
       }),
       LayoutLanguages

@@ -1,7 +1,10 @@
 import { createI18n } from 'vue-i18n';
 import { messages, defaultLocale } from './config/index';
+import { Locales } from './config/locales';
 
-const i18n = createI18n({
+type MessageSchema = typeof messages[typeof defaultLocale];
+
+const i18n = createI18n<[MessageSchema], Locales>({
   messages,
   locale: defaultLocale,
   fallbackLocale: defaultLocale

@@ -31,6 +31,11 @@ export default defineComponent({
         set(value: string) {
           locale.value = value;
           store.dispatch('selectNewDefaultLanguage', value);
+
+          const htmlElement = document.querySelector('html');
+          if (htmlElement) {
+            htmlElement.setAttribute('lang', value);
+          }
         }
       }),
       LayoutLanguages

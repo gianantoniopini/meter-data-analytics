@@ -9,7 +9,7 @@ import router from '@/router';
 import store from '@/store';
 
 const app = createApp(App);
-app.use(i18n);
 app.use(store);
+app.use(i18n);
 app.use(router);
 app.mount('#app');

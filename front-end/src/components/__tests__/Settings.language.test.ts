@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/vue';
 import Settings from '../Settings.vue';
+import { Locales } from '@/i18n/config/locales';
 
 const getLanguageSelectorOption = (
   languageSelector: HTMLSelectElement,
@@ -37,7 +38,7 @@ it('renders the language dropdown in English', () => {
   expect(languageSelector).toHaveDisplayValue('English');
   const italianLanguageSelectorOption = getLanguageSelectorOption(
     languageSelector,
-    'it'
+    Locales.it
   );
   expect(italianLanguageSelectorOption).not.toBeNull();
   expect(italianLanguageSelectorOption).toHaveTextContent('Italian');
@@ -48,7 +49,7 @@ describe('changing the language to Italian', () => {
     render(Settings);
     const languageSelector = screen.getByLabelText('Language:');
 
-    await fireEvent.update(languageSelector, 'it');
+    await fireEvent.update(languageSelector, Locales.it);
 
     const updatedLanguageSelector = screen.queryByLabelText(
       'Lingua:'
@@ -57,9 +58,29 @@ describe('changing the language to Italian', () => {
     expect(updatedLanguageSelector).toHaveDisplayValue('Italiano');
     const englishLanguageSelectorOption = getLanguageSelectorOption(
       updatedLanguageSelector,
-      'en-gb'
+      Locales.enGb
     );
     expect(englishLanguageSelectorOption).not.toBeNull();
     expect(englishLanguageSelectorOption).toHaveTextContent('Inglese');
+  });
+
+  it('sets the html lang to Italian', async () => {
+    render(Settings);
+    const languageSelector = screen.getByLabelText('Language:');
+
+    await fireEvent.update(languageSelector, Locales.it);
+
+    const htmlElement = document.querySelector('html');
+    expect(htmlElement).toBeInTheDocument();
+    const htmlLangAttribute = htmlElement?.getAttribute('lang');
+    expect(htmlLangAttribute).toEqual(Locales.it);
+  });
+
+  afterEach(async () => {
+    // Switch back to English language, if the language was changed to Italian
+    const languageSelector = screen.queryByLabelText('Lingua:');
+    if (languageSelector) {
+      await fireEvent.update(languageSelector, Locales.enGb);
+    }
   });
 });

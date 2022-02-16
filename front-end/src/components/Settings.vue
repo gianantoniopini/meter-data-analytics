@@ -2,7 +2,7 @@
   <div class="row border rounded p-2 mb-2" id="language">
     <div class="col-12">
       <form @submit.prevent="onSubmit" class="row form">
-        <div class="form-group col-3">
+        <div class="form-group col-12 col-sm-4">
           <label for="languageSelector" class="form-label"
             >{{ $t('settings.language.label') }}:</label
           >

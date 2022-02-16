@@ -4,9 +4,9 @@ import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'mosha-vue-toastify/dist/style.css';
+import store from '@/store';
 import { setupI18n } from '@/i18n';
 import router from '@/router';
-import store from '@/store';
 
 const app = createApp(App);
 app.use(store);

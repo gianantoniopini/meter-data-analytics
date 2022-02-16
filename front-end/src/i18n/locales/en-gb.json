@@ -1,5 +1,12 @@
 {
   "settings": {
-    "title": "Settings"
+    "title": "Settings",
+    "language": {
+      "label": "Language",
+      "options": {
+        "en-gb": "English",
+        "it": "Italian"
+      }
+    }
   }
 }

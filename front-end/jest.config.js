@@ -5,7 +5,7 @@ module.exports = {
   coverageDirectory: 'coverage',
   coverageThreshold: {
     global: {
-      lines: 58
+      lines: 86
     }
   },
   moduleNameMapper: {

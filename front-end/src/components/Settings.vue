@@ -1,23 +1,25 @@
 <template>
-  <div class="row border rounded p-2 mb-2" id="language">
-    <div class="col-12">
-      <form @submit.prevent="onSubmit" class="row form">
-        <div class="form-group col-12 col-sm-4">
-          <label for="languageSelector" class="form-label"
-            >{{ $t('settings.language.label') }}:</label
-          >
-          <select
-            id="languageSelector"
-            v-model="selectedLanguageModel"
-            class="form-select"
-            placeholder="Please Select"
-          >
-            <option v-for="locale in Locales" :key="locale" :value="locale">
-              {{ $t(`settings.language.options.${locale}`) }}
-            </option>
-          </select>
-        </div>
-      </form>
+  <div class="container-fluid">
+    <div class="row border rounded p-2 mb-2" id="language">
+      <div class="col-12">
+        <form @submit.prevent="onSubmit" class="row form">
+          <div class="form-group col-12 col-sm-4">
+            <label for="languageSelector" class="form-label"
+              >{{ $t('settings.language.label') }}:</label
+            >
+            <select
+              id="languageSelector"
+              v-model="selectedLanguageModel"
+              class="form-select"
+              placeholder="Please Select"
+            >
+              <option v-for="locale in Locales" :key="locale" :value="locale">
+                {{ $t(`settings.language.options.${locale}`) }}
+              </option>
+            </select>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </template>

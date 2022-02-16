@@ -12,12 +12,8 @@
             class="form-select"
             placeholder="Please Select"
           >
-            <option
-              v-for="item in LayoutLanguages"
-              :key="item.param"
-              :value="item.param"
-            >
-              {{ $t(`settings.language.options.${item.param}`) }}
+            <option v-for="locale in Locales" :key="locale" :value="locale">
+              {{ $t(`settings.language.options.${locale}`) }}
             </option>
           </select>
         </div>
@@ -30,7 +26,7 @@
 import { defineComponent, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
-import { LayoutLanguages, Locales } from '@/i18n/config/locales';
+import { Locales } from '@/i18n/config/locales';
 import { setHtmlLang } from '@/i18n';
 
 export default defineComponent({
@@ -51,7 +47,7 @@ export default defineComponent({
           setHtmlLang(value);
         }
       }),
-      LayoutLanguages
+      Locales
     };
   }
 });

@@ -1,10 +1,20 @@
 import { fireEvent, render, screen } from '@testing-library/vue';
 import Settings from '../Settings.vue';
+import store from '@/store';
+import { setupI18n } from '@/i18n';
 import { Locales } from '@/i18n/config/locales';
+
+const setup = () => {
+  render(Settings, {
+    global: {
+      plugins: [store, setupI18n()]
+    }
+  });
+};
 
 const getLanguageSelectorOption = (
   languageSelector: HTMLSelectElement,
-  language: string
+  language: Locales
 ): HTMLOptionElement | null => {
   let languageSelectorOption: HTMLOptionElement | null = null;
   const languageSelectorOptions = languageSelector.options;
@@ -29,7 +39,7 @@ const getLanguageSelectorOption = (
 };
 
 it('renders the language dropdown in English', () => {
-  render(Settings);
+  setup();
 
   const languageSelector = screen.queryByLabelText(
     'Language:'
@@ -46,7 +56,7 @@ it('renders the language dropdown in English', () => {
 
 describe('changing the language to Italian', () => {
   it('renders the language dropdown in Italian', async () => {
-    render(Settings);
+    setup();
     const languageSelector = screen.getByLabelText('Language:');
 
     await fireEvent.update(languageSelector, Locales.it);
@@ -65,7 +75,7 @@ describe('changing the language to Italian', () => {
   });
 
   it('sets the html lang to Italian', async () => {
-    render(Settings);
+    setup();
     const languageSelector = screen.getByLabelText('Language:');
 
     await fireEvent.update(languageSelector, Locales.it);

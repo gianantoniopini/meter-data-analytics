@@ -8,5 +8,10 @@
         "it": "Italiano"
       }
     }
+  },
+  "home": {
+    "title": "Home",
+    "welcomeMessage": "Benvenuto nell'applicazione Meter Data Analytics.",
+    "appDescription": "Applicazione di analisi dei dati di contatori intelligenti costruita con lo stack MEVN (MongoDB, Express, Vue, Node.js)."
   }
 }

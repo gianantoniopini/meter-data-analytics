@@ -24,9 +24,9 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <div class="navbar-nav text-center fw-bold mr-auto">
-          <router-link :to="{ name: 'home' }" class="nav-link"
-            >Home</router-link
-          >
+          <router-link :to="{ name: 'home' }" class="nav-link">{{
+            $t('home.title')
+          }}</router-link>
           <router-link :to="{ name: 'meterData' }" class="nav-link"
             >Meter Data</router-link
           >

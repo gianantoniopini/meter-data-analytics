@@ -1,11 +1,16 @@
 module.exports = {
   clearMocks: true,
   collectCoverage: true,
-  collectCoverageFrom: ['./src/**', '!**/__tests__/**', '!**/i18n/locales/**'],
+  collectCoverageFrom: [
+    './src/**',
+    '!**/assets/**',
+    '!**/__tests__/**',
+    '!**/i18n/locales/**'
+  ],
   coverageDirectory: 'coverage',
   coverageThreshold: {
     global: {
-      lines: 86
+      lines: 89
     }
   },
   moduleNameMapper: {

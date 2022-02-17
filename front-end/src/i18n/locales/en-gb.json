@@ -8,5 +8,10 @@
         "it": "Italian"
       }
     }
+  },
+  "home": {
+    "title": "Home",
+    "welcomeMessage": "Welcome to the Meter Data Analytics app.",
+    "appDescription": "Smart meter data analytics app built with the MEVN stack (MongoDB, Express, Vue, Node.js)."
   }
 }

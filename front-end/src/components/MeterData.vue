@@ -158,8 +158,8 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { createToast } from 'mosha-vue-toastify';
-import MeterDataService from '@/services/MeterDataService';
-import InstantaneousPowerMeasurement from '@/types/InstantaneousPowerMeasurement';
+import MeterDataService from '@/services/meter-data.service';
+import InstantaneousPowerMeasurement from '@/interfaces/instantaneous-power-measurement.interface';
 import HourAveragePower from '@shared/interfaces/hour-average-power.interface';
 import WeekdayAveragePower from '@shared/interfaces/weekday-average-power.interface';
 import Sidebar from './Sidebar.vue';

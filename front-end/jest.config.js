@@ -19,7 +19,5 @@ module.exports = {
   preset: '@vue/cli-plugin-unit-jest/presets/typescript-and-babel',
   setupFilesAfterEnv: ['<rootDir>/jest-setup.ts'],
   testMatch: ['**/__tests__/**/*.test.ts'],
-  transform: {
-    '^.+\\.vue$': '@vue/vue3-jest'
-  }
+  transformIgnorePatterns: ['/node_modules/(?!lodash-es)']
 };

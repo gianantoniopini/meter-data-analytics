@@ -1,11 +1,11 @@
 import { fireEvent, render, screen } from '@testing-library/vue';
-import Settings from '../Settings.vue';
+import TheSettings from '../TheSettings.vue';
 import store from '@/store';
 import { setupI18n } from '@/i18n';
 import { Locales } from '@/i18n/config/locales';
 
 const setup = () => {
-  render(Settings, {
+  render(TheSettings, {
     global: {
       plugins: [store, setupI18n()]
     }

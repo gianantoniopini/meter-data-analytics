@@ -4,7 +4,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'home',
-    component: () => import('./components/Home.vue')
+    component: () => import('./components/TheHome.vue')
   },
   {
     path: '/meterdata',
@@ -14,7 +14,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/settings',
     name: 'settings',
-    component: () => import('./components/Settings.vue')
+    component: () => import('./components/TheSettings.vue')
   }
 ];
 

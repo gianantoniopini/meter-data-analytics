@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-sm-auto bg-light sticky-top">
         <!-- sidebar -->
-        <Sidebar
+        <BaseSidebar
           :menuItems="[
             { href: '#filters', title: 'Filters', biClass: 'bi-filter' },
             {
@@ -92,7 +92,7 @@
           <div class="row border rounded p-2 mb-2" id="timeSeries">
             <div class="col-12">
               <h4>Time Series</h4>
-              <BasicLineChart
+              <BaseLineChart
                 :labels="timeSeriesChartLabels"
                 :datasets="timeSeriesChartDataSets"
                 title="Instantaneous Power"
@@ -102,13 +102,13 @@
           <div class="row border rounded p-2 mb-2" id="analytics">
             <div class="col-12">
               <h4>Analytics</h4>
-              <BasicLineChart
+              <BaseLineChart
                 class="mb-3"
                 :labels="averagePowerByWeekdayChartLabels"
                 :datasets="averagePowerByWeekdayChartDataSets"
                 title="Power by Day of the Week"
               />
-              <BasicLineChart
+              <BaseLineChart
                 :labels="averagePowerByHourChartLabels"
                 :datasets="averagePowerByHourChartDataSets"
                 title="Power by Hour of the Day"
@@ -162,14 +162,14 @@ import MeterDataService from '@/services/meter-data.service';
 import InstantaneousPowerMeasurement from '@/interfaces/instantaneous-power-measurement.interface';
 import HourAveragePower from '@shared/interfaces/hour-average-power.interface';
 import WeekdayAveragePower from '@shared/interfaces/weekday-average-power.interface';
-import Sidebar from './Sidebar.vue';
-import BasicLineChart, { Dataset } from './BasicLineChart.vue';
+import BaseSidebar from './BaseSidebar.vue';
+import BaseLineChart, { Dataset } from './BaseLineChart.vue';
 import { parseDateInISOFormat } from '@/utils/date-utils';
 
 export default defineComponent({
   name: 'MeterData',
 
-  components: { BasicLineChart, Sidebar },
+  components: { BaseLineChart, BaseSidebar },
 
   data() {
     return {

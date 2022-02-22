@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/vue';
-import Home from '../Home.vue';
+import TheHome from '../TheHome.vue';
 import { setupI18n } from '@/i18n';
 
 it('renders welcome message', () => {
-  render(Home, {
+  render(TheHome, {
     global: {
       plugins: [setupI18n()]
     }

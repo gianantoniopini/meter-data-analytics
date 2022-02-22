@@ -32,7 +32,7 @@ import { Locales } from '@/i18n/config/locales';
 import { setHtmlLang } from '@/i18n';
 
 export default defineComponent({
-  name: 'Settings',
+  name: 'TheSettings',
 
   setup() {
     const store = useStore();

@@ -19,7 +19,7 @@ export interface Dataset {
 }
 
 export default defineComponent({
-  name: 'BasicLineChart',
+  name: 'BaseLineChart',
 
   components: { LineChart },
 

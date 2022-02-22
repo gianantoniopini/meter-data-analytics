@@ -33,7 +33,7 @@ interface SidebarMenuItem {
 }
 
 export default defineComponent({
-  name: 'Sidebar',
+  name: 'BaseSidebar',
 
   props: {
     menuItems: {

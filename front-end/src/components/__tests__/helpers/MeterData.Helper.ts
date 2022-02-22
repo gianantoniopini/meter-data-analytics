@@ -68,8 +68,8 @@ const createAveragePowerByHourArray = () => {
 export const mockGetInstantaneousPowerMeasurementsRequest = (
   axiosMockAdapter: AxiosMockAdapter,
   smartMeterId: string,
-  timestampFrom: string | null,
-  timestampTo: string | null,
+  timestampFrom: string | undefined,
+  timestampTo: string | undefined,
   measurements: Measurement[],
   networkError?: boolean
 ): void => {

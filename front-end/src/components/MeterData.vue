@@ -175,8 +175,8 @@ export default defineComponent({
     return {
       loading: false,
       smartMeterIdFilter: process.env.VUE_APP_DEFAULT_SMART_METER_ID as string,
-      timestampFromFilter: null,
-      timestampToFilter: null,
+      timestampFromFilter: undefined,
+      timestampToFilter: undefined,
       timeSeries: [] as InstantaneousPowerMeasurement[],
       averagePowerByWeekday: [] as WeekdayAveragePower[],
       averagePowerByHour: [] as HourAveragePower[],
@@ -211,8 +211,8 @@ export default defineComponent({
   methods: {
     async retrieveInstantaneousPowerMeasurements(
       smartMeterId: string,
-      timestampFrom: string | null,
-      timestampTo: string | null
+      timestampFrom: string | undefined,
+      timestampTo: string | undefined
     ) {
       this.loading = true;
       const { close: closeToast } = createToast('Loading data...', {
@@ -290,10 +290,12 @@ export default defineComponent({
         return;
       }
 
-      const timestampFromFilter = this.timestampFromFilter as string | null;
-      let timestampFromDate: Date | null = null;
-      const timestampToFilter = this.timestampToFilter as string | null;
-      let timestampToDate: Date | null = null;
+      const timestampFromFilter = this.timestampFromFilter as
+        | string
+        | undefined;
+      let timestampFromDate: Date | undefined;
+      const timestampToFilter = this.timestampToFilter as string | undefined;
+      let timestampToDate: Date | undefined;
 
       if (timestampFromFilter) {
         const { year, month, date } = parseDateInISOFormat(timestampFromFilter);
@@ -307,8 +309,8 @@ export default defineComponent({
 
       await this.retrieveInstantaneousPowerMeasurements(
         this.smartMeterIdFilter,
-        timestampFromDate ? timestampFromDate.toISOString() : null,
-        timestampToDate ? timestampToDate.toISOString() : null
+        timestampFromDate ? timestampFromDate.toISOString() : undefined,
+        timestampToDate ? timestampToDate.toISOString() : undefined
       );
     },
 
@@ -321,7 +323,7 @@ export default defineComponent({
     },
 
     getIsoWeekdayAsString(isoWeekday: number): string {
-      const isoWeekdays = new Array(7);
+      const isoWeekdays = Array.from({ length: 7 }) as string[];
       isoWeekdays[0] = 'Monday';
       isoWeekdays[1] = 'Tuesday';
       isoWeekdays[2] = 'Wednesday';

@@ -19,8 +19,8 @@ const mapToInstantaneousPowerMeasurement = (
 class MeterDataService {
   async getInstantaneousPowerMeasurements(
     smartMeterId: string,
-    timestampFrom: string | null,
-    timestampTo: string | null
+    timestampFrom: string | undefined,
+    timestampTo: string | undefined
   ): Promise<{
     timeSeries: InstantaneousPowerMeasurement[];
     analytics: {
@@ -47,7 +47,7 @@ class MeterDataService {
     }>(url);
 
     const instantaneousPowerMeasurements = responseBody.data.timeSeries.map(
-      mapToInstantaneousPowerMeasurement
+      (m) => mapToInstantaneousPowerMeasurement(m)
     );
 
     const instantaneousPowerMeasurementsSorted =

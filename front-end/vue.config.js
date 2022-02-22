@@ -1,12 +1,14 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+// eslint-disable-next-line @typescript-eslint/no-var-requires, unicorn/prefer-module
 const zlib = require('zlib');
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+// eslint-disable-next-line @typescript-eslint/no-var-requires, unicorn/prefer-module
 const path = require('path');
 
+// eslint-disable-next-line unicorn/prefer-module
 module.exports = {
   configureWebpack: {
     resolve: {
       alias: {
+        // eslint-disable-next-line unicorn/prefer-module
         '@shared': path.resolve(__dirname, '../shared/src')
       }
     }

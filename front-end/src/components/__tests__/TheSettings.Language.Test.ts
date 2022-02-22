@@ -15,22 +15,21 @@ const setup = () => {
 const getLanguageSelectorOption = (
   languageSelector: HTMLSelectElement,
   language: Locales
-): HTMLOptionElement | null => {
-  let languageSelectorOption: HTMLOptionElement | null = null;
+): HTMLOptionElement | undefined => {
+  let languageSelectorOption: HTMLOptionElement | undefined;
   const languageSelectorOptions = languageSelector.options;
 
   for (
-    let languageSelectorOptionIdx = 0;
-    languageSelectorOptionIdx < languageSelectorOptions.length;
-    languageSelectorOptionIdx++
+    let languageSelectorOptionIndex = 0;
+    languageSelectorOptionIndex < languageSelectorOptions.length;
+    languageSelectorOptionIndex++
   ) {
     if (
-      languageSelectorOptions.item(languageSelectorOptionIdx)?.value ===
+      languageSelectorOptions.item(languageSelectorOptionIndex)?.value ===
       language
     ) {
-      languageSelectorOption = languageSelectorOptions.item(
-        languageSelectorOptionIdx
-      );
+      languageSelectorOption =
+        languageSelectorOptions.item(languageSelectorOptionIndex) ?? undefined;
       break;
     }
   }

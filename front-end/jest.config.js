@@ -1,3 +1,4 @@
+// eslint-disable-next-line unicorn/prefer-module
 module.exports = {
   clearMocks: true,
   collectCoverage: true,
@@ -18,6 +19,6 @@ module.exports = {
   },
   preset: '@vue/cli-plugin-unit-jest/presets/typescript-and-babel',
   setupFilesAfterEnv: ['<rootDir>/jest-setup.ts'],
-  testMatch: ['**/__tests__/**/*.test.ts'],
+  testMatch: ['**/__tests__/**/*.Test.ts'],
   transformIgnorePatterns: ['/node_modules/(?!lodash-es)']
 };

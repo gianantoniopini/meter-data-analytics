@@ -8,7 +8,7 @@ import {
   mockGetInstantaneousPowerMeasurementsRequest,
   waitForLoadingMessageToAppear,
   waitForLoadingMessageToDisappear
-} from './helpers/MeterData.helper';
+} from './helpers/MeterData.Helper';
 import MeterData from '../MeterData.vue';
 
 const axiosMockAdapter = new AxiosMockAdapter(axiosInstance, {
@@ -17,8 +17,8 @@ const axiosMockAdapter = new AxiosMockAdapter(axiosInstance, {
 
 const setup = async (
   smartMeterId: string,
-  timestampFrom: string | null,
-  timestampTo: string | null,
+  timestampFrom: string | undefined,
+  timestampTo: string | undefined,
   measurementsCount: number,
   apiRequestNetworkError?: boolean
 ): Promise<{ measurements: Measurement[]; applyButton: HTMLElement }> => {
@@ -29,7 +29,7 @@ const setup = async (
   });
   fireEvent.update(smartMeterIdFilter, smartMeterId);
 
-  let timestampFromDate: Date | null = null;
+  let timestampFromDate: Date | undefined;
   if (timestampFrom) {
     const timestampFromFilter = screen.getByLabelText('Timestamp From:');
     fireEvent.update(timestampFromFilter, timestampFrom);
@@ -38,7 +38,7 @@ const setup = async (
     timestampFromDate = new Date(Date.UTC(year, month, date, 0, 0, 0));
   }
 
-  let timestampToDate: Date | null = null;
+  let timestampToDate: Date | undefined;
   if (timestampTo) {
     const timestampToFilter = screen.getByLabelText('Timestamp To:');
     fireEvent.update(timestampToFilter, timestampTo);
@@ -59,8 +59,8 @@ const setup = async (
   mockGetInstantaneousPowerMeasurementsRequest(
     axiosMockAdapter,
     smartMeterId,
-    timestampFromDate ? timestampFromDate.toISOString() : null,
-    timestampToDate ? timestampToDate.toISOString() : null,
+    timestampFromDate ? timestampFromDate.toISOString() : undefined,
+    timestampToDate ? timestampToDate.toISOString() : undefined,
     measurements,
     apiRequestNetworkError
   );
@@ -82,8 +82,8 @@ describe('clicking the filters Apply button', () => {
   it('displays Loading message', async () => {
     const { applyButton } = await setup(
       smartMeterId,
-      null,
-      null,
+      undefined,
+      undefined,
       measurementsCount
     );
 
@@ -96,8 +96,8 @@ describe('clicking the filters Apply button', () => {
   it('disables button while loading', async () => {
     const { applyButton } = await setup(
       smartMeterId,
-      null,
-      null,
+      undefined,
+      undefined,
       measurementsCount
     );
 
@@ -110,8 +110,8 @@ describe('clicking the filters Apply button', () => {
   it('enables button after loading', async () => {
     const { applyButton } = await setup(
       smartMeterId,
-      null,
-      null,
+      undefined,
+      undefined,
       measurementsCount
     );
 
@@ -141,7 +141,7 @@ describe('clicking the filters Apply button', () => {
     expect(apiRequestUrl).toBeDefined();
     const apiRequestUrlAsString = apiRequestUrl as string;
     const apiRequestParameters = new URLSearchParams(
-      apiRequestUrlAsString.substring(apiRequestUrlAsString.indexOf('?'))
+      apiRequestUrlAsString.slice(apiRequestUrlAsString.indexOf('?'))
     );
     expect(apiRequestParameters.get('muid')).toEqual(smartMeterId);
     expect(apiRequestParameters.get('start')).toEqual(
@@ -155,8 +155,8 @@ describe('clicking the filters Apply button', () => {
   it('renders Raw Data table', async () => {
     const { measurements, applyButton } = await setup(
       smartMeterId,
-      null,
-      null,
+      undefined,
+      undefined,
       measurementsCount
     );
 
@@ -185,7 +185,13 @@ describe('clicking the filters Apply button', () => {
   });
 
   it('renders Error message if api request fails', async () => {
-    const { applyButton } = await setup(smartMeterId, null, null, 0, true);
+    const { applyButton } = await setup(
+      smartMeterId,
+      undefined,
+      undefined,
+      0,
+      true
+    );
     jest.spyOn(console, 'error').mockImplementationOnce(() => {
       // do nothing
     });

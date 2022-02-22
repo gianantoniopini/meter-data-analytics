@@ -20,6 +20,6 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>/jest-setup.ts'],
   testMatch: ['**/__tests__/**/*.test.ts'],
   transform: {
-    '^.+\\.vue$': 'vue-jest'
+    '^.+\\.vue$': '@vue/vue3-jest'
   }
 };

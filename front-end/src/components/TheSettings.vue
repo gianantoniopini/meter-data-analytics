@@ -1,27 +1,58 @@
 <template>
-  <div class="container-fluid">
-    <div class="row border rounded p-2 mb-2" id="language">
-      <div class="col-12">
-        <form @submit.prevent="onSubmit" class="row form">
-          <div class="form-group col-12 col-sm-4">
-            <label for="languageSelector" class="form-label"
-              >{{ $t('settings.language.label') }}:</label
-            >
-            <select
-              id="languageSelector"
-              v-model="selectedLanguageModel"
-              class="form-select"
-              placeholder="Please Select"
-            >
-              <option v-for="locale in Locales" :key="locale" :value="locale">
-                {{ $t(`settings.language.options.${locale}`) }}
-              </option>
-            </select>
+  <BaseLayout>
+    <template #sidebar>
+      <BaseSidebar
+        :menuItems="[
+          {
+            href: '#language',
+            title: $t('settings.language.label'),
+            biClass: 'bi-translate'
+          },
+          {
+            href: '#import',
+            title: 'Import',
+            biClass: 'bi-plus'
+          }
+        ]"
+      />
+    </template>
+
+    <template #default>
+      <div>
+        <div class="row border rounded p-2 mb-2" id="language">
+          <div class="col-12">
+            <form @submit.prevent="onSubmit" class="row form">
+              <div class="form-group col-12 col-md-4">
+                <label for="languageSelector" class="form-label"
+                  >{{ $t('settings.language.label') }}:</label
+                >
+                <select
+                  id="languageSelector"
+                  v-model="selectedLanguageModel"
+                  class="form-select"
+                  placeholder="Please Select"
+                >
+                  <option
+                    v-for="locale in Locales"
+                    :key="locale"
+                    :value="locale"
+                  >
+                    {{ $t(`settings.language.options.${locale}`) }}
+                  </option>
+                </select>
+              </div>
+            </form>
           </div>
-        </form>
+        </div>
+        <div class="row border rounded p-2 mb-2" id="import">
+          <div class="col-12">
+            <h4>Import</h4>
+            <div>TODO</div>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
+    </template>
+  </BaseLayout>
 </template>
 
 <script lang="ts">
@@ -30,9 +61,13 @@ import { useStore } from 'vuex';
 import { useI18n } from 'vue-i18n';
 import { Locales } from '@/i18n/config/locales';
 import { setHtmlLang } from '@/i18n';
+import BaseLayout from './BaseLayout.vue';
+import BaseSidebar from './BaseSidebar.vue';
 
 export default defineComponent({
   name: 'TheSettings',
+
+  components: { BaseLayout, BaseSidebar },
 
   setup() {
     const store = useStore();

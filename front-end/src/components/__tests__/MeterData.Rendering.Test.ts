@@ -10,12 +10,12 @@ it('renders Sidebar menu', () => {
 
   const navigation = screen.queryByRole('navigation');
   expect(navigation).toBeInTheDocument();
-  const navigationLinks = queryAllByRole(navigation as HTMLElement, 'link');
-  expect(navigationLinks).toHaveLength(4);
-  expect(navigationLinks[0]).toHaveTextContent('Filters');
-  expect(navigationLinks[1]).toHaveTextContent('Time Series');
-  expect(navigationLinks[2]).toHaveTextContent('Analytics');
-  expect(navigationLinks[3]).toHaveTextContent('Raw Data');
+  const sidebarMenuLinks = queryAllByRole(navigation as HTMLElement, 'link');
+  expect(sidebarMenuLinks).toHaveLength(4);
+  expect(sidebarMenuLinks[0]).toHaveTextContent('Filters');
+  expect(sidebarMenuLinks[1]).toHaveTextContent('Time Series');
+  expect(sidebarMenuLinks[2]).toHaveTextContent('Analytics');
+  expect(sidebarMenuLinks[3]).toHaveTextContent('Raw Data');
 });
 
 it('renders Smart Meter Id filter with default value', () => {

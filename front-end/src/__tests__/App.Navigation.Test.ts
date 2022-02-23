@@ -1,4 +1,4 @@
-import { fireEvent, getByRole, render, screen } from '@testing-library/vue';
+import { fireEvent, render, screen } from '@testing-library/vue';
 import App from '../App.vue';
 import store from '@/store';
 import { setupI18n } from '@/i18n';
@@ -16,7 +16,7 @@ const setup = async () => {
 
 it('can navigate to Meter Data', async () => {
   await setup();
-  const meterDataLink = getByRole(screen.getByRole('navigation'), 'link', {
+  const meterDataLink = screen.getByRole('link', {
     name: 'Meter Data'
   });
 
@@ -31,7 +31,7 @@ it('can navigate to Meter Data', async () => {
 
 it('can navigate to Settings', async () => {
   await setup();
-  const settingsLink = getByRole(screen.getByRole('navigation'), 'link', {
+  const settingsLink = screen.getByRole('link', {
     name: 'Settings'
   });
 
@@ -42,12 +42,12 @@ it('can navigate to Settings', async () => {
 
 it('can navigate back to Home after navigating to Settings', async () => {
   await setup();
-  const settingsLink = getByRole(screen.getByRole('navigation'), 'link', {
+  const settingsLink = screen.getByRole('link', {
     name: 'Settings'
   });
   fireEvent.click(settingsLink);
   await screen.findByLabelText('Language:');
-  const homeLink = getByRole(screen.getByRole('navigation'), 'link', {
+  const homeLink = screen.getByRole('link', {
     name: 'Home'
   });
 

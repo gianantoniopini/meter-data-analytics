@@ -61,5 +61,5 @@ it('can navigate back to Home after navigating to Settings', async () => {
 });
 
 afterEach(async () => {
-  await router.push('/');
+  await router.push({ name: 'home' });
 });

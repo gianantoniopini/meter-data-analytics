@@ -1,7 +1,7 @@
 import { createStore } from 'vuex';
 import { Locales } from '@/i18n/config/locales';
 import { defaultLocale } from '@/i18n/config';
-import { RootState } from './declarations/index';
+import { RootState } from './interfaces/root-state.interface';
 
 const state: RootState = {
   selectedLanguage: defaultLocale

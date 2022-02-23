@@ -12,9 +12,9 @@ _All the smart meter data being used is just test data._
 
 ## Requirements
 
-- [Node.js v16.3.0][3]
-- [npm v7.15.1][4]
-- MongoDB v5.0 - [Download and install][5], or install with Docker
+- [Node.js][3]
+- [npm][4]
+- MongoDB - [Download and install][5], or install with Docker
 - [http-server][9] (only required to start the production version of the front-end)
 
 ## Setup

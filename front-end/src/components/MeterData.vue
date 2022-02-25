@@ -12,126 +12,123 @@
     </template>
 
     <template #default>
-      <div>
-        <div class="row border rounded p-2 mb-2" id="filters">
-          <div class="col-12">
-            <h4>Filters</h4>
-            <form @submit.prevent="onSubmit" class="row form">
-              <div class="form-group col-lg-4">
-                <label for="smartMeterIdFilter" class="form-label"
-                  >Smart Meter Id:</label
-                >
-                <input
-                  id="smartMeterIdFilter"
-                  v-model="smartMeterIdFilter"
-                  placeholder="Enter Smart Meter Id"
-                  type="text"
-                  class="form-control"
-                  aria-describedby="smartMeterIdFilterInvalidFeedback"
-                  :class="{
-                    'is-invalid': this.validationErrors.smartMeterIdFilter
-                  }"
-                />
-                <div
-                  id="smartMeterIdFilterInvalidFeedback"
-                  class="invalid-feedback"
-                  role="alert"
-                >
-                  {{ this.validationErrors.smartMeterIdFilter }}
-                </div>
-              </div>
-              <div class="form-group col-lg-4">
-                <label for="timestampFromFilter" class="form-label"
-                  >Timestamp From:</label
-                >
-                <input
-                  id="timestampFromFilter"
-                  class="form-control"
-                  type="date"
-                  v-model="timestampFromFilter"
-                />
-              </div>
-              <div class="form-group col-lg-4">
-                <label for="timestampToFilter" class="form-label"
-                  >Timestamp To:</label
-                >
-                <input
-                  id="timestampToFilter"
-                  class="form-control"
-                  type="date"
-                  v-model="timestampToFilter"
-                />
-              </div>
-              <div class="col-12 pt-2">
-                <button
-                  :disabled="applyFiltersDisabled"
-                  v-on:click="applyFilters"
-                  type="submit"
-                  class="btn btn-primary"
-                >
-                  Apply
-                </button>
-              </div>
-            </form>
-          </div>
+      <div class="row">
+        <div class="col-12">
+          <h4>Meter Data</h4>
+          <hr />
         </div>
-        <div class="row border rounded p-2 mb-2" id="timeSeries">
-          <div class="col-12">
-            <h4>Time Series</h4>
-            <BaseLineChart
-              :labels="timeSeriesChartLabels"
-              :datasets="timeSeriesChartDataSets"
-              title="Instantaneous Power"
-            />
-          </div>
-        </div>
-        <div class="row border rounded p-2 mb-2" id="analytics">
-          <div class="col-12">
-            <h4>Analytics</h4>
-            <BaseLineChart
-              class="mb-3"
-              :labels="averagePowerByWeekdayChartLabels"
-              :datasets="averagePowerByWeekdayChartDataSets"
-              title="Power by Day of the Week"
-            />
-            <BaseLineChart
-              :labels="averagePowerByHourChartLabels"
-              :datasets="averagePowerByHourChartDataSets"
-              title="Power by Hour of the Day"
-            />
-          </div>
-        </div>
-        <div class="row border rounded p-2" id="rawData">
-          <div class="col-12">
-            <h4>
-              Raw Data -
-              {{ timeSeries.length }} Power Measurements
-            </h4>
-            <div class="row border border-dark bg-light fw-bold">
-              <div class="col-lg-5 border border-dark text-lg-start">
-                Smart Meter Id
-              </div>
-              <div class="col-lg-4 border border-dark text-lg-end">
-                Timestamp
-              </div>
-              <div class="col-lg-3 border border-dark text-lg-end">
-                Instantaneous Power (W)
+        <div class="col-12" id="filters">
+          <h5>Filters</h5>
+          <form @submit.prevent="onSubmit" class="row form">
+            <div class="form-group col-lg-4">
+              <label for="smartMeterIdFilter" class="form-label"
+                >Smart Meter Id:</label
+              >
+              <input
+                id="smartMeterIdFilter"
+                v-model="smartMeterIdFilter"
+                placeholder="Enter Smart Meter Id"
+                type="text"
+                class="form-control"
+                aria-describedby="smartMeterIdFilterInvalidFeedback"
+                :class="{
+                  'is-invalid': this.validationErrors.smartMeterIdFilter
+                }"
+              />
+              <div
+                id="smartMeterIdFilterInvalidFeedback"
+                class="invalid-feedback"
+                role="alert"
+              >
+                {{ this.validationErrors.smartMeterIdFilter }}
               </div>
             </div>
-            <div
-              class="row border"
-              v-for="(measurement, index) in timeSeries"
-              :key="index"
-            >
-              <div class="col-lg-5 border text-lg-start">
-                {{ measurement.muid }}
-              </div>
-              <div class="col-lg-4 border text-lg-end">
-                {{ formatDate(measurement.timestamp) }}
-              </div>
-              <div class="col-lg-3 border text-lg-end">
-                {{ formatNumber(measurement.valueInWatts) }}
-              </div>
+            <div class="form-group col-lg-4">
+              <label for="timestampFromFilter" class="form-label"
+                >Timestamp From:</label
+              >
+              <input
+                id="timestampFromFilter"
+                class="form-control"
+                type="date"
+                v-model="timestampFromFilter"
+              />
+            </div>
+            <div class="form-group col-lg-4">
+              <label for="timestampToFilter" class="form-label"
+                >Timestamp To:</label
+              >
+              <input
+                id="timestampToFilter"
+                class="form-control"
+                type="date"
+                v-model="timestampToFilter"
+              />
+            </div>
+            <div class="col-12 pt-2">
+              <button
+                :disabled="applyFiltersDisabled"
+                v-on:click="applyFilters"
+                type="submit"
+                class="btn btn-primary"
+              >
+                Apply
+              </button>
+            </div>
+          </form>
+          <hr />
+        </div>
+        <div class="col-12" id="timeSeries">
+          <h5>Time Series</h5>
+          <BaseLineChart
+            :labels="timeSeriesChartLabels"
+            :datasets="timeSeriesChartDataSets"
+            title="Instantaneous Power"
+          />
+          <hr />
+        </div>
+        <div class="col-12" id="analytics">
+          <h5>Analytics</h5>
+          <BaseLineChart
+            class="mb-3"
+            :labels="averagePowerByWeekdayChartLabels"
+            :datasets="averagePowerByWeekdayChartDataSets"
+            title="Power by Day of the Week"
+          />
+          <BaseLineChart
+            :labels="averagePowerByHourChartLabels"
+            :datasets="averagePowerByHourChartDataSets"
+            title="Power by Hour of the Day"
+          />
+          <hr />
+        </div>
+        <div class="col-12" id="rawData">
+          <h5>
+            Raw Data -
+            {{ timeSeries.length }} Power Measurements
+          </h5>
+          <div class="row border border-dark bg-light fw-bold">
+            <div class="col-lg-5 border border-dark text-lg-start">
+              Smart Meter Id
+            </div>
+            <div class="col-lg-4 border border-dark text-lg-end">Timestamp</div>
+            <div class="col-lg-3 border border-dark text-lg-end">
+              Instantaneous Power (W)
+            </div>
+          </div>
+          <div
+            class="row border"
+            v-for="(measurement, index) in timeSeries"
+            :key="index"
+          >
+            <div class="col-lg-5 border text-lg-start">
+              {{ measurement.muid }}
+            </div>
+            <div class="col-lg-4 border text-lg-end">
+              {{ formatDate(measurement.timestamp) }}
+            </div>
+            <div class="col-lg-3 border text-lg-end">
+              {{ formatNumber(measurement.valueInWatts) }}
             </div>
           </div>
         </div>

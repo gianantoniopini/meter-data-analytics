@@ -1,13 +1,13 @@
 <template>
   <div id="app">
+    <!-- navbar -->
+    <TheNavbar />
+
     <div class="container-fluid">
       <div class="row">
-        <!-- navbar -->
-        <TheNavbar />
-      </div>
-
-      <div class="row">
-        <router-view />
+        <div class="col-12">
+          <router-view />
+        </div>
       </div>
     </div>
   </div>

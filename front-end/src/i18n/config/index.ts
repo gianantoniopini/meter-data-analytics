@@ -8,7 +8,4 @@ export const messages = {
   [Locales.it]: it
 };
 
-export const defaultLocale =
-  process.env.VUE_APP_I18N_DEFAULT_LOCALE in Locales
-    ? (process.env.VUE_APP_I18N_DEFAULT_LOCALE as Locales)
-    : Locales.enGb;
+export const defaultLocale = Locales.enGb;

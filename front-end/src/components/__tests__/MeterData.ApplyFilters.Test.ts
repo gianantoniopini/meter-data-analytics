@@ -10,6 +10,7 @@ import {
   waitForLoadingMessageToDisappear
 } from './helpers/MeterData.Helper';
 import MeterData from '../MeterData.vue';
+import { setupI18n } from '@/i18n';
 
 const axiosMockAdapter = new AxiosMockAdapter(axiosInstance, {
   delayResponse: 500
@@ -22,7 +23,11 @@ const setup = async (
   measurementsCount: number,
   apiRequestNetworkError?: boolean
 ): Promise<{ measurements: Measurement[]; applyButton: HTMLElement }> => {
-  render(MeterData);
+  render(MeterData, {
+    global: {
+      plugins: [setupI18n()]
+    }
+  });
 
   const smartMeterIdFilter = screen.getByRole('textbox', {
     name: 'Smart Meter Id:'

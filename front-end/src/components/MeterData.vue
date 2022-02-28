@@ -3,10 +3,26 @@
     <template #sidebar>
       <BaseSidebar
         :menuItems="[
-          { href: '#filters', title: 'Filters', biClass: 'bi-filter' },
-          { href: '#timeSeries', title: 'Time Series', biClass: 'bi-graph-up' },
-          { href: '#analytics', title: 'Analytics', biClass: 'bi-heart' },
-          { href: '#rawData', title: 'Raw Data', biClass: 'bi-table' }
+          {
+            href: '#filters',
+            title: $t('meterData.filters.title'),
+            biClass: 'bi-filter'
+          },
+          {
+            href: '#timeSeries',
+            title: $t('meterData.timeSeries.title'),
+            biClass: 'bi-graph-up'
+          },
+          {
+            href: '#analytics',
+            title: $t('meterData.analytics.title'),
+            biClass: 'bi-heart'
+          },
+          {
+            href: '#rawData',
+            title: $t('meterData.rawData.title'),
+            biClass: 'bi-table'
+          }
         ]"
       />
     </template>
@@ -14,20 +30,20 @@
     <template #default>
       <div class="row">
         <div class="col-12">
-          <h4>Meter Data</h4>
+          <h4>{{ $t('meterData.title') }}</h4>
           <hr />
         </div>
         <div class="col-12" id="filters">
-          <h5>Filters</h5>
+          <h5>{{ $t('meterData.filters.title') }}</h5>
           <form @submit.prevent="onSubmit" class="row form">
             <div class="form-group col-lg-4">
               <label for="smartMeterIdFilter" class="form-label"
-                >Smart Meter Id:</label
+                >{{ $t('meterData.filters.smartMeterId.label') }}:</label
               >
               <input
                 id="smartMeterIdFilter"
                 v-model="smartMeterIdFilter"
-                placeholder="Enter Smart Meter Id"
+                :placeholder="$t('meterData.filters.smartMeterId.placeholder')"
                 type="text"
                 class="form-control"
                 aria-describedby="smartMeterIdFilterInvalidFeedback"
@@ -45,7 +61,7 @@
             </div>
             <div class="form-group col-lg-4">
               <label for="timestampFromFilter" class="form-label"
-                >Timestamp From:</label
+                >{{ $t('meterData.filters.timestampFrom.label') }}:</label
               >
               <input
                 id="timestampFromFilter"
@@ -56,7 +72,7 @@
             </div>
             <div class="form-group col-lg-4">
               <label for="timestampToFilter" class="form-label"
-                >Timestamp To:</label
+                >{{ $t('meterData.filters.timestampTo.label') }}:</label
               >
               <input
                 id="timestampToFilter"
@@ -72,48 +88,52 @@
                 type="submit"
                 class="btn btn-primary"
               >
-                Apply
+                {{ $t('meterData.filters.apply') }}
               </button>
             </div>
           </form>
           <hr />
         </div>
         <div class="col-12" id="timeSeries">
-          <h5>Time Series</h5>
+          <h5>{{ $t('meterData.timeSeries.title') }}</h5>
           <BaseLineChart
             :labels="timeSeriesChartLabels"
             :datasets="timeSeriesChartDataSets"
-            title="Instantaneous Power"
+            :title="$t('meterData.timeSeries.chart.title')"
           />
           <hr />
         </div>
         <div class="col-12" id="analytics">
-          <h5>Analytics</h5>
+          <h5>{{ $t('meterData.analytics.title') }}</h5>
           <BaseLineChart
             class="mb-3"
             :labels="averagePowerByWeekdayChartLabels"
             :datasets="averagePowerByWeekdayChartDataSets"
-            title="Power by Day of the Week"
+            :title="
+              $t('meterData.analytics.charts.averagePowerByWeekday.title')
+            "
           />
           <BaseLineChart
             :labels="averagePowerByHourChartLabels"
             :datasets="averagePowerByHourChartDataSets"
-            title="Power by Hour of the Day"
+            :title="$t('meterData.analytics.charts.averagePowerByHour.title')"
           />
           <hr />
         </div>
         <div class="col-12" id="rawData">
           <h5>
-            Raw Data -
-            {{ timeSeries.length }} Power Measurements
+            {{ $t('meterData.rawData.title') }} - {{ timeSeries.length }}
+            {{ $t('meterData.rawData.powerMeasurements') }}
           </h5>
           <div class="row border border-dark bg-light fw-bold">
             <div class="col-lg-5 border border-dark text-lg-start">
-              Smart Meter Id
+              {{ $t('meterData.rawData.smartMeterId') }}
             </div>
-            <div class="col-lg-4 border border-dark text-lg-end">Timestamp</div>
+            <div class="col-lg-4 border border-dark text-lg-end">
+              {{ $t('meterData.rawData.timestamp') }}
+            </div>
             <div class="col-lg-3 border border-dark text-lg-end">
-              Instantaneous Power (W)
+              {{ $t('meterData.rawData.instantaneousPower') }}
             </div>
           </div>
           <div
@@ -198,13 +218,16 @@ export default defineComponent({
       timestampTo: string | undefined
     ) {
       this.loading = true;
-      const { close: closeToast } = createToast('Loading data...', {
-        position: 'top-center',
-        showCloseButton: false,
-        timeout: -1,
-        transition: 'slide',
-        type: 'info'
-      });
+      const { close: closeToast } = createToast(
+        this.$t('meterData.toasts.loadingData'),
+        {
+          position: 'top-center',
+          showCloseButton: false,
+          timeout: -1,
+          transition: 'slide',
+          type: 'info'
+        }
+      );
 
       try {
         const instantaneousPowerMeasurements =
@@ -235,7 +258,7 @@ export default defineComponent({
       );
       this.timeSeriesChartDataSets = [
         {
-          label: 'Instantaneous Power (W)',
+          label: this.$t('meterData.timeSeries.chart.dataSet.label'),
           data: this.timeSeries.map((m) => m.valueInWatts),
           backgroundColor: 'rgba(54, 162, 235, 0.2)',
           borderColor: 'rgb(54, 162, 235)'
@@ -247,7 +270,9 @@ export default defineComponent({
       );
       this.averagePowerByWeekdayChartDataSets = [
         {
-          label: 'Average Power Value (W)',
+          label: this.$t(
+            'meterData.analytics.charts.averagePowerByWeekday.dataSet.label'
+          ),
           data: this.averagePowerByWeekday.map((apbw) => apbw.averagePower),
           backgroundColor: 'rgba(255, 99, 132, 0.2)',
           borderColor: 'rgb(255, 99, 132)'
@@ -259,7 +284,9 @@ export default defineComponent({
       );
       this.averagePowerByHourChartDataSets = [
         {
-          label: 'Average Power Value (W)',
+          label: this.$t(
+            'meterData.analytics.charts.averagePowerByHour.dataSet.label'
+          ),
           data: this.averagePowerByHour.map((apbh) => apbh.averagePower),
           backgroundColor: 'rgba(255, 159, 64, 0.2)',
           borderColor: 'rgb(255, 159, 64)'
@@ -307,19 +334,19 @@ export default defineComponent({
 
     getIsoWeekdayAsString(isoWeekday: number): string {
       const isoWeekdays = Array.from({ length: 7 }) as string[];
-      isoWeekdays[0] = 'Monday';
-      isoWeekdays[1] = 'Tuesday';
-      isoWeekdays[2] = 'Wednesday';
-      isoWeekdays[3] = 'Thursday';
-      isoWeekdays[4] = 'Friday';
-      isoWeekdays[5] = 'Saturday';
-      isoWeekdays[6] = 'Sunday';
+      isoWeekdays[0] = this.$t('shared.weekdays.monday');
+      isoWeekdays[1] = this.$t('shared.weekdays.tuesday');
+      isoWeekdays[2] = this.$t('shared.weekdays.wednesday');
+      isoWeekdays[3] = this.$t('shared.weekdays.thursday');
+      isoWeekdays[4] = this.$t('shared.weekdays.friday');
+      isoWeekdays[5] = this.$t('shared.weekdays.saturday');
+      isoWeekdays[6] = this.$t('shared.weekdays.sunday');
 
       return isoWeekdays[isoWeekday - 1];
     },
 
     onError(error: unknown) {
-      createToast('An unexpected error occurred. Please try again.', {
+      createToast(this.$t('meterData.toasts.error'), {
         position: 'top-center',
         showCloseButton: true,
         timeout: 4000,
@@ -333,8 +360,9 @@ export default defineComponent({
       this.validationErrors.smartMeterIdFilter = '';
 
       if (!this.smartMeterIdFilter || !this.smartMeterIdFilter.trim()) {
-        this.validationErrors.smartMeterIdFilter =
-          "'Smart Meter Id' filter is required";
+        this.validationErrors.smartMeterIdFilter = this.$t(
+          'meterData.filters.smartMeterId.validationErrors.required'
+        );
       }
     }
   },

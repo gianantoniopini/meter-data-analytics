@@ -13,5 +13,73 @@
     "title": "Home",
     "welcomeMessage": "Benvenuto nell'applicazione Meter Data Analytics.",
     "appDescription": "Applicazione di analisi dei dati di contatori intelligenti costruita con lo stack MEVN (MongoDB, Express, Vue, Node.js)."
+  },
+  "meterData": {
+    "title": "Meter Data",
+    "filters": {
+      "title": "Filters",
+      "smartMeterId": {
+        "label": "Smart Meter Id",
+        "placeholder": "Enter @:meterData.filters.smartMeterId.label",
+        "validationErrors": {
+          "required": "@:meterData.filters.smartMeterId.label filter is required"
+        }
+      },
+      "timestampFrom": {
+        "label": "Timestamp From"
+      },
+      "timestampTo": {
+        "label": "Timestamp To"
+      },
+      "apply": "Apply"
+    },
+    "timeSeries": {
+      "title": "Time Series",
+      "chart": {
+        "title": "Instantaneous Power",
+        "dataSet": {
+          "label": "Instantaneous Power (W)"
+        }
+      }
+    },
+    "analytics": {
+      "title": "Analytics",
+      "charts": {
+        "averagePowerByWeekday": {
+          "title": "Power by Day of the Week",
+          "dataSet": {
+            "label": "Average Power Value (W)"
+          }
+        },
+        "averagePowerByHour": {
+          "title": "Power by Hour of the Day",
+          "dataSet": {
+            "label": "Average Power Value (W)"
+          }
+        }
+      }
+    },
+    "rawData": {
+      "title": "Raw Data",
+      "powerMeasurements": "Power Measurements",
+      "smartMeterId": "Smart Meter Id",
+      "timestamp": "Timestamp",
+      "instantaneousPower": "Instantaneous Power (W)"
+    },
+    "toasts": {
+      "loadingData": "Loading data...",
+      "error": "An unexpected error occurred. Please try again."
+    }
+  },
+  "shared": {
+    "weekdays": {
+      "monday": "Lunedì",
+      "tuesday": "Martedì",
+      "wednesday": "Mercoledì",
+      "thursday": "Giovedì",
+      "friday": "Venerdì",
+      "saturday": "Sabato",
+      "sunday": "Domenica"
+    }
   }
 }

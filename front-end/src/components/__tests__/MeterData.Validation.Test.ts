@@ -1,11 +1,16 @@
 import { fireEvent, render, screen } from '@testing-library/vue';
 import MeterData from '../MeterData.vue';
+import { setupI18n } from '@/i18n';
 
 const setup = (): {
   smartMeterIdFilter: HTMLElement;
   applyButton: HTMLElement;
 } => {
-  render(MeterData);
+  render(MeterData, {
+    global: {
+      plugins: [setupI18n()]
+    }
+  });
 
   const smartMeterIdFilter = screen.getByRole('textbox', {
     name: 'Smart Meter Id:'
@@ -17,7 +22,7 @@ const setup = (): {
   return { smartMeterIdFilter, applyButton };
 };
 
-const smartMeterIdFilterValidationError = "'Smart Meter Id' filter is required";
+const smartMeterIdFilterValidationError = 'Smart Meter Id filter is required';
 
 describe('if Smart Meter Id filter is cleared', () => {
   it('renders validation error', async () => {

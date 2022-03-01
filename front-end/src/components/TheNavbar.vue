@@ -22,7 +22,7 @@
       >
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
+      <div id="navbarNav" class="collapse navbar-collapse">
         <div class="navbar-nav text-center fw-bold mr-auto">
           <router-link :to="{ name: 'home' }" class="nav-link">{{
             $t('home.title')

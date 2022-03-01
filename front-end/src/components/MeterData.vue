@@ -203,7 +203,7 @@ onMounted(() => {
   <BaseLayout>
     <template #sidebar>
       <BaseSidebar
-        :menuItems="[
+        :menu-items="[
           {
             href: '#filters',
             title: $t('meterData.filters.title'),
@@ -234,9 +234,9 @@ onMounted(() => {
           <h4>{{ $t('meterData.title') }}</h4>
           <hr />
         </div>
-        <div class="col-12" id="filters">
+        <div id="filters" class="col-12">
           <h5>{{ $t('meterData.filters.title') }}</h5>
-          <form @submit.prevent="onSubmit" class="row form">
+          <form class="row form" @submit.prevent="onSubmit">
             <div class="form-group col-lg-4">
               <label for="smartMeterIdFilter" class="form-label"
                 >{{ $t('meterData.filters.smartMeterId.label') }}:</label
@@ -266,9 +266,9 @@ onMounted(() => {
               >
               <input
                 id="timestampFromFilter"
+                v-model="timestampFromFilter"
                 class="form-control"
                 type="date"
-                v-model="timestampFromFilter"
               />
             </div>
             <div class="form-group col-lg-4">
@@ -277,17 +277,17 @@ onMounted(() => {
               >
               <input
                 id="timestampToFilter"
+                v-model="timestampToFilter"
                 class="form-control"
                 type="date"
-                v-model="timestampToFilter"
               />
             </div>
             <div class="col-12 pt-2">
               <button
                 :disabled="applyFiltersDisabled"
-                v-on:click="applyFilters"
                 type="submit"
                 class="btn btn-primary"
+                @click="applyFilters"
               >
                 {{ $t('meterData.filters.apply') }}
               </button>
@@ -295,7 +295,7 @@ onMounted(() => {
           </form>
           <hr />
         </div>
-        <div class="col-12" id="timeSeries">
+        <div id="timeSeries" class="col-12">
           <h5>{{ $t('meterData.timeSeries.title') }}</h5>
           <BaseLineChart
             :labels="timeSeriesChart.labels"
@@ -304,7 +304,7 @@ onMounted(() => {
           />
           <hr />
         </div>
-        <div class="col-12" id="analytics">
+        <div id="analytics" class="col-12">
           <h5>{{ $t('meterData.analytics.title') }}</h5>
           <BaseLineChart
             class="mb-3"
@@ -321,7 +321,7 @@ onMounted(() => {
           />
           <hr />
         </div>
-        <div class="col-12" id="rawData">
+        <div id="rawData" class="col-12">
           <h5>
             {{ $t('meterData.rawData.title') }} - {{ timeSeries.values.length }}
             {{ $t('meterData.rawData.powerMeasurements') }}
@@ -338,9 +338,9 @@ onMounted(() => {
             </div>
           </div>
           <div
-            class="row border"
             v-for="(measurement, index) in timeSeries.values"
             :key="index"
+            class="row border"
           >
             <div class="col-lg-5 border text-lg-start">
               {{ measurement.muid }}

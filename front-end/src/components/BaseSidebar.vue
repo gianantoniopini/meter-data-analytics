@@ -6,7 +6,7 @@
     <ul
       class="nav nav-pills nav-flush flex-sm-column flex-row flex-nowrap mb-auto mx-auto justify-content-between w-100 px-3"
     >
-      <li class="nav-item" v-for="(item, index) in menuItems" :key="index">
+      <li v-for="(item, index) in menuItems" :key="index" class="nav-item">
         <a
           :href="item.href"
           class="nav-link py-3 px-2"

@@ -2,7 +2,7 @@
   <BaseLayout>
     <template #sidebar>
       <BaseSidebar
-        :menuItems="[
+        :menu-items="[
           {
             href: '#language',
             title: $t('settings.language.label'),
@@ -23,8 +23,8 @@
           <h4>Settings</h4>
           <hr />
         </div>
-        <div class="col-12" id="language">
-          <form @submit.prevent="onSubmit" class="row form">
+        <div id="language" class="col-12">
+          <form class="row form" @submit.prevent="onSubmit">
             <div class="form-group col-12 col-md-4">
               <label for="languageSelector" class="form-label"
                 >{{ $t('settings.language.label') }}:</label
@@ -43,7 +43,7 @@
           </form>
           <hr />
         </div>
-        <div class="col-12" id="import">
+        <div id="import" class="col-12">
           <h5>Import</h5>
           <div>TODO</div>
         </div>

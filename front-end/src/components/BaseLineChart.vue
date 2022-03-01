@@ -1,12 +1,6 @@
-<template>
-  <div>
-    <LineChart ref="lineChartRef" :chartData="chartData" :options="options" />
-  </div>
-</template>
-
-<script lang="ts">
-import { computed, defineComponent, ref, PropType } from 'vue';
-import { LineChart, ExtractComponentData } from 'vue-chart-3';
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { LineChart } from 'vue-chart-3';
 import { Chart, ChartData, ChartOptions, registerables } from 'chart.js';
 
 Chart.register(...registerables);
@@ -18,51 +12,35 @@ export interface Dataset {
   borderColor: string;
 }
 
-export default defineComponent({
-  name: 'BaseLineChart',
+interface Properties {
+  labels: string[];
+  datasets: Dataset[];
+  title?: string;
+}
 
-  components: { LineChart },
+const props = defineProps<Properties>();
 
-  props: {
-    labels: {
-      type: Object as PropType<string[]>,
-      required: true
+const options = ref<ChartOptions<'line'>>({
+  responsive: true,
+  plugins: {
+    legend: {
+      position: 'top'
     },
-
-    datasets: {
-      type: Object as PropType<Dataset[]>,
-      required: true
-    },
-
     title: {
-      type: String,
-      required: false
+      display: props.title !== undefined,
+      text: props.title,
+      position: 'top'
     }
-  },
-
-  data(props) {
-    return {
-      lineChartRef: ref<ExtractComponentData<typeof LineChart>>(),
-
-      options: ref<ChartOptions<'line'>>({
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'top'
-          },
-          title: {
-            display: props.title !== undefined,
-            text: props.title,
-            position: 'top'
-          }
-        }
-      }),
-
-      chartData: computed<ChartData<'line'>>(() => ({
-        labels: props.labels,
-        datasets: props.datasets
-      }))
-    };
   }
 });
+const chartData = computed<ChartData<'line'>>(() => ({
+  labels: props.labels,
+  datasets: props.datasets
+}));
 </script>
+
+<template>
+  <div>
+    <LineChart :chart-data="chartData" :options="options" />
+  </div>
+</template>

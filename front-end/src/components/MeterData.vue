@@ -1,162 +1,3 @@
-<template>
-  <BaseLayout>
-    <template #sidebar>
-      <BaseSidebar
-        :menuItems="[
-          {
-            href: '#filters',
-            title: $t('meterData.filters.title'),
-            biClass: 'bi-filter'
-          },
-          {
-            href: '#timeSeries',
-            title: $t('meterData.timeSeries.title'),
-            biClass: 'bi-graph-up'
-          },
-          {
-            href: '#analytics',
-            title: $t('meterData.analytics.title'),
-            biClass: 'bi-heart'
-          },
-          {
-            href: '#rawData',
-            title: $t('meterData.rawData.title'),
-            biClass: 'bi-table'
-          }
-        ]"
-      />
-    </template>
-
-    <template #default>
-      <div class="row">
-        <div class="col-12">
-          <h4>{{ $t('meterData.title') }}</h4>
-          <hr />
-        </div>
-        <div class="col-12" id="filters">
-          <h5>{{ $t('meterData.filters.title') }}</h5>
-          <form @submit.prevent="onSubmit" class="row form">
-            <div class="form-group col-lg-4">
-              <label for="smartMeterIdFilter" class="form-label"
-                >{{ $t('meterData.filters.smartMeterId.label') }}:</label
-              >
-              <input
-                id="smartMeterIdFilter"
-                v-model="smartMeterIdFilter"
-                :placeholder="$t('meterData.filters.smartMeterId.placeholder')"
-                type="text"
-                class="form-control"
-                aria-describedby="smartMeterIdFilterInvalidFeedback"
-                :class="{
-                  'is-invalid': this.validationErrors.smartMeterIdFilter
-                }"
-              />
-              <div
-                id="smartMeterIdFilterInvalidFeedback"
-                class="invalid-feedback"
-                role="alert"
-              >
-                {{ this.validationErrors.smartMeterIdFilter }}
-              </div>
-            </div>
-            <div class="form-group col-lg-4">
-              <label for="timestampFromFilter" class="form-label"
-                >{{ $t('meterData.filters.timestampFrom.label') }}:</label
-              >
-              <input
-                id="timestampFromFilter"
-                class="form-control"
-                type="date"
-                v-model="timestampFromFilter"
-              />
-            </div>
-            <div class="form-group col-lg-4">
-              <label for="timestampToFilter" class="form-label"
-                >{{ $t('meterData.filters.timestampTo.label') }}:</label
-              >
-              <input
-                id="timestampToFilter"
-                class="form-control"
-                type="date"
-                v-model="timestampToFilter"
-              />
-            </div>
-            <div class="col-12 pt-2">
-              <button
-                :disabled="applyFiltersDisabled"
-                v-on:click="applyFilters"
-                type="submit"
-                class="btn btn-primary"
-              >
-                {{ $t('meterData.filters.apply') }}
-              </button>
-            </div>
-          </form>
-          <hr />
-        </div>
-        <div class="col-12" id="timeSeries">
-          <h5>{{ $t('meterData.timeSeries.title') }}</h5>
-          <BaseLineChart
-            :labels="timeSeriesChartLabels"
-            :datasets="timeSeriesChartDataSets"
-            :title="$t('meterData.timeSeries.chart.title')"
-          />
-          <hr />
-        </div>
-        <div class="col-12" id="analytics">
-          <h5>{{ $t('meterData.analytics.title') }}</h5>
-          <BaseLineChart
-            class="mb-3"
-            :labels="averagePowerByWeekdayChartLabels"
-            :datasets="averagePowerByWeekdayChartDataSets"
-            :title="
-              $t('meterData.analytics.charts.averagePowerByWeekday.title')
-            "
-          />
-          <BaseLineChart
-            :labels="averagePowerByHourChartLabels"
-            :datasets="averagePowerByHourChartDataSets"
-            :title="$t('meterData.analytics.charts.averagePowerByHour.title')"
-          />
-          <hr />
-        </div>
-        <div class="col-12" id="rawData">
-          <h5>
-            {{ $t('meterData.rawData.title') }} - {{ timeSeries.length }}
-            {{ $t('meterData.rawData.powerMeasurements') }}
-          </h5>
-          <div class="row border border-dark bg-light fw-bold">
-            <div class="col-lg-5 border border-dark text-lg-start">
-              {{ $t('meterData.rawData.smartMeterId') }}
-            </div>
-            <div class="col-lg-4 border border-dark text-lg-end">
-              {{ $t('meterData.rawData.timestamp') }}
-            </div>
-            <div class="col-lg-3 border border-dark text-lg-end">
-              {{ $t('meterData.rawData.instantaneousPower') }}
-            </div>
-          </div>
-          <div
-            class="row border"
-            v-for="(measurement, index) in timeSeries"
-            :key="index"
-          >
-            <div class="col-lg-5 border text-lg-start">
-              {{ measurement.muid }}
-            </div>
-            <div class="col-lg-4 border text-lg-end">
-              {{ formatDate(measurement.timestamp) }}
-            </div>
-            <div class="col-lg-3 border text-lg-end">
-              {{ formatNumber(measurement.valueInWatts) }}
-            </div>
-          </div>
-        </div>
-      </div>
-    </template>
-  </BaseLayout>
-</template>
-
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { createToast } from 'mosha-vue-toastify';
@@ -372,3 +213,162 @@ export default defineComponent({
   }
 });
 </script>
+
+<template>
+  <BaseLayout>
+    <template #sidebar>
+      <BaseSidebar
+        :menuItems="[
+          {
+            href: '#filters',
+            title: $t('meterData.filters.title'),
+            biClass: 'bi-filter'
+          },
+          {
+            href: '#timeSeries',
+            title: $t('meterData.timeSeries.title'),
+            biClass: 'bi-graph-up'
+          },
+          {
+            href: '#analytics',
+            title: $t('meterData.analytics.title'),
+            biClass: 'bi-heart'
+          },
+          {
+            href: '#rawData',
+            title: $t('meterData.rawData.title'),
+            biClass: 'bi-table'
+          }
+        ]"
+      />
+    </template>
+
+    <template #default>
+      <div class="row">
+        <div class="col-12">
+          <h4>{{ $t('meterData.title') }}</h4>
+          <hr />
+        </div>
+        <div class="col-12" id="filters">
+          <h5>{{ $t('meterData.filters.title') }}</h5>
+          <form @submit.prevent="onSubmit" class="row form">
+            <div class="form-group col-lg-4">
+              <label for="smartMeterIdFilter" class="form-label"
+                >{{ $t('meterData.filters.smartMeterId.label') }}:</label
+              >
+              <input
+                id="smartMeterIdFilter"
+                v-model="smartMeterIdFilter"
+                :placeholder="$t('meterData.filters.smartMeterId.placeholder')"
+                type="text"
+                class="form-control"
+                aria-describedby="smartMeterIdFilterInvalidFeedback"
+                :class="{
+                  'is-invalid': this.validationErrors.smartMeterIdFilter
+                }"
+              />
+              <div
+                id="smartMeterIdFilterInvalidFeedback"
+                class="invalid-feedback"
+                role="alert"
+              >
+                {{ this.validationErrors.smartMeterIdFilter }}
+              </div>
+            </div>
+            <div class="form-group col-lg-4">
+              <label for="timestampFromFilter" class="form-label"
+                >{{ $t('meterData.filters.timestampFrom.label') }}:</label
+              >
+              <input
+                id="timestampFromFilter"
+                class="form-control"
+                type="date"
+                v-model="timestampFromFilter"
+              />
+            </div>
+            <div class="form-group col-lg-4">
+              <label for="timestampToFilter" class="form-label"
+                >{{ $t('meterData.filters.timestampTo.label') }}:</label
+              >
+              <input
+                id="timestampToFilter"
+                class="form-control"
+                type="date"
+                v-model="timestampToFilter"
+              />
+            </div>
+            <div class="col-12 pt-2">
+              <button
+                :disabled="applyFiltersDisabled"
+                v-on:click="applyFilters"
+                type="submit"
+                class="btn btn-primary"
+              >
+                {{ $t('meterData.filters.apply') }}
+              </button>
+            </div>
+          </form>
+          <hr />
+        </div>
+        <div class="col-12" id="timeSeries">
+          <h5>{{ $t('meterData.timeSeries.title') }}</h5>
+          <BaseLineChart
+            :labels="timeSeriesChartLabels"
+            :datasets="timeSeriesChartDataSets"
+            :title="$t('meterData.timeSeries.chart.title')"
+          />
+          <hr />
+        </div>
+        <div class="col-12" id="analytics">
+          <h5>{{ $t('meterData.analytics.title') }}</h5>
+          <BaseLineChart
+            class="mb-3"
+            :labels="averagePowerByWeekdayChartLabels"
+            :datasets="averagePowerByWeekdayChartDataSets"
+            :title="
+              $t('meterData.analytics.charts.averagePowerByWeekday.title')
+            "
+          />
+          <BaseLineChart
+            :labels="averagePowerByHourChartLabels"
+            :datasets="averagePowerByHourChartDataSets"
+            :title="$t('meterData.analytics.charts.averagePowerByHour.title')"
+          />
+          <hr />
+        </div>
+        <div class="col-12" id="rawData">
+          <h5>
+            {{ $t('meterData.rawData.title') }} - {{ timeSeries.length }}
+            {{ $t('meterData.rawData.powerMeasurements') }}
+          </h5>
+          <div class="row border border-dark bg-light fw-bold">
+            <div class="col-lg-5 border border-dark text-lg-start">
+              {{ $t('meterData.rawData.smartMeterId') }}
+            </div>
+            <div class="col-lg-4 border border-dark text-lg-end">
+              {{ $t('meterData.rawData.timestamp') }}
+            </div>
+            <div class="col-lg-3 border border-dark text-lg-end">
+              {{ $t('meterData.rawData.instantaneousPower') }}
+            </div>
+          </div>
+          <div
+            class="row border"
+            v-for="(measurement, index) in timeSeries"
+            :key="index"
+          >
+            <div class="col-lg-5 border text-lg-start">
+              {{ measurement.muid }}
+            </div>
+            <div class="col-lg-4 border text-lg-end">
+              {{ formatDate(measurement.timestamp) }}
+            </div>
+            <div class="col-lg-3 border text-lg-end">
+              {{ formatNumber(measurement.valueInWatts) }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+  </BaseLayout>
+</template>

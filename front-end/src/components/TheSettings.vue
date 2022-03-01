@@ -1,3 +1,27 @@
+<script setup lang="ts">
+import { computed } from 'vue';
+import { useStore } from 'vuex';
+import { useI18n } from 'vue-i18n';
+import { Locales } from '@/i18n/config/locales';
+import { setHtmlLang } from '@/i18n';
+import BaseLayout from './BaseLayout.vue';
+import BaseSidebar from './BaseSidebar.vue';
+
+const store = useStore();
+const { locale } = useI18n();
+
+const selectedLanguageModel = computed({
+  get() {
+    return store.getters.selectedLanguage;
+  },
+  set(value: Locales) {
+    locale.value = value as string;
+    store.dispatch('selectNewDefaultLanguage', value);
+    setHtmlLang(value);
+  }
+});
+</script>
+
 <template>
   <BaseLayout>
     <template #sidebar>
@@ -35,8 +59,12 @@
                 class="form-select"
                 placeholder="Please Select"
               >
-                <option v-for="locale in Locales" :key="locale" :value="locale">
-                  {{ $t(`settings.language.options.${locale}`) }}
+                <option
+                  v-for="language in Locales"
+                  :key="language"
+                  :value="language"
+                >
+                  {{ $t(`settings.language.options.${language}`) }}
                 </option>
               </select>
             </div>
@@ -51,38 +79,3 @@
     </template>
   </BaseLayout>
 </template>
-
-<script lang="ts">
-import { defineComponent, computed } from 'vue';
-import { useStore } from 'vuex';
-import { useI18n } from 'vue-i18n';
-import { Locales } from '@/i18n/config/locales';
-import { setHtmlLang } from '@/i18n';
-import BaseLayout from './BaseLayout.vue';
-import BaseSidebar from './BaseSidebar.vue';
-
-export default defineComponent({
-  name: 'TheSettings',
-
-  components: { BaseLayout, BaseSidebar },
-
-  setup() {
-    const store = useStore();
-    const { locale } = useI18n();
-
-    return {
-      selectedLanguageModel: computed({
-        get() {
-          return store.getters.selectedLanguage;
-        },
-        set(value: Locales) {
-          locale.value = value as string;
-          store.dispatch('selectNewDefaultLanguage', value);
-          setHtmlLang(value);
-        }
-      }),
-      Locales
-    };
-  }
-});
-</script>

@@ -39,14 +39,6 @@
   </nav>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-
-export default defineComponent({
-  name: 'TheNavbar'
-});
-</script>
-
 <style scoped>
 #navbarNav a.router-link-active,
 #navbarNav a.router-link-exact-active {

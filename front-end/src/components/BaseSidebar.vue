@@ -1,3 +1,17 @@
+<script setup lang="ts">
+interface SidebarMenuItem {
+  href: string;
+  title: string;
+  biClass: string;
+}
+
+interface Properties {
+  menuItems: SidebarMenuItem[];
+}
+
+defineProps<Properties>();
+</script>
+
 <template>
   <div
     class="d-flex flex-sm-column flex-row flex-nowrap bg-light sticky-top"
@@ -22,24 +36,3 @@
     </ul>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent, PropType } from 'vue';
-
-interface SidebarMenuItem {
-  href: string;
-  title: string;
-  biClass: string;
-}
-
-export default defineComponent({
-  name: 'BaseSidebar',
-
-  props: {
-    menuItems: {
-      type: Object as PropType<SidebarMenuItem[]>,
-      required: true
-    }
-  }
-});
-</script>

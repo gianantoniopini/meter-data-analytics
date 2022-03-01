@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import { LineChart } from 'vue-chart-3';
-import { Chart, ChartData, ChartOptions, registerables } from 'chart.js';
-
-Chart.register(...registerables);
-
 export interface Dataset {
   label: string;
   data: number[];
   backgroundColor: string;
   borderColor: string;
 }
+
+import { computed, ref } from 'vue';
+import { LineChart } from 'vue-chart-3';
+import { Chart, ChartData, ChartOptions, registerables } from 'chart.js';
+
+Chart.register(...registerables);
 
 interface Properties {
   labels: string[];

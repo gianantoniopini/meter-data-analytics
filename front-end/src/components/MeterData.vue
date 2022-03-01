@@ -194,6 +194,10 @@ const validateSmartMeterIdFilter = (value: string) => {
   }
 };
 
+const onSubmit = () => {
+  // Do nothing
+};
+
 onMounted(() => {
   refreshChartsData();
 });

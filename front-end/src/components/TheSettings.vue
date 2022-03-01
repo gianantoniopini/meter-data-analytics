@@ -20,6 +20,10 @@ const selectedLanguageModel = computed({
     setHtmlLang(value);
   }
 });
+
+const onSubmit = () => {
+  // Do nothing
+};
 </script>
 
 <template>

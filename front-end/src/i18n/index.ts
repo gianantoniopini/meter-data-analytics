@@ -13,8 +13,6 @@ const setupI18n = (): I18n => {
   type MessageSchema = typeof messages[typeof defaultLocale];
 
   const i18n = createI18n<[MessageSchema], Locales>({
-    legacy: false,
-    globalInjection: true,
     messages,
     locale: defaultLocale,
     fallbackLocale: defaultLocale

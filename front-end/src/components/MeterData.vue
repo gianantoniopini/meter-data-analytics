@@ -12,8 +12,8 @@ import BaseLineChart from './BaseLineChart.vue';
 import MeterDataService from '@/services/meter-data.service';
 import { parseDateInISOFormat } from '@/utils/date-utils';
 
-interface TimeSeries {
-  values: InstantaneousPowerMeasurement[];
+interface Series<T> {
+  values: T[];
 }
 
 interface Chart {
@@ -29,9 +29,11 @@ const smartMeterIdFilter = ref(
 );
 const timestampFromFilter: Ref<string | undefined> = ref();
 const timestampToFilter: Ref<string | undefined> = ref();
-const timeSeries: TimeSeries = reactive({ values: [] });
-const averagePowerByWeekday = { values: [] as WeekdayAveragePower[] };
-const averagePowerByHour = { values: [] as HourAveragePower[] };
+const timeSeries: Series<InstantaneousPowerMeasurement> = reactive({
+  values: []
+});
+const averagePowerByWeekday: Series<WeekdayAveragePower> = { values: [] };
+const averagePowerByHour: Series<HourAveragePower> = { values: [] };
 const timeSeriesChart: Chart = reactive({ labels: [], dataSets: [] });
 const averagePowerByWeekdayChart: Chart = reactive({
   labels: [],

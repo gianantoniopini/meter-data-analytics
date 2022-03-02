@@ -1,25 +1,28 @@
 import { createWebHistory, createRouter, RouteRecordRaw } from 'vue-router';
+import TheHome from '@/components/TheHome.vue';
+import MeterData from '@/components/MeterData.vue';
+import TheSettings from '@/components/TheSettings.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'home',
-    component: () => import('./components/TheHome.vue')
+    component: TheHome
   },
   {
     path: '/meterdata',
     name: 'meterData',
-    component: () => import('./components/MeterData.vue')
+    component: MeterData
   },
   {
     path: '/settings',
     name: 'settings',
-    component: () => import('./components/TheSettings.vue')
+    component: TheSettings
   }
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(process.env.BASE_URL),
   routes
 });
 

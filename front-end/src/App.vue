@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import TheNavbar from '@/components/TheNavbar.vue';
+</script>
+
 <template>
   <div id="app">
     <!-- navbar -->
@@ -12,14 +16,3 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent } from 'vue';
-import TheNavbar from '@/components/TheNavbar.vue';
-
-export default defineComponent({
-  name: 'App',
-
-  components: { TheNavbar }
-});
-</script>

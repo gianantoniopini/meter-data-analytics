@@ -3,11 +3,12 @@ import { computed, onMounted, reactive, ref, Ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { createToast } from 'mosha-vue-toastify';
 import InstantaneousPowerMeasurement from '@/interfaces/instantaneous-power-measurement.interface';
+import ChartDataset from '@/interfaces/chart-dataset.interface';
 import HourAveragePower from '@shared/interfaces/hour-average-power.interface';
 import WeekdayAveragePower from '@shared/interfaces/weekday-average-power.interface';
 import BaseLayout from './BaseLayout.vue';
 import BaseSidebar from './BaseSidebar.vue';
-import BaseLineChart, { Dataset } from './BaseLineChart.vue';
+import BaseLineChart from './BaseLineChart.vue';
 import MeterDataService from '@/services/meter-data.service';
 import { parseDateInISOFormat } from '@/utils/date-utils';
 
@@ -17,7 +18,7 @@ interface TimeSeries {
 
 interface Chart {
   labels: string[];
-  dataSets: Dataset[];
+  dataSets: ChartDataset[];
 }
 
 const { t } = useI18n();

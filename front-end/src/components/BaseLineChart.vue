@@ -1,20 +1,14 @@
 <script setup lang="ts">
-export interface Dataset {
-  label: string;
-  data: number[];
-  backgroundColor: string;
-  borderColor: string;
-}
-
 import { computed, ref } from 'vue';
 import { LineChart } from 'vue-chart-3';
 import { Chart, ChartData, ChartOptions, registerables } from 'chart.js';
+import ChartDataset from '@/interfaces/chart-dataset.interface';
 
 Chart.register(...registerables);
 
 interface Properties {
   labels: string[];
-  datasets: Dataset[];
+  datasets: ChartDataset[];
   title?: string;
 }
 

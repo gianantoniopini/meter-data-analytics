@@ -8,7 +8,7 @@ import BaseLayout from './BaseLayout.vue';
 import BaseSidebar from './BaseSidebar.vue';
 
 const store = useStore();
-const { locale } = useI18n();
+const { locale, t } = useI18n();
 
 const selectedLanguageModel = computed({
   get() {
@@ -33,7 +33,7 @@ const onSubmit = () => {
         :menu-items="[
           {
             href: '#language',
-            title: $t('settings.language.label'),
+            title: t('settings.language.label'),
             biClass: 'bi-translate'
           },
           {
@@ -55,7 +55,7 @@ const onSubmit = () => {
           <form class="row form" @submit.prevent="onSubmit">
             <div class="form-group col-12 col-md-4">
               <label for="languageSelector" class="form-label"
-                >{{ $t('settings.language.label') }}:</label
+                >{{ t('settings.language.label') }}:</label
               >
               <select
                 id="languageSelector"
@@ -68,7 +68,7 @@ const onSubmit = () => {
                   :key="language"
                   :value="language"
                 >
-                  {{ $t(`settings.language.options.${language}`) }}
+                  {{ t(`settings.language.options.${language}`) }}
                 </option>
               </select>
             </div>

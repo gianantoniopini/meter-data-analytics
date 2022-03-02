@@ -211,22 +211,22 @@ onMounted(() => {
         :menu-items="[
           {
             href: '#filters',
-            title: $t('meterData.filters.title'),
+            title: t('meterData.filters.title'),
             biClass: 'bi-filter'
           },
           {
             href: '#timeSeries',
-            title: $t('meterData.timeSeries.title'),
+            title: t('meterData.timeSeries.title'),
             biClass: 'bi-graph-up'
           },
           {
             href: '#analytics',
-            title: $t('meterData.analytics.title'),
+            title: t('meterData.analytics.title'),
             biClass: 'bi-heart'
           },
           {
             href: '#rawData',
-            title: $t('meterData.rawData.title'),
+            title: t('meterData.rawData.title'),
             biClass: 'bi-table'
           }
         ]"
@@ -236,20 +236,20 @@ onMounted(() => {
     <template #default>
       <div class="row">
         <div class="col-12">
-          <h4>{{ $t('meterData.title') }}</h4>
+          <h4>{{ t('meterData.title') }}</h4>
           <hr />
         </div>
         <div id="filters" class="col-12">
-          <h5>{{ $t('meterData.filters.title') }}</h5>
+          <h5>{{ t('meterData.filters.title') }}</h5>
           <form class="row form" @submit.prevent="onSubmit">
             <div class="form-group col-lg-4">
               <label for="smartMeterIdFilter" class="form-label"
-                >{{ $t('meterData.filters.smartMeterId.label') }}:</label
+                >{{ t('meterData.filters.smartMeterId.label') }}:</label
               >
               <input
                 id="smartMeterIdFilter"
                 v-model="smartMeterIdFilter"
-                :placeholder="$t('meterData.filters.smartMeterId.placeholder')"
+                :placeholder="t('meterData.filters.smartMeterId.placeholder')"
                 type="text"
                 class="form-control"
                 aria-describedby="smartMeterIdFilterInvalidFeedback"
@@ -267,7 +267,7 @@ onMounted(() => {
             </div>
             <div class="form-group col-lg-4">
               <label for="timestampFromFilter" class="form-label"
-                >{{ $t('meterData.filters.timestampFrom.label') }}:</label
+                >{{ t('meterData.filters.timestampFrom.label') }}:</label
               >
               <input
                 id="timestampFromFilter"
@@ -278,7 +278,7 @@ onMounted(() => {
             </div>
             <div class="form-group col-lg-4">
               <label for="timestampToFilter" class="form-label"
-                >{{ $t('meterData.filters.timestampTo.label') }}:</label
+                >{{ t('meterData.filters.timestampTo.label') }}:</label
               >
               <input
                 id="timestampToFilter"
@@ -294,52 +294,50 @@ onMounted(() => {
                 class="btn btn-primary"
                 @click="applyFilters"
               >
-                {{ $t('meterData.filters.apply') }}
+                {{ t('meterData.filters.apply') }}
               </button>
             </div>
           </form>
           <hr />
         </div>
         <div id="timeSeries" class="col-12">
-          <h5>{{ $t('meterData.timeSeries.title') }}</h5>
+          <h5>{{ t('meterData.timeSeries.title') }}</h5>
           <BaseLineChart
             :labels="timeSeriesChart.labels"
             :datasets="timeSeriesChart.dataSets"
-            :title="$t('meterData.timeSeries.chart.title')"
+            :title="t('meterData.timeSeries.chart.title')"
           />
           <hr />
         </div>
         <div id="analytics" class="col-12">
-          <h5>{{ $t('meterData.analytics.title') }}</h5>
+          <h5>{{ t('meterData.analytics.title') }}</h5>
           <BaseLineChart
             class="mb-3"
             :labels="averagePowerByWeekdayChart.labels"
             :datasets="averagePowerByWeekdayChart.dataSets"
-            :title="
-              $t('meterData.analytics.charts.averagePowerByWeekday.title')
-            "
+            :title="t('meterData.analytics.charts.averagePowerByWeekday.title')"
           />
           <BaseLineChart
             :labels="averagePowerByHourChart.labels"
             :datasets="averagePowerByHourChart.dataSets"
-            :title="$t('meterData.analytics.charts.averagePowerByHour.title')"
+            :title="t('meterData.analytics.charts.averagePowerByHour.title')"
           />
           <hr />
         </div>
         <div id="rawData" class="col-12">
           <h5>
-            {{ $t('meterData.rawData.title') }} - {{ timeSeries.values.length }}
-            {{ $t('meterData.rawData.powerMeasurements') }}
+            {{ t('meterData.rawData.title') }} - {{ timeSeries.values.length }}
+            {{ t('meterData.rawData.powerMeasurements') }}
           </h5>
           <div class="row border border-dark bg-light fw-bold">
             <div class="col-lg-5 border border-dark text-lg-start">
-              {{ $t('meterData.rawData.smartMeterId') }}
+              {{ t('meterData.rawData.smartMeterId') }}
             </div>
             <div class="col-lg-4 border border-dark text-lg-end">
-              {{ $t('meterData.rawData.timestamp') }}
+              {{ t('meterData.rawData.timestamp') }}
             </div>
             <div class="col-lg-3 border border-dark text-lg-end">
-              {{ $t('meterData.rawData.instantaneousPower') }}
+              {{ t('meterData.rawData.instantaneousPower') }}
             </div>
           </div>
           <div

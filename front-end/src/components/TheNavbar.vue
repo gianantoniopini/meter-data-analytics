@@ -1,3 +1,9 @@
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
+</script>
+
 <template>
   <nav class="navbar navbar-expand-sm navbar-light bg-light">
     <div class="container-fluid">
@@ -25,13 +31,13 @@
       <div id="navbarNav" class="collapse navbar-collapse">
         <div class="navbar-nav text-center fw-bold mr-auto">
           <router-link :to="{ name: 'home' }" class="nav-link">{{
-            $t('home.title')
+            t('home.title')
           }}</router-link>
           <router-link :to="{ name: 'meterData' }" class="nav-link"
             >Meter Data</router-link
           >
           <router-link :to="{ name: 'settings' }" class="nav-link">{{
-            $t('settings.title')
+            t('settings.title')
           }}</router-link>
         </div>
       </div>

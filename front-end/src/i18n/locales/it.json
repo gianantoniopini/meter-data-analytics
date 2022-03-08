@@ -17,58 +17,58 @@
   "meterData": {
     "title": "Meter Data",
     "filters": {
-      "title": "Filters",
+      "title": "Filtri",
       "smartMeterId": {
-        "label": "Smart Meter Id",
-        "placeholder": "Enter @:meterData.filters.smartMeterId.label",
+        "label": "Id del Contatore Intelligente",
+        "placeholder": "Inserisci l'@:meterData.filters.smartMeterId.label",
         "validationErrors": {
-          "required": "@:meterData.filters.smartMeterId.label filter is required"
+          "required": "Il filtro @:meterData.filters.smartMeterId.label è necessario"
         }
       },
       "timestampFrom": {
-        "label": "Timestamp From"
+        "label": "Data e Ora Da"
       },
       "timestampTo": {
-        "label": "Timestamp To"
+        "label": "Data e Ora A"
       },
-      "apply": "Apply"
+      "apply": "Applica"
     },
     "timeSeries": {
-      "title": "Time Series",
+      "title": "Serie Temporale",
       "chart": {
-        "title": "Instantaneous Power",
+        "title": "Potenza Istantanea",
         "dataSet": {
-          "label": "Instantaneous Power (W)"
+          "label": "Potenza Istantanea (W)"
         }
       }
     },
     "analytics": {
-      "title": "Analytics",
+      "title": "Analisi",
       "charts": {
         "averagePowerByWeekday": {
-          "title": "Power by Day of the Week",
+          "title": "Potenza per Giorno della Settimana",
           "dataSet": {
-            "label": "Average Power Value (W)"
+            "label": "Valore Medio della Potenza (W)"
           }
         },
         "averagePowerByHour": {
-          "title": "Power by Hour of the Day",
+          "title": "Potenza per Ora del Giorno",
           "dataSet": {
-            "label": "Average Power Value (W)"
+            "label": "Valore Medio della Potenza (W)"
           }
         }
       }
     },
     "rawData": {
-      "title": "Raw Data",
-      "powerMeasurements": "Power Measurements",
-      "smartMeterId": "Smart Meter Id",
-      "timestamp": "Timestamp",
-      "instantaneousPower": "Instantaneous Power (W)"
+      "title": "Dati Grezzi",
+      "powerMeasurements": "Misurazioni della Potenza",
+      "smartMeterId": "Id del Contatore Intelligente",
+      "timestamp": "Data e Ora",
+      "instantaneousPower": "Potenza Istantanea (W)"
     },
     "toasts": {
-      "loadingData": "Loading data...",
-      "error": "An unexpected error occurred. Please try again."
+      "loadingData": "Caricamento dei dati...",
+      "error": "Si è verificato un errore inaspettato. Si prega di riprovare."
     }
   },
   "shared": {

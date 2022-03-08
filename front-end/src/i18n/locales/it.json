@@ -1,21 +1,11 @@
 {
-  "settings": {
-    "title": "Impostazioni",
-    "language": {
-      "label": "Lingua",
-      "options": {
-        "en-gb": "Inglese",
-        "it": "Italiano"
-      }
-    }
-  },
   "home": {
     "title": "Home",
     "welcomeMessage": "Benvenuto nell'applicazione Meter Data Analytics.",
     "appDescription": "Applicazione di analisi dei dati di contatori intelligenti costruita con lo stack MEVN (MongoDB, Express, Vue, Node.js)."
   },
   "meterData": {
-    "title": "Meter Data",
+    "title": "Dati dei Contatori",
     "filters": {
       "title": "Filtri",
       "smartMeterId": {
@@ -69,6 +59,20 @@
     "toasts": {
       "loadingData": "Caricamento dei dati...",
       "error": "Si è verificato un errore inaspettato. Si prega di riprovare."
+    }
+  },
+  "settings": {
+    "title": "Impostazioni",
+    "language": {
+      "label": "Lingua",
+      "placeholder": "Seleziona per favore",
+      "options": {
+        "en-gb": "Inglese",
+        "it": "Italiano"
+      }
+    },
+    "import": {
+      "title": "Importazione"
     }
   },
   "shared": {

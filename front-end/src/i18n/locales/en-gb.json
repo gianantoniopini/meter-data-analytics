@@ -1,14 +1,4 @@
 {
-  "settings": {
-    "title": "Settings",
-    "language": {
-      "label": "Language",
-      "options": {
-        "en-gb": "English",
-        "it": "Italian"
-      }
-    }
-  },
   "home": {
     "title": "Home",
     "welcomeMessage": "Welcome to the Meter Data Analytics app.",
@@ -69,6 +59,20 @@
     "toasts": {
       "loadingData": "Loading data...",
       "error": "An unexpected error occurred. Please try again."
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "language": {
+      "label": "Language",
+      "placeholder": "Please select",
+      "options": {
+        "en-gb": "English",
+        "it": "Italian"
+      }
+    },
+    "import": {
+      "title": "Import"
     }
   },
   "shared": {

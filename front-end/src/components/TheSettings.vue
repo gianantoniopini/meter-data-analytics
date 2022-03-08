@@ -38,7 +38,7 @@ const onSubmit = () => {
           },
           {
             href: '#import',
-            title: 'Import',
+            title: t('settings.import.title'),
             biClass: 'bi-plus'
           }
         ]"
@@ -48,7 +48,7 @@ const onSubmit = () => {
     <template #default>
       <div class="row">
         <div class="col-12">
-          <h4>Settings</h4>
+          <h4>{{ t('settings.title') }}</h4>
           <hr />
         </div>
         <div id="language" class="col-12">
@@ -61,7 +61,7 @@ const onSubmit = () => {
                 id="languageSelector"
                 v-model="selectedLanguageModel"
                 class="form-select"
-                placeholder="Please Select"
+                :placeholder="t('settings.language.placeholder')"
               >
                 <option
                   v-for="language in Locales"
@@ -76,7 +76,7 @@ const onSubmit = () => {
           <hr />
         </div>
         <div id="import" class="col-12">
-          <h5>Import</h5>
+          <h5>{{ t('settings.import.title') }}</h5>
           <div>TODO</div>
         </div>
       </div>

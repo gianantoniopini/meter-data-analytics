@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/vue';
 import AxiosMockAdapter from 'axios-mock-adapter';
-import axiosInstance from '@/http-common';
+import axiosInstance from '@/utils/http-utils';
 import Measurement from '@shared/interfaces/measurement.interface';
 import { parseDateInISOFormat } from '@/utils/date-utils';
 import {

@@ -1,4 +1,4 @@
-import axiosInstance from '@/http-common';
+import axiosInstance from '@/utils/http-utils';
 import Measurement from '@shared/interfaces/measurement.interface';
 import HourAveragePower from '@shared/interfaces/hour-average-power.interface';
 import InstantaneousPowerMeasurement from '@/interfaces/instantaneous-power-measurement.interface';

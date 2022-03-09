@@ -11,7 +11,11 @@ import {
 } from './helpers/MeterData.Helper';
 import MeterData from '../MeterData.vue';
 import { setupI18n } from '@/i18n';
-import { datetimeFormats, defaultLocale } from '@/i18n/config/index';
+import {
+  datetimeFormats,
+  numberFormats,
+  defaultLocale
+} from '@/i18n/config/index';
 
 const axiosMockAdapter = new AxiosMockAdapter(axiosInstance, {
   delayResponse: 500
@@ -184,8 +188,9 @@ describe('clicking the filters Apply button', () => {
       const timestampTableCell = await screen.findByText(expectedTimestampText);
       expect(timestampTableCell).toBeInTheDocument();
 
-      const expectedInstantaneousPowerText =
-        measurement['0100100700FF'].toFixed(2);
+      const expectedInstantaneousPowerText = measurement[
+        '0100100700FF'
+      ].toLocaleString(defaultLocale, numberFormats[defaultLocale].decimal);
       const instantaneousPowerTableCell = await screen.findByText(
         expectedInstantaneousPowerText
       );

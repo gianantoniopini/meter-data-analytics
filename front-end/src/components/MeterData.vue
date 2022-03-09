@@ -21,7 +21,7 @@ interface Chart {
   dataSets: ChartDataset[];
 }
 
-const { d, t } = useI18n();
+const { d, n, t } = useI18n();
 
 const loading = ref(false);
 const smartMeterIdFilter = ref(
@@ -89,9 +89,7 @@ const retrieveInstantaneousPowerMeasurements = async (
 };
 
 const refreshChartsData = () => {
-  timeSeriesChart.labels = timeSeries.values.map((m) =>
-    formatDate(m.timestamp)
-  );
+  timeSeriesChart.labels = timeSeries.values.map((m) => d(m.timestamp, 'long'));
   timeSeriesChart.dataSets = [
     {
       label: t('meterData.timeSeries.chart.dataSet.label'),
@@ -153,14 +151,6 @@ const applyFilters = async (): Promise<void> => {
     timestampFromDate ? timestampFromDate.toISOString() : undefined,
     timestampToDate ? timestampToDate.toISOString() : undefined
   );
-};
-
-const formatDate = (value: Date) => {
-  return d(value, 'long');
-};
-
-const formatNumber = (value: number) => {
-  return value.toFixed(2);
 };
 
 const getIsoWeekdayAsString = (isoWeekday: number): string => {
@@ -351,10 +341,10 @@ onMounted(() => {
               {{ measurement.muid }}
             </div>
             <div class="col-lg-4 border text-lg-end">
-              {{ formatDate(measurement.timestamp) }}
+              {{ d(measurement.timestamp, 'long') }}
             </div>
             <div class="col-lg-3 border text-lg-end">
-              {{ formatNumber(measurement.valueInWatts) }}
+              {{ n(measurement.valueInWatts, 'decimal') }}
             </div>
           </div>
         </div>

@@ -11,6 +11,7 @@ import {
 } from './helpers/MeterData.Helper';
 import MeterData from '../MeterData.vue';
 import { setupI18n } from '@/i18n';
+import { datetimeFormats, defaultLocale } from '@/i18n/config/index';
 
 const axiosMockAdapter = new AxiosMockAdapter(axiosInstance, {
   delayResponse: 500
@@ -176,7 +177,10 @@ describe('clicking the filters Apply button', () => {
 
     expect(measurements).toHaveLength(measurementsCount);
     for (const measurement of measurements) {
-      const expectedTimestampText = measurement.timestamp.toUTCString();
+      const expectedTimestampText = measurement.timestamp.toLocaleString(
+        defaultLocale,
+        datetimeFormats[defaultLocale].long
+      );
       const timestampTableCell = await screen.findByText(expectedTimestampText);
       expect(timestampTableCell).toBeInTheDocument();
 

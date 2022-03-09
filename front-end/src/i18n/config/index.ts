@@ -1,11 +1,18 @@
 import { Locales } from './locales';
 
-import enGb from '../locales/en-gb.json';
-import it from '../locales/it.json';
+import enGbMessages from '../locales/en-gb.json';
+import itMessages from '../locales/it.json';
+import enGbDatetimeFormat from '../locales/datetime-formats/en-gb';
+import itDatetimeFormat from '../locales/datetime-formats/it';
 
 export const messages = {
-  [Locales.enGb]: enGb,
-  [Locales.it]: it
+  [Locales.enGb]: enGbMessages,
+  [Locales.it]: itMessages
+};
+
+export const datetimeFormats = {
+  [Locales.enGb]: enGbDatetimeFormat,
+  [Locales.it]: itDatetimeFormat
 };
 
 export const defaultLocale = Locales.enGb;

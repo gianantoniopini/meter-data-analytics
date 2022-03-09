@@ -1,5 +1,5 @@
 import { createI18n, I18n } from 'vue-i18n';
-import { messages, defaultLocale } from './config/index';
+import { messages, datetimeFormats, defaultLocale } from './config/index';
 import { Locales } from './config/locales';
 
 const setHtmlLang = (value: Locales): void => {
@@ -14,6 +14,7 @@ const setupI18n = (): I18n => {
 
   const i18n = createI18n<[MessageSchema], Locales>({
     messages,
+    datetimeFormats,
     locale: defaultLocale,
     fallbackLocale: defaultLocale
   });

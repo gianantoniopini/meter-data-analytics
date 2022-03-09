@@ -21,7 +21,7 @@ interface Chart {
   dataSets: ChartDataset[];
 }
 
-const { t } = useI18n();
+const { d, t } = useI18n();
 
 const loading = ref(false);
 const smartMeterIdFilter = ref(
@@ -156,7 +156,7 @@ const applyFilters = async (): Promise<void> => {
 };
 
 const formatDate = (value: Date) => {
-  return new Date(value).toUTCString();
+  return d(value, 'long');
 };
 
 const formatNumber = (value: number) => {

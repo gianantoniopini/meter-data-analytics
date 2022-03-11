@@ -29,6 +29,7 @@ const smartMeterIdFilter = ref(
 );
 const timestampFromFilter: Ref<string | undefined> = ref();
 const timestampToFilter: Ref<string | undefined> = ref();
+const datePickerFormat = 'yyyy-MM-dd';
 const timeSeries: Series<InstantaneousPowerMeasurement> = reactive({
   values: []
 });
@@ -245,25 +246,31 @@ onMounted(() => {
               </div>
             </div>
             <div class="form-group col-lg-4">
-              <label for="timestampFromFilter" class="form-label"
+              <label id="timestampFromFilterLabel" class="form-label"
                 >{{ t('meterData.filters.timestampFrom.label') }}:</label
               >
-              <input
+              <DatePicker
                 id="timestampFromFilter"
                 v-model="timestampFromFilter"
-                class="form-control"
-                type="date"
+                aria-labelledby="timestampFromFilterLabel"
+                text-input
+                utc
+                :locale="locale"
+                :format="datePickerFormat"
               />
             </div>
             <div class="form-group col-lg-4">
-              <label for="timestampToFilter" class="form-label"
+              <label id="timestampToFilterLabel" class="form-label"
                 >{{ t('meterData.filters.timestampTo.label') }}:</label
               >
-              <input
+              <DatePicker
                 id="timestampToFilter"
                 v-model="timestampToFilter"
-                class="form-control"
-                type="date"
+                aria-labelledby="timestampToFilterLabel"
+                text-input
+                utc
+                :locale="locale"
+                :format="datePickerFormat"
               />
             </div>
             <div class="col-12 pt-2">

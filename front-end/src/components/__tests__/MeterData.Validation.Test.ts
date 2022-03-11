@@ -1,16 +1,11 @@
-import { fireEvent, render, screen } from '@testing-library/vue';
-import MeterData from '../MeterData.vue';
-import { setupI18n } from '@/i18n';
+import { fireEvent, screen } from '@testing-library/vue';
+import { renderComponent } from './helpers/MeterData.Helper';
 
 const setup = (): {
   smartMeterIdFilter: HTMLElement;
   applyButton: HTMLElement;
 } => {
-  render(MeterData, {
-    global: {
-      plugins: [setupI18n()]
-    }
-  });
+  renderComponent();
 
   const smartMeterIdFilter = screen.getByRole('textbox', {
     name: 'Smart Meter Id:'

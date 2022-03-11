@@ -1,9 +1,13 @@
-import { screen, waitFor } from '@testing-library/vue';
+import { render, screen, waitFor } from '@testing-library/vue';
+import userEvent from '@testing-library/user-event';
+import DatePicker from 'vue3-date-time-picker';
 import AxiosMockAdapter from 'axios-mock-adapter';
 import { StatusCodes } from 'http-status-codes';
 import Measurement from '@shared/interfaces/measurement.interface';
 import WeekdayAveragePower from '@shared/interfaces/weekday-average-power.interface';
 import HourAveragePower from '@shared/interfaces/hour-average-power.interface';
+import MeterData from '@/components/MeterData.vue';
+import { setupI18n } from '@/i18n';
 
 const loadingMessage = 'Loading data...';
 
@@ -100,6 +104,18 @@ export const mockGetInstantaneousPowerMeasurementsRequest = (
       }
     }
   });
+};
+
+export const renderComponent = () => {
+  const user = userEvent.setup();
+  render(MeterData, {
+    global: {
+      plugins: [setupI18n()],
+      components: { DatePicker }
+    }
+  });
+
+  return user;
 };
 
 export const waitForLoadingMessageToAppear = async (): Promise<HTMLElement> => {

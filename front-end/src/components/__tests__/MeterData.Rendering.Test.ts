@@ -1,13 +1,8 @@
-import { render, screen, queryAllByRole } from '@testing-library/vue';
-import MeterData from '../MeterData.vue';
-import { setupI18n } from '@/i18n';
+import { screen, queryAllByRole } from '@testing-library/vue';
+import { renderComponent } from './helpers/MeterData.Helper';
 
 const setup = (): void => {
-  render(MeterData, {
-    global: {
-      plugins: [setupI18n()]
-    }
-  });
+  renderComponent();
 };
 
 it('renders Sidebar menu', () => {

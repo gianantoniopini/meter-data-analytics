@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/vue';
+import DatePicker from 'vue3-date-time-picker';
 import App from '../App.vue';
 import store from '@/store';
 import { setupI18n } from '@/i18n';
@@ -7,7 +8,8 @@ import router from '@/router';
 const setup = async () => {
   render(App, {
     global: {
-      plugins: [store, setupI18n(), router]
+      plugins: [store, setupI18n(), router],
+      components: { DatePicker }
     }
   });
 
@@ -23,8 +25,8 @@ it('can navigate to Meter Data', async () => {
   fireEvent.click(meterDataLink);
 
   expect(
-    await screen.findByRole('textbox', {
-      name: 'Smart Meter Id:'
+    await screen.findByRole('heading', {
+      name: 'Meter Data'
     })
   ).toBeInTheDocument();
 });
@@ -37,7 +39,11 @@ it('can navigate to Settings', async () => {
 
   fireEvent.click(settingsLink);
 
-  expect(await screen.findByLabelText('Language:')).toBeInTheDocument();
+  expect(
+    await screen.findByRole('heading', {
+      name: 'Settings'
+    })
+  ).toBeInTheDocument();
 });
 
 it('can navigate back to Home after navigating to Settings', async () => {
@@ -46,7 +52,9 @@ it('can navigate back to Home after navigating to Settings', async () => {
     name: 'Settings'
   });
   fireEvent.click(settingsLink);
-  await screen.findByLabelText('Language:');
+  await screen.findByRole('heading', {
+    name: 'Settings'
+  });
   const homeLink = screen.getByRole('link', {
     name: 'Home'
   });

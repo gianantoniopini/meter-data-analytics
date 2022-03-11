@@ -10,7 +10,7 @@ import BaseLayout from './BaseLayout.vue';
 import BaseSidebar from './BaseSidebar.vue';
 import BaseLineChart from './BaseLineChart.vue';
 import MeterDataService from '@/services/meter-data.service';
-import { parseDateInISOFormat } from '@/utils/date-utils';
+import { getWeekdayName, parseDateInISOFormat } from '@/utils/date-utils';
 
 interface Series<T> {
   values: T[];
@@ -21,7 +21,7 @@ interface Chart {
   dataSets: ChartDataset[];
 }
 
-const { d, n, t } = useI18n();
+const { d, n, t, locale } = useI18n();
 
 const loading = ref(false);
 const smartMeterIdFilter = ref(
@@ -100,7 +100,7 @@ const refreshChartsData = () => {
   ];
 
   averagePowerByWeekdayChart.labels = averagePowerByWeekday.values.map((apbw) =>
-    getIsoWeekdayAsString(apbw.isoWeekday)
+    getWeekdayName(locale.value, apbw.isoWeekday)
   );
   averagePowerByWeekdayChart.dataSets = [
     {
@@ -151,19 +151,6 @@ const applyFilters = async (): Promise<void> => {
     timestampFromDate ? timestampFromDate.toISOString() : undefined,
     timestampToDate ? timestampToDate.toISOString() : undefined
   );
-};
-
-const getIsoWeekdayAsString = (isoWeekday: number): string => {
-  const isoWeekdays = Array.from({ length: 7 }) as string[];
-  isoWeekdays[0] = t('shared.weekdays.monday');
-  isoWeekdays[1] = t('shared.weekdays.tuesday');
-  isoWeekdays[2] = t('shared.weekdays.wednesday');
-  isoWeekdays[3] = t('shared.weekdays.thursday');
-  isoWeekdays[4] = t('shared.weekdays.friday');
-  isoWeekdays[5] = t('shared.weekdays.saturday');
-  isoWeekdays[6] = t('shared.weekdays.sunday');
-
-  return isoWeekdays[isoWeekday - 1];
 };
 
 const onError = (error: unknown) => {

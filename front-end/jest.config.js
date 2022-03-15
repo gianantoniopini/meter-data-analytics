@@ -6,12 +6,12 @@ module.exports = {
     './src/**',
     '!**/assets/**',
     '!**/__tests__/**',
-    '!**/i18n/locales/**'
+    '!**/i18n/locales/messages/**'
   ],
   coverageDirectory: 'coverage',
   coverageThreshold: {
     global: {
-      lines: 89
+      lines: 90
     }
   },
   moduleNameMapper: {

@@ -2,7 +2,6 @@ import { fireEvent, screen } from '@testing-library/vue';
 import AxiosMockAdapter from 'axios-mock-adapter';
 import axiosInstance from '@/utils/http-utils';
 import Measurement from '@shared/interfaces/measurement.interface';
-import { parseDateInISOFormat } from '@/utils/date-utils';
 import {
   createMeasurements,
   mockGetInstantaneousPowerMeasurementsRequest,
@@ -20,6 +19,16 @@ const axiosMockAdapter = new AxiosMockAdapter(axiosInstance, {
   delayResponse: 500
 });
 
+const parseDateInISOFormat = (
+  dateInISOFormat: string
+): { year: number; month: number; date: number } => {
+  return {
+    year: Number.parseInt(dateInISOFormat.slice(0, 4), 10),
+    month: Number.parseInt(dateInISOFormat.slice(5, 7), 10) - 1,
+    date: Number.parseInt(dateInISOFormat.slice(8, 10), 10)
+  };
+};
+
 const setup = async (
   smartMeterId: string,
   timestampFrom: string | undefined,
@@ -27,7 +36,7 @@ const setup = async (
   measurementsCount: number,
   apiRequestNetworkError?: boolean
 ): Promise<{ measurements: Measurement[]; applyButton: HTMLElement }> => {
-  const userEvent = renderComponent();
+  renderComponent();
 
   const smartMeterIdFilter = screen.getByRole('textbox', {
     name: 'Smart Meter Id:'
@@ -37,7 +46,7 @@ const setup = async (
   let timestampFromDate: Date | undefined;
   if (timestampFrom) {
     const timestampFromFilter = screen.getByLabelText('Timestamp From:');
-    userEvent.type(timestampFromFilter, timestampFrom);
+    fireEvent.update(timestampFromFilter, timestampFrom);
 
     const { year, month, date } = parseDateInISOFormat(timestampFrom);
     timestampFromDate = new Date(Date.UTC(year, month, date, 0, 0, 0));
@@ -46,7 +55,7 @@ const setup = async (
   let timestampToDate: Date | undefined;
   if (timestampTo) {
     const timestampToFilter = screen.getByLabelText('Timestamp To:');
-    userEvent.type(timestampToFilter, timestampTo);
+    fireEvent.update(timestampToFilter, timestampTo);
 
     const { year, month, date } = parseDateInISOFormat(timestampTo);
     timestampToDate = new Date(Date.UTC(year, month, date, 23, 59, 59));
@@ -127,8 +136,7 @@ describe('clicking the filters Apply button', () => {
     expect(applyButton).toBeEnabled();
   });
 
-  // eslint-disable-next-line jest/no-disabled-tests
-  it.skip('makes api request with expected parameters', async () => {
+  it('makes api request with expected parameters', async () => {
     const timestampFrom = '2022-02-10';
     const timestampTo = '2022-05-10';
     const { applyButton } = await setup(

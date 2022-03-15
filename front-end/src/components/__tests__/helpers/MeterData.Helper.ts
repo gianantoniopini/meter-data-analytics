@@ -1,6 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/vue';
-import userEvent from '@testing-library/user-event';
-import DatePicker from 'vue3-date-time-picker';
+import VCalendar from 'v-calendar';
 import AxiosMockAdapter from 'axios-mock-adapter';
 import { StatusCodes } from 'http-status-codes';
 import Measurement from '@shared/interfaces/measurement.interface';
@@ -107,15 +106,11 @@ export const mockGetInstantaneousPowerMeasurementsRequest = (
 };
 
 export const renderComponent = () => {
-  const user = userEvent.setup();
   render(MeterData, {
     global: {
-      plugins: [setupI18n()],
-      components: { DatePicker }
+      plugins: [setupI18n(), VCalendar]
     }
   });
-
-  return user;
 };
 
 export const waitForLoadingMessageToAppear = async (): Promise<HTMLElement> => {

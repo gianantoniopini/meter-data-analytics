@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/vue';
-import DatePicker from 'vue3-date-time-picker';
+import VCalendar from 'v-calendar';
 import App from '../App.vue';
 import store from '@/store';
 import { setupI18n } from '@/i18n';
@@ -8,8 +8,7 @@ import router from '@/router';
 const setup = async () => {
   render(App, {
     global: {
-      plugins: [store, setupI18n(), router],
-      components: { DatePicker }
+      plugins: [store, setupI18n(), router, VCalendar]
     }
   });
 

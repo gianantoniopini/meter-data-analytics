@@ -10,7 +10,7 @@ import BaseLayout from './BaseLayout.vue';
 import BaseSidebar from './BaseSidebar.vue';
 import BaseLineChart from './BaseLineChart.vue';
 import MeterDataService from '@/services/meter-data.service';
-import { getWeekdayName, parseDateInISOFormat } from '@/utils/date-utils';
+import { getWeekdayName } from '@/utils/date-utils';
 
 interface Series<T> {
   values: T[];
@@ -27,9 +27,9 @@ const loading = ref(false);
 const smartMeterIdFilter = ref(
   process.env.VUE_APP_DEFAULT_SMART_METER_ID as string
 );
-const timestampFromFilter: Ref<string | undefined> = ref();
-const timestampToFilter: Ref<string | undefined> = ref();
-const datePickerFormat = 'yyyy-MM-dd';
+const datePickerMasksInput = 'YYYY-MM-DD';
+const timestampFromFilter: Ref<Date | undefined> = ref();
+const timestampToFilter: Ref<Date | undefined> = ref();
 const timeSeries: Series<InstantaneousPowerMeasurement> = reactive({
   values: []
 });
@@ -135,16 +135,30 @@ const applyFilters = async (): Promise<void> => {
 
   let timestampFromDate: Date | undefined;
   if (timestampFromFilter.value) {
-    const { year, month, date } = parseDateInISOFormat(
-      timestampFromFilter.value
+    timestampFromDate = new Date(
+      Date.UTC(
+        timestampFromFilter.value.getFullYear(),
+        timestampFromFilter.value.getMonth(),
+        timestampFromFilter.value.getDate(),
+        0,
+        0,
+        0
+      )
     );
-    timestampFromDate = new Date(Date.UTC(year, month, date, 0, 0, 0));
   }
 
   let timestampToDate: Date | undefined;
   if (timestampToFilter.value) {
-    const { year, month, date } = parseDateInISOFormat(timestampToFilter.value);
-    timestampToDate = new Date(Date.UTC(year, month, date, 23, 59, 59));
+    timestampToDate = new Date(
+      Date.UTC(
+        timestampToFilter.value.getFullYear(),
+        timestampToFilter.value.getMonth(),
+        timestampToFilter.value.getDate(),
+        23,
+        59,
+        59
+      )
+    );
   }
 
   await retrieveInstantaneousPowerMeasurements(
@@ -246,32 +260,46 @@ onMounted(() => {
               </div>
             </div>
             <div class="form-group col-lg-4">
-              <label id="timestampFromFilterLabel" class="form-label"
+              <label for="timestampFromFilter" class="form-label"
                 >{{ t('meterData.filters.timestampFrom.label') }}:</label
               >
-              <DatePicker
-                id="timestampFromFilter"
+              <v-date-picker
                 v-model="timestampFromFilter"
-                aria-labelledby="timestampFromFilterLabel"
-                text-input
-                utc
+                mode="date"
+                :masks="{ input: datePickerMasksInput }"
                 :locale="locale"
-                :format="datePickerFormat"
-              />
+                :input-debounce="0"
+              >
+                <template #default="{ inputValue, inputEvents }">
+                  <input
+                    id="timestampFromFilter"
+                    class="form-control"
+                    :value="inputValue"
+                    v-on="inputEvents"
+                  />
+                </template>
+              </v-date-picker>
             </div>
             <div class="form-group col-lg-4">
-              <label id="timestampToFilterLabel" class="form-label"
+              <label for="timestampToFilter" class="form-label"
                 >{{ t('meterData.filters.timestampTo.label') }}:</label
               >
-              <DatePicker
-                id="timestampToFilter"
+              <v-date-picker
                 v-model="timestampToFilter"
-                aria-labelledby="timestampToFilterLabel"
-                text-input
-                utc
+                mode="date"
+                :masks="{ input: datePickerMasksInput }"
                 :locale="locale"
-                :format="datePickerFormat"
-              />
+                :input-debounce="0"
+              >
+                <template #default="{ inputValue, inputEvents }">
+                  <input
+                    id="timestampToFilter"
+                    class="form-control"
+                    :value="inputValue"
+                    v-on="inputEvents"
+                  />
+                </template>
+              </v-date-picker>
             </div>
             <div class="col-12 pt-2">
               <button

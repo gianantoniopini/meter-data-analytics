@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue';
 import { LineChart } from 'vue-chart-3';
 import { Chart, ChartData, ChartOptions, registerables } from 'chart.js';
+import { useI18n } from 'vue-i18n';
 import ChartDataset from '@/interfaces/chart-dataset.interface';
 
 Chart.register(...registerables);
@@ -11,6 +12,8 @@ interface Properties {
   datasets: ChartDataset[];
   title?: string;
 }
+
+const { locale } = useI18n();
 
 const props = defineProps<Properties>();
 
@@ -25,7 +28,8 @@ const options = ref<ChartOptions<'line'>>({
       text: props.title,
       position: 'top'
     }
-  }
+  },
+  locale: locale.value
 });
 const chartData = computed<ChartData<'line'>>(() => ({
   labels: props.labels,

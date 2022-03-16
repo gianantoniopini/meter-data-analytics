@@ -133,33 +133,31 @@ const applyFilters = async (): Promise<void> => {
     return;
   }
 
-  let timestampFromDate: Date | undefined;
-  if (timestampFromFilter.value) {
-    timestampFromDate = new Date(
-      Date.UTC(
-        timestampFromFilter.value.getFullYear(),
-        timestampFromFilter.value.getMonth(),
-        timestampFromFilter.value.getDate(),
-        0,
-        0,
-        0
+  const timestampFromDate = timestampFromFilter.value
+    ? new Date(
+        Date.UTC(
+          timestampFromFilter.value.getFullYear(),
+          timestampFromFilter.value.getMonth(),
+          timestampFromFilter.value.getDate(),
+          0,
+          0,
+          0
+        )
       )
-    );
-  }
+    : undefined;
 
-  let timestampToDate: Date | undefined;
-  if (timestampToFilter.value) {
-    timestampToDate = new Date(
-      Date.UTC(
-        timestampToFilter.value.getFullYear(),
-        timestampToFilter.value.getMonth(),
-        timestampToFilter.value.getDate(),
-        23,
-        59,
-        59
+  const timestampToDate = timestampToFilter.value
+    ? new Date(
+        Date.UTC(
+          timestampToFilter.value.getFullYear(),
+          timestampToFilter.value.getMonth(),
+          timestampToFilter.value.getDate(),
+          23,
+          59,
+          59
+        )
       )
-    );
-  }
+    : undefined;
 
   await retrieveInstantaneousPowerMeasurements(
     smartMeterIdFilter.value,

@@ -42,7 +42,6 @@ describe('database seeding', () => {
         muid: expectedSmartMeter.muid
       });
       expect(actualSmartMeters).toHaveLength(1);
-      expect(actualSmartMeters[0].muid).toEqual(expectedSmartMeter.muid);
       expect(actualSmartMeters[0].name).toEqual(expectedSmartMeter.name);
     }
   });

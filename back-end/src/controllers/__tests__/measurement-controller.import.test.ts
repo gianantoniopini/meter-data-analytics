@@ -11,7 +11,7 @@ import MeasurementModel, {
 } from '../../models/measurement.model';
 import { ExternalApiMeasurementResponse } from '../../interfaces/external-api-measurement-response.interface';
 import ExternalApiMeasurement from '@shared/interfaces/external-api-measurement.interface';
-import { setupMeasurements } from './helpers/meter-data-controller-helper';
+import { setupMeasurements } from './helpers/measurement-controller-helper';
 
 jest.mock('got');
 

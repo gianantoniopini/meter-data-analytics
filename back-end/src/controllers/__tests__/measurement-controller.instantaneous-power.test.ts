@@ -10,7 +10,7 @@ import HourAveragePower from '@shared/interfaces/hour-average-power.interface';
 import MeasurementModel, {
   powerMeasurement
 } from '../../models/measurement.model';
-import { setupMeasurements } from './helpers/meter-data-controller-helper';
+import { setupMeasurements } from './helpers/measurement-controller-helper';
 
 let mongoServer: MongoMemoryServer;
 let app: Application;

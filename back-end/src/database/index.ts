@@ -1,7 +1,6 @@
-import fs from 'node:fs/promises';
 import { connect, Connection, disconnect } from 'mongoose';
-import SmartMeter from '@shared/interfaces/smart-meter.interface';
 import SmartMeterModel from '../models/smart-meter.model';
+import SmartMeterSeedData from './seed-data/smart-meter.seed-data';
 
 export const openConnection = async (
   connectionString: string
@@ -20,12 +19,7 @@ export const seed = async (): Promise<boolean> => {
     return false;
   }
 
-  const smartMeters: SmartMeter[] = [];
-  const filePath = './data/smart_meters.json';
-  const fileData = await fs.readFile(filePath, { encoding: 'utf8' });
-  smartMeters.push(...JSON.parse(fileData));
-
-  await SmartMeterModel.collection.insertMany(smartMeters);
+  await SmartMeterModel.insertMany(SmartMeterSeedData);
 
   return true;
 };

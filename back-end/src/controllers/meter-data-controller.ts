@@ -113,10 +113,8 @@ export const importMeasurements = async (
 
     let insertedCount = 0;
     if (measurements.length > 0) {
-      const insertResult = await MeasurementModel.collection.insertMany(
-        measurements
-      );
-      insertedCount = insertResult.insertedCount;
+      const insertResult = await MeasurementModel.insertMany(measurements);
+      insertedCount = insertResult.length;
     }
 
     const message = `${deleteResult.deletedCount} measurements deleted - ${insertedCount} measurements inserted`;

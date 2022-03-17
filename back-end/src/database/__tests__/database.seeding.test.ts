@@ -1,8 +1,7 @@
-import fs from 'node:fs/promises';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { openConnection, closeConnection, seed } from '../../database';
-import SmartMeter from '@shared/interfaces/smart-meter.interface';
 import SmartMeterModel from '../../models/smart-meter.model';
+import SmartMeterSeedData from '../seed-data/smart-meter.seed-data';
 
 let mongoServer: MongoMemoryServer;
 
@@ -32,18 +31,13 @@ describe('database seeding', () => {
   });
 
   it('should insert smart meter documents if the collection is empty', async () => {
-    const expectedSmartMeters: SmartMeter[] = [];
-    const filePath = './data/smart_meters.json';
-    const fileData = await fs.readFile(filePath, { encoding: 'utf8' });
-    expectedSmartMeters.push(...JSON.parse(fileData));
-
     const result = await seed();
 
     expect(result).toEqual(true);
     const actualDocumentsCount = await SmartMeterModel.countDocuments();
     expect(actualDocumentsCount).toBeGreaterThan(0);
-    expect(actualDocumentsCount).toEqual(expectedSmartMeters.length);
-    for (const expectedSmartMeter of expectedSmartMeters) {
+    expect(actualDocumentsCount).toEqual(SmartMeterSeedData.length);
+    for (const expectedSmartMeter of SmartMeterSeedData) {
       const actualSmartMeters = await SmartMeterModel.find({
         muid: expectedSmartMeter.muid
       });

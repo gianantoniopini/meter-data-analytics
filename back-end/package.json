@@ -28,9 +28,9 @@
     "express": "^4.18.2",
     "express-rate-limit": "^6.7.0",
     "got": "^11.8.2",
-    "http-status-codes": "^2.1.4",
+    "http-status-codes": "^2.2.0",
     "mongoose": "^7.1.0",
-    "tough-cookie": "^4.0.0",
+    "tough-cookie": "^4.1.2",
     "util": "^0.12.4"
   },
   "devDependencies": {
@@ -39,7 +39,7 @@
     "@types/jest": "^29.5.1",
     "@types/node": "^18.16.3",
     "@types/supertest": "^2.0.11",
-    "@types/tough-cookie": "^4.0.1",
+    "@types/tough-cookie": "^4.0.2",
     "@typescript-eslint/eslint-plugin": "^4.31.0",
     "@typescript-eslint/parser": "^4.31.0",
     "eslint": "^7.32.0",

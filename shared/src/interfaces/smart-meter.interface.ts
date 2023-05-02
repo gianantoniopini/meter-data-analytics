@@ -1,6 +1,5 @@
 export default interface SmartMeter {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  _id: any;
+  _id?: string;
   muid: string;
   name: string;
 }

@@ -74,8 +74,8 @@ describe('GET /meterdata/measurement/instantaneouspower request', () => {
     expect(actualMeasurements).toHaveLength(1);
     const actualMeasurement = actualMeasurements[0];
     expect(actualMeasurement._id).toBeDefined();
-    expect(actualMeasurement._id.toString()).toEqual(
-      expectedMeasurement._id.toString()
+    expect(actualMeasurement._id?.toString()).toEqual(
+      expectedMeasurement._id?.toString()
     );
     expect(actualMeasurement.tags.muid).toEqual(muid);
     expect(actualMeasurement.measurement).toEqual(
@@ -162,8 +162,9 @@ describe('GET /meterdata/measurement/instantaneouspower request', () => {
     const actualFirstMeasurement = actualMeasurements.find(
       (m) => new Date(m.timestamp).getTime() === actualFirstMeasurementTimestamp
     ) as Measurement;
-    expect(actualFirstMeasurement._id.toString()).toEqual(
-      expectedFirstMeasurement._id.toString()
+    expect(actualFirstMeasurement._id).toBeDefined();
+    expect(actualFirstMeasurement._id?.toString()).toEqual(
+      expectedFirstMeasurement._id?.toString()
     );
     expect(new Date(actualFirstMeasurement.timestamp)).toEqual(
       expectedFirstMeasurement.timestamp
@@ -174,8 +175,9 @@ describe('GET /meterdata/measurement/instantaneouspower request', () => {
     const actualLastMeasurement = actualMeasurements.find(
       (m) => new Date(m.timestamp).getTime() === actualLastMeasurementTimestamp
     ) as Measurement;
-    expect(actualLastMeasurement._id.toString()).toEqual(
-      expectedLastMeasurement._id.toString()
+    expect(actualLastMeasurement._id).toBeDefined();
+    expect(actualLastMeasurement._id?.toString()).toEqual(
+      expectedLastMeasurement._id?.toString()
     );
     expect(new Date(actualLastMeasurement.timestamp)).toEqual(
       expectedLastMeasurement.timestamp

@@ -1,4 +1,4 @@
-import { model, Model, Schema } from 'mongoose';
+import { model, Schema } from 'mongoose';
 import Measurement from '@shared/interfaces/measurement.interface';
 
 const MeasurementSchema: Schema = new Schema<Measurement>(
@@ -33,10 +33,7 @@ const MeasurementSchema: Schema = new Schema<Measurement>(
   { collection: 'measurements' }
 );
 
-const MeasurementModel: Model<Measurement> = model(
-  'Measurement',
-  MeasurementSchema
-);
+const MeasurementModel = model<Measurement>('Measurement', MeasurementSchema);
 
 const powerMeasurement = 'power';
 

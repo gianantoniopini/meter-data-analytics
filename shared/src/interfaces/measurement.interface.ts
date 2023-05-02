@@ -1,6 +1,5 @@
 export default interface Measurement {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  _id: any;
+  _id?: string;
   measurement: string;
   timestamp: Date;
   tags: { muid: string };

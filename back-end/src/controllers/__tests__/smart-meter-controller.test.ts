@@ -40,7 +40,7 @@ describe('GET /meterdata/smartmeter request', () => {
     expect(actualSmartMeters).toHaveLength(expectedSmartMeters.length);
     for (const expectedSmartMeter of expectedSmartMeters) {
       const actualSmartMetersFiltered = actualSmartMeters.filter(
-        (sm) => sm._id.toString() === expectedSmartMeter._id.toString()
+        (sm) => sm._id === expectedSmartMeter._id.toString()
       );
       expect(actualSmartMetersFiltered).toHaveLength(1);
       expect(actualSmartMetersFiltered[0].muid).toEqual(

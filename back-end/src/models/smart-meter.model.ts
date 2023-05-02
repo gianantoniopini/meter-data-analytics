@@ -1,4 +1,4 @@
-import { model, Model, Schema } from 'mongoose';
+import { model, Schema } from 'mongoose';
 import SmartMeter from '@shared/interfaces/smart-meter.interface';
 
 const SmartMeterSchema: Schema = new Schema<SmartMeter>(
@@ -15,9 +15,6 @@ const SmartMeterSchema: Schema = new Schema<SmartMeter>(
   { collection: 'smart_meters' }
 );
 
-const SmartMeterModel: Model<SmartMeter> = model(
-  'SmartMeter',
-  SmartMeterSchema
-);
+const SmartMeterModel = model<SmartMeter>('SmartMeter', SmartMeterSchema);
 
 export default SmartMeterModel;

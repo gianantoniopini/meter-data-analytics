@@ -34,6 +34,7 @@ openConnection(process.env.MONGO_URI as string)
         console.error(error);
       });
   })
+  // eslint-disable-next-line unicorn/prefer-top-level-await
   .catch((error) => {
     console.error('could not open connection to MongoDB');
     console.error(error);

@@ -157,8 +157,8 @@ npm run serve:production
 
 [1]: ./back-end
 [2]: ./front-end
-[3]: https://nodejs.org/en/download/current/
-[4]: https://nodejs.org/en/download/current/
+[3]: https://nodejs.org/en/download/
+[4]: https://nodejs.org/en/download/
 [5]: https://www.mongodb.com/try/download/community
 [6]: ./back-end/.env.example
 [7]: ./back-end/measurements.json.example

@@ -13,7 +13,7 @@ const setupI18n = () => {
   type MessageSchema = (typeof messages)[typeof defaultLocale]
 
   const i18n = createI18n<[MessageSchema], Locales>({
-    allowComposition: true,
+    legacy: false,
     messages,
     datetimeFormats,
     numberFormats,

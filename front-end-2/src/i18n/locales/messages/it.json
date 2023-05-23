@@ -1,0 +1,78 @@
+{
+  "home": {
+    "title": "Home",
+    "welcomeMessage": "Benvenuto nell'applicazione Meter Data Analytics.",
+    "appDescription": "Applicazione di analisi dei dati di contatori intelligenti costruita con lo stack MEVN (MongoDB, Express, Vue, Node.js)."
+  },
+  "meterData": {
+    "title": "Dati dei Contatori",
+    "filters": {
+      "title": "Filtri",
+      "smartMeterId": {
+        "label": "Id del Contatore Intelligente",
+        "placeholder": "Inserisci l'@:meterData.filters.smartMeterId.label",
+        "validationErrors": {
+          "required": "Il filtro @:meterData.filters.smartMeterId.label è necessario"
+        }
+      },
+      "timestampFrom": {
+        "label": "Data e Ora Da"
+      },
+      "timestampTo": {
+        "label": "Data e Ora A"
+      },
+      "apply": "Applica"
+    },
+    "timeSeries": {
+      "title": "Serie Temporale",
+      "chart": {
+        "title": "Potenza Istantanea",
+        "dataSet": {
+          "label": "Potenza Istantanea (W)"
+        }
+      }
+    },
+    "analytics": {
+      "title": "Analisi",
+      "charts": {
+        "averagePowerByWeekday": {
+          "title": "Potenza per Giorno della Settimana",
+          "dataSet": {
+            "label": "Valore Medio della Potenza (W)"
+          }
+        },
+        "averagePowerByHour": {
+          "title": "Potenza per Ora del Giorno",
+          "dataSet": {
+            "label": "Valore Medio della Potenza (W)"
+          }
+        }
+      }
+    },
+    "rawData": {
+      "title": "Dati Grezzi",
+      "powerMeasurements": "Misurazioni della Potenza",
+      "smartMeterId": "Id del Contatore Intelligente",
+      "timestamp": "Data e Ora",
+      "instantaneousPower": "Potenza Istantanea (W)"
+    },
+    "toasts": {
+      "loadingData": "Caricamento dei dati...",
+      "error": "Si è verificato un errore inaspettato. Si prega di riprovare."
+    }
+  },
+  "settings": {
+    "title": "Impostazioni",
+    "language": {
+      "label": "Lingua",
+      "placeholder": "Seleziona per favore",
+      "options": {
+        "en-gb": "Inglese",
+        "it": "Italiano"
+      }
+    },
+    "import": {
+      "title": "Importazione"
+    }
+  }
+}

@@ -1,7 +1,7 @@
 import type { RouteRecordRaw } from 'vue-router'
 import { createWebHistory, createRouter } from 'vue-router'
 import TheHome from '@/components/TheHome.vue'
-//import MeterData from '@/components/MeterData.vue'
+import MeterData from '@/components/MeterData.vue'
 import TheSettings from '@/components/TheSettings.vue'
 
 const routes: Array<RouteRecordRaw> = [
@@ -10,13 +10,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'home',
     component: TheHome
   },
-  /*
   {
     path: '/meterdata',
     name: 'meterData',
     component: MeterData
   },
-  */
   {
     path: '/settings',
     name: 'settings',

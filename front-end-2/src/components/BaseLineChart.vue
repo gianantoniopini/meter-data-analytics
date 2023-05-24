@@ -2,8 +2,11 @@
 import { computed, ref } from 'vue'
 import { Line } from 'vue-chartjs'
 import type { ChartData, ChartOptions } from 'chart.js'
+import { Chart as ChartJS, CategoryScale, LinearScale, LineElement, PointElement, Tooltip } from 'chart.js'
 import { useI18n } from 'vue-i18n'
 import type ChartDataset from '@/interfaces/chart-dataset.interface'
+
+ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement, Tooltip)
 
 interface Properties {
   labels: string[];

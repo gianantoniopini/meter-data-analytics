@@ -33,11 +33,9 @@ const { t } = useI18n()
           <router-link :to="{ name: 'home' }" class="nav-link">{{
             t('home.title')
           }}</router-link>
-          <!--
           <router-link :to="{ name: 'meterData' }" class="nav-link">{{
             t('meterData.title')
           }}</router-link>
-          -->
           <router-link :to="{ name: 'settings' }" class="nav-link">{{
             t('settings.title')
           }}</router-link>

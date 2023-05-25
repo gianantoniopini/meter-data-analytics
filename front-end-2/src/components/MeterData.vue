@@ -28,7 +28,7 @@ const loading = ref(false);
 const smartMeterIdFilter = ref(
   import.meta.env.VITE_DEFAULT_SMART_METER_ID as string
 );
-const datePickerMasksInput = 'YYYY-MM-DD';
+const datePickerFormat = 'yyyy-MM-dd';
 const timestampFromFilter: Ref<Date | undefined> = ref();
 const timestampToFilter: Ref<Date | undefined> = ref();
 const timeSeries: Series<InstantaneousPowerMeasurement> = reactive({
@@ -259,46 +259,30 @@ onMounted(() => {
               </div>
             </div>
             <div class="form-group col-lg-4">
-              <label for="timestampFromFilter" class="form-label"
+              <label for="dp-input-timestampFromFilter" class="form-label"
                 >{{ t('meterData.filters.timestampFrom.label') }}:</label
               >
-              <v-date-picker
+              <VueDatePicker 
                 v-model="timestampFromFilter"
-                mode="date"
-                :masks="{ input: datePickerMasksInput }"
+                :enable-time-picker="false"
+                :format="datePickerFormat"
+                input-class-name="form-control"
                 :locale="locale"
-                :input-debounce="0"
-              >
-                <template #default="{ inputValue, inputEvents }">
-                  <input
-                    id="timestampFromFilter"
-                    class="form-control"
-                    :value="inputValue"
-                    v-on="inputEvents"
-                  />
-                </template>
-              </v-date-picker>
+                uid="timestampFromFilter"
+              />
             </div>
             <div class="form-group col-lg-4">
-              <label for="timestampToFilter" class="form-label"
+              <label for="dp-input-timestampToFilter" class="form-label"
                 >{{ t('meterData.filters.timestampTo.label') }}:</label
               >
-              <v-date-picker
+              <VueDatePicker 
                 v-model="timestampToFilter"
-                mode="date"
-                :masks="{ input: datePickerMasksInput }"
+                :enable-time-picker="false"
+                :format="datePickerFormat"
+                input-class-name="form-control"
                 :locale="locale"
-                :input-debounce="0"
-              >
-                <template #default="{ inputValue, inputEvents }">
-                  <input
-                    id="timestampToFilter"
-                    class="form-control"
-                    :value="inputValue"
-                    v-on="inputEvents"
-                  />
-                </template>
-              </v-date-picker>
+                uid="timestampToFilter"
+              />
             </div>
             <div class="col-12 pt-2">
               <button

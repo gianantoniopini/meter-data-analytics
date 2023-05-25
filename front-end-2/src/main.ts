@@ -9,8 +9,8 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 
-import VCalendar from 'v-calendar'
-import 'v-calendar/style.css'
+import VueDatePicker from '@vuepic/vue-datepicker'
+import '@vuepic/vue-datepicker/dist/main.css'
 
 import 'mosha-vue-toastify/dist/style.css'
 
@@ -19,6 +19,6 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(setupI18n())
 app.use(router)
-app.use(VCalendar, {})
+app.component('VueDatePicker', VueDatePicker)
 
 app.mount('#app')

@@ -16,7 +16,10 @@ export default defineConfig(({ mode }) => {
       }
     },
     server: {
-      port: Number(env.DEV_SERVER_PORT)
-    }
+      port: Number(env.SERVER_PORT)
+    },
+    preview: {
+      port: Number(env.SERVER_PORT)
+    },
   }
 })

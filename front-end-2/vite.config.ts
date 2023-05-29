@@ -20,6 +20,6 @@ export default defineConfig(({ mode }) => {
     },
     preview: {
       port: Number(env.SERVER_PORT)
-    },
+    }
   }
 })

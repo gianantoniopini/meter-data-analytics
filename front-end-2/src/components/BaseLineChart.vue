@@ -2,16 +2,25 @@
 import { computed } from 'vue'
 import { Line } from 'vue-chartjs'
 import type { ChartData, ChartOptions } from 'chart.js'
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js'
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+} from 'chart.js'
 import { useI18n } from 'vue-i18n'
 import type ChartDataset from '@/interfaces/chart-dataset.interface'
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
 
 interface Properties {
-  labels: string[];
-  datasets: ChartDataset[];
-  title?: string;
+  labels: string[]
+  datasets: ChartDataset[]
+  title?: string
 }
 
 const { locale } = useI18n()

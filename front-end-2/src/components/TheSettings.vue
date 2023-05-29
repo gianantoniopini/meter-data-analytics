@@ -12,18 +12,18 @@ const { locale, t } = useI18n()
 
 const selectedLanguageModel = computed({
   get() {
-    return store.selectedLanguage;
+    return store.selectedLanguage
   },
   set(value: Locales) {
     locale.value = value as string
     store.selectedLanguage = value
     setHtmlLang(value)
   }
-});
+})
 
 const onSubmit = () => {
   // Do nothing
-};
+}
 </script>
 
 <template>
@@ -63,11 +63,7 @@ const onSubmit = () => {
                 class="form-select"
                 :placeholder="t('settings.language.placeholder')"
               >
-                <option
-                  v-for="language in Locales"
-                  :key="language"
-                  :value="language"
-                >
+                <option v-for="language in Locales" :key="language" :value="language">
                   {{ t(`settings.language.options.${language}`) }}
                 </option>
               </select>

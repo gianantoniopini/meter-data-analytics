@@ -30,9 +30,7 @@ const { t } = useI18n()
       </button>
       <div id="navbarNav" class="collapse navbar-collapse">
         <div class="navbar-nav text-center fw-bold mr-auto">
-          <router-link :to="{ name: 'home' }" class="nav-link">{{
-            t('home.title')
-          }}</router-link>
+          <router-link :to="{ name: 'home' }" class="nav-link">{{ t('home.title') }}</router-link>
           <router-link :to="{ name: 'meterData' }" class="nav-link">{{
             t('meterData.title')
           }}</router-link>

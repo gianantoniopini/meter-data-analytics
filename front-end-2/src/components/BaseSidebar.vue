@@ -1,22 +1,19 @@
 <script setup lang="ts">
 interface SidebarMenuItem {
-  href: string;
-  title: string;
-  biClass: string;
+  href: string
+  title: string
+  biClass: string
 }
 
 interface Properties {
-  menuItems: SidebarMenuItem[];
+  menuItems: SidebarMenuItem[]
 }
 
-defineProps<Properties>();
+defineProps<Properties>()
 </script>
 
 <template>
-  <div
-    class="d-flex flex-sm-column flex-row flex-nowrap bg-light sticky-top"
-    role="navigation"
-  >
+  <div class="d-flex flex-sm-column flex-row flex-nowrap bg-light sticky-top" role="navigation">
     <ul
       class="nav nav-pills nav-flush flex-sm-column flex-row flex-nowrap mb-auto mx-auto justify-content-between w-100 px-3"
     >

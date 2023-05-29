@@ -20,6 +20,7 @@ const props = defineProps<Properties>()
 
 const options = computed<ChartOptions<'line'>>(() => ({
   responsive: true,
+  maintainAspectRatio: false,
   plugins: {
     legend: {
       position: 'top'
@@ -39,5 +40,9 @@ const chartData = computed<ChartData<'line'>>(() => ({
 </script>
 
 <template>
-  <Line :data="chartData" :options="options" />
+  <div class="container-fluid">
+    <div class="row">
+      <Line :data="chartData" :options="options" class="col-12" />
+    </div>
+  </div>
 </template>

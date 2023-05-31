@@ -10,9 +10,40 @@ module.exports = {
     'eslint:recommended',
     '@vue/eslint-config-typescript',
     '@vue/eslint-config-prettier/skip-formatting',
-    'plugin:sonarjs/recommended'
+    'plugin:sonarjs/recommended',
+    'plugin:unicorn/recommended'
   ],
   parserOptions: {
     ecmaVersion: 'latest'
-  }
+  },
+  rules: {
+    'unicorn/filename-case': [
+      'error',
+      {
+        case: 'kebabCase'
+      }
+    ],
+    'unicorn/prevent-abbreviations': [
+      'error',
+      {
+        allowList: {
+          env: true,
+          props: true
+        }
+      }
+    ]
+  },
+  overrides: [
+    {
+      files: ['*.vue', '**/__tests__/**/*.{j,t}s?(x)'],
+      rules: {
+        'unicorn/filename-case': [
+          'error',
+          {
+            case: 'pascalCase'
+          }
+        ]
+      }
+    }
+  ]
 }

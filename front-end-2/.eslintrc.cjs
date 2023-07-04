@@ -20,7 +20,8 @@ module.exports = {
     'unicorn/filename-case': [
       'error',
       {
-        case: 'kebabCase'
+        case: 'kebabCase',
+        ignore: ['^.+\\.(spec|test)\\.(j|t)s$']
       }
     ],
     'unicorn/prevent-abbreviations': [
@@ -35,7 +36,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['*.vue', '**/__tests__/**/*.{j,t}s?(x)'],
+      files: ['*.vue'],
       rules: {
         'unicorn/filename-case': [
           'error',

@@ -1,10 +1,12 @@
 import { fileURLToPath } from 'node:url'
-import { mergeConfig } from 'vite'
+import { mergeConfig, UserConfig, UserConfigFn } from 'vite'
 import { configDefaults, defineConfig } from 'vitest/config'
-import viteConfig from './vite.config'
+import viteConfigCallback from './vite.config'
+
+const viteConfig = viteConfigCallback as UserConfigFn
 
 export default mergeConfig(
-  viteConfig,
+  viteConfig({ command: 'build', mode: 'testing' }),
   defineConfig({
     test: {
       environment: 'jsdom',
@@ -14,5 +16,5 @@ export default mergeConfig(
         web: [/\.[jt]sx$/]
       }
     }
-  })
+  }) as UserConfig
 )

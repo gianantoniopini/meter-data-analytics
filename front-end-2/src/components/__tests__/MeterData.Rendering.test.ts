@@ -1,33 +1,28 @@
 import { describe, it, expect } from 'vitest'
-import { queryAllByRole, screen } from '@testing-library/vue'
-import { renderComponent } from './helpers/MeterData.Helper'
+import { mountComponent } from './helpers/MeterData.Helper'
 
-const setup = (): void => {
-  renderComponent()
+const setup = () => {
+  return mountComponent()
 }
 
 describe('MeterData', () => {
   it('renders Sidebar menu', () => {
-    setup()
+    const wrapper = setup()
 
-    const navigation = screen.queryByRole('navigation')
-    expect(navigation).not.toBeNull()
-    const sidebarMenuLinks = queryAllByRole(navigation as HTMLElement, 'link')
+    const sidebarMenuLinks = wrapper.findAll('.nav-link')
     expect(sidebarMenuLinks).toHaveLength(4)
-    expect(sidebarMenuLinks[0].textContent).toEqual('Filters')
-    expect(sidebarMenuLinks[1].textContent).toEqual('Time Series')
-    expect(sidebarMenuLinks[2].textContent).toEqual('Analytics')
-    expect(sidebarMenuLinks[3].textContent).toEqual('Raw Data')
+    expect(sidebarMenuLinks[0].element.text).toBe('Filters')
+    expect(sidebarMenuLinks[1].element.text).toBe('Time Series')
+    expect(sidebarMenuLinks[2].element.text).toBe('Analytics')
+    expect(sidebarMenuLinks[3].element.text).toBe('Raw Data')
   })
 
   it('renders Smart Meter Id filter with default value', () => {
-    setup()
     const expectedValue = process.env.VITE_DEFAULT_SMART_METER_ID
 
-    const smartMeterIdFilter = screen.queryByRole('textbox', {
-      name: 'Smart Meter Id:'
-    })
-    expect(smartMeterIdFilter).not.toBeNull()
-    expect(smartMeterIdFilter?.textContent).toEqual(expectedValue)
+    const wrapper = setup()
+
+    const smartMeterIdFilter = wrapper.get('input#smartMeterIdFilter')
+    expect(smartMeterIdFilter.element.value).toBe(expectedValue)
   })
 })

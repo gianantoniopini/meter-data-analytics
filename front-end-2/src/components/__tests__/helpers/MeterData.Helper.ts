@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/vue'
+import { mount } from '@vue/test-utils'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import AxiosMockAdapter from 'axios-mock-adapter'
 import { StatusCodes } from 'http-status-codes'
@@ -97,15 +97,11 @@ export const mockGetInstantaneousPowerMeasurementsRequest = (
   })
 }
 
-export const renderComponent = () => {
-  render(MeterData, {
-    global: {
-      plugins: [setupI18n()],
-      components: { VueDatePicker }
-    }
-  })
+export const mountComponent = () => {
+  return mount(MeterData, { global: { plugins: [setupI18n()], components: { VueDatePicker } } })
 }
 
+/*
 export const waitForLoadingMessageToAppear = async (): Promise<HTMLElement> => {
   return await screen.findByText(loadingMessage)
 }
@@ -118,3 +114,4 @@ export const waitForLoadingMessageToDisappear = async (): Promise<void> => {
     { timeout: 2000 }
   )
 }
+*/

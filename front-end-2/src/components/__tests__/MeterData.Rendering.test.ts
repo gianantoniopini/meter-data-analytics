@@ -11,10 +11,10 @@ describe('MeterData', () => {
 
     const sidebarMenuLinks = wrapper.findAll('.nav-link')
     expect(sidebarMenuLinks).toHaveLength(4)
-    expect(sidebarMenuLinks[0].element.text).toBe('Filters')
-    expect(sidebarMenuLinks[1].element.text).toBe('Time Series')
-    expect(sidebarMenuLinks[2].element.text).toBe('Analytics')
-    expect(sidebarMenuLinks[3].element.text).toBe('Raw Data')
+    expect(sidebarMenuLinks[0].element.textContent).toBe('Filters')
+    expect(sidebarMenuLinks[1].element.textContent).toBe('Time Series')
+    expect(sidebarMenuLinks[2].element.textContent).toBe('Analytics')
+    expect(sidebarMenuLinks[3].element.textContent).toBe('Raw Data')
   })
 
   it('renders Smart Meter Id filter with default value', () => {

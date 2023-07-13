@@ -1,20 +1,17 @@
 import { describe, it, expect } from 'vitest'
-import { render, screen } from '@testing-library/vue'
+import { mount } from '@vue/test-utils'
 import TheHome from '../TheHome.vue'
 import { setupI18n } from '@/i18n'
 
 describe('TheHome', () => {
   it('renders welcome message', () => {
-    render(TheHome, {
+    const wrapper = mount(TheHome, {
       global: {
         plugins: [setupI18n()]
       }
     })
 
-    expect(
-      screen.queryByRole('heading', {
-        name: 'Welcome to the Meter Data Analytics app.'
-      })
-    ).not.toBeNull()
+    const heading = wrapper.get('h1')
+    expect(heading.element.textContent).toBe('Welcome to the Meter Data Analytics app.')
   })
 })

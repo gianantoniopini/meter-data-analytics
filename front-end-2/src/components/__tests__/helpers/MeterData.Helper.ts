@@ -1,4 +1,5 @@
-import { mount } from '@vue/test-utils'
+import type { VueWrapper } from '@vue/test-utils'
+import { flushPromises, mount } from '@vue/test-utils'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import AxiosMockAdapter from 'axios-mock-adapter'
 import { StatusCodes } from 'http-status-codes'
@@ -7,8 +8,6 @@ import type WeekdayAveragePower from '@shared/interfaces/weekday-average-power.i
 import type HourAveragePower from '@shared/interfaces/hour-average-power.interface'
 import MeterData from '@/components/MeterData.vue'
 import { setupI18n } from '@/i18n'
-
-const loadingMessage = 'Loading data...'
 
 const randomIntFromInterval = (min: number, max: number): number => {
   return Math.floor(Math.random() * (max - min + 1) + min)
@@ -101,17 +100,12 @@ export const mountComponent = () => {
   return mount(MeterData, { global: { plugins: [setupI18n()], components: { VueDatePicker } } })
 }
 
-/*
-export const waitForLoadingMessageToAppear = async (): Promise<HTMLElement> => {
-  return await screen.findByText(loadingMessage)
+export const waitForRawDataTableHeaderToBeRendered = async (
+  wrapper: VueWrapper,
+  measurementsCount: Number
+) => {
+  const text = `Raw Data - ${measurementsCount} Power Measurements`
+  while (wrapper.findAll('*').filter((node) => node.text() === text).length === 0) {
+    await flushPromises()
+  }
 }
-
-export const waitForLoadingMessageToDisappear = async (): Promise<void> => {
-  await waitFor(
-    () => {
-      return screen.queryByText(loadingMessage) === null ? Promise.resolve() : Promise.reject()
-    },
-    { timeout: 2000 }
-  )
-}
-*/

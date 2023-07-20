@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import App from '../App.vue'
+import App from '@/App.vue'
 import { setupI18n } from '@/i18n'
 import router from '@/router'
 

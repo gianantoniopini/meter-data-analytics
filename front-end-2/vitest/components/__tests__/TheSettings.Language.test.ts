@@ -1,7 +1,7 @@
 import { describe, it, expect, afterEach } from 'vitest'
 import type { VueWrapper } from '@vue/test-utils'
 import { mount } from '@vue/test-utils'
-import TheSettings from '../TheSettings.vue'
+import TheSettings from '@/components/TheSettings.vue'
 import { createPinia } from 'pinia'
 import { setupI18n } from '@/i18n'
 import { Locales } from '@/i18n/config/locales'

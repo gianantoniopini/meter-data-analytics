@@ -1,7 +1,7 @@
 import { describe, it, expect, afterEach } from 'vitest'
 import { flushPromises, mount } from '@vue/test-utils'
 import VueDatePicker from '@vuepic/vue-datepicker'
-import App from '../App.vue'
+import App from '@/App.vue'
 import { createPinia } from 'pinia'
 import { setupI18n } from '@/i18n'
 import router from '@/router'

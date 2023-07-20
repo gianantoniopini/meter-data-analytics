@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import TheHome from '../TheHome.vue'
+import TheHome from '@/components/TheHome.vue'
 import { setupI18n } from '@/i18n'
 
 describe('TheHome', () => {

@@ -1,4 +1,5 @@
 import { describe, it, expect, afterEach } from 'vitest'
+import type { DOMWrapper } from '@vue/test-utils'
 import AxiosMockAdapter from 'axios-mock-adapter'
 import axiosInstance from '@/utils/http-utils'
 import {
@@ -71,7 +72,7 @@ const setup = async (
     apiRequestNetworkError
   )
 
-  const applyButton = wrapper.get('button')
+  const applyButton = wrapper.findAll('button').find((node) => node.text() === 'Apply') as DOMWrapper<HTMLButtonElement>
 
   return {
     wrapper,

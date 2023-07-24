@@ -22,7 +22,7 @@ describe('MeterData', () => {
 
     const wrapper = setup()
 
-    const smartMeterIdFilter = wrapper.get('input#smartMeterIdFilter')
+    const smartMeterIdFilter = wrapper.get<HTMLInputElement>('input#smartMeterIdFilter')
     expect(smartMeterIdFilter.element.value).toBe(expectedValue)
   })
 })

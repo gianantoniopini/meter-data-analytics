@@ -86,7 +86,7 @@ describe('TheSettings', () => {
       }
 
       // Switch back to English language, if the language was changed
-      const languageElement = wrapper.get(languageSelectElementSelector)
+      const languageElement = wrapper.get<HTMLSelectElement>(languageSelectElementSelector)
       if (languageElement.element.value !== Locales.enGb) {
         await languageElement.setValue(Locales.enGb)
       }

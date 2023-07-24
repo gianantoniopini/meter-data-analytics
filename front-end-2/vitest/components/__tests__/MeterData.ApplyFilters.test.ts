@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach } from 'vitest'
-import type { DOMWrapper } from '@vue/test-utils'
+import type { DOMWrapper, VueWrapper } from '@vue/test-utils'
 import AxiosMockAdapter from 'axios-mock-adapter'
 import axiosInstance from '@/utils/http-utils'
 import {
@@ -24,6 +24,12 @@ const parseDateInISOFormat = (
   }
 }
 
+const getButton = (wrapper: VueWrapper, text: string) => {
+  return wrapper
+    .findAll('button')
+    .find((node) => node.text() === text) as DOMWrapper<HTMLButtonElement>
+}
+
 const setup = async (
   smartMeterId: string,
   timestampFrom: string | undefined,
@@ -40,6 +46,8 @@ const setup = async (
   if (timestampFrom) {
     const timestampFromFilter = wrapper.get('#dp-input-timestampFromFilter')
     await timestampFromFilter.setValue(timestampFrom)
+    const selectDateButton = getButton(wrapper, 'Select')
+    await selectDateButton.trigger('click')
 
     const { year, month, date } = parseDateInISOFormat(timestampFrom)
     timestampFromDate = new Date(Date.UTC(year, month, date, 0, 0, 0))
@@ -49,6 +57,8 @@ const setup = async (
   if (timestampTo) {
     const timestampToFilter = wrapper.get('#dp-input-timestampToFilter')
     await timestampToFilter.setValue(timestampTo)
+    const selectDateButton = getButton(wrapper, 'Select')
+    await selectDateButton.trigger('click')
 
     const { year, month, date } = parseDateInISOFormat(timestampTo)
     timestampToDate = new Date(Date.UTC(year, month, date, 23, 59, 59))
@@ -72,7 +82,7 @@ const setup = async (
     apiRequestNetworkError
   )
 
-  const applyButton = wrapper.findAll('button').find((node) => node.text() === 'Apply') as DOMWrapper<HTMLButtonElement>
+  const applyButton = getButton(wrapper, 'Apply')
 
   return {
     wrapper,
@@ -125,10 +135,8 @@ describe('MeterData', () => {
     })
 
     it('makes api request with expected parameters', async () => {
-      //const timestampFrom = '2022-02-10'
-      const timestampFrom = undefined
-      //const timestampTo = '2022-05-10'
-      const timestampTo = undefined
+      const timestampFrom = '2022-02-10'
+      const timestampTo = '2022-05-10'
       const { wrapper, applyButton } = await setup(
         smartMeterId,
         timestampFrom,
@@ -146,9 +154,9 @@ describe('MeterData', () => {
       const apiRequestParameters = new URLSearchParams(
         apiRequestUrlAsString.slice(apiRequestUrlAsString.indexOf('?'))
       )
-      expect(apiRequestParameters.get('muid')).toEqual(smartMeterId)
-      //expect(apiRequestParameters.get('start')).toEqual(`${timestampFrom}T00:00:00.000Z`)
-      //expect(apiRequestParameters.get('stop')).toEqual(`${timestampTo}T23:59:59.000Z`)
+      expect(apiRequestParameters.get('muid')).toBe(smartMeterId)
+      expect(apiRequestParameters.get('start')).toBe(`${timestampFrom}T00:00:00.000Z`)
+      expect(apiRequestParameters.get('stop')).toBe(`${timestampTo}T23:59:59.000Z`)
     })
 
     it('renders Raw Data table', async () => {

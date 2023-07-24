@@ -1,11 +1,14 @@
 import { describe, it, expect } from 'vitest'
+import type { DOMWrapper } from '@vue/test-utils'
 import { mountComponent } from './helpers/MeterData.Helper'
 
 const setup = () => {
   const wrapper = mountComponent()
 
   const smartMeterIdFilter = wrapper.get('input#smartMeterIdFilter')
-  const applyButton = wrapper.get('button')
+  const applyButton = wrapper
+    .findAll('button')
+    .find((node) => node.text() === 'Apply') as DOMWrapper<HTMLButtonElement>
 
   return { wrapper, smartMeterIdFilter, applyButton }
 }

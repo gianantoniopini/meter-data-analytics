@@ -36,7 +36,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['*.vue'],
+      files: ['*.vue', '**/components/__tests__/helpers/*.ts'],
       rules: {
         'unicorn/filename-case': [
           'error',

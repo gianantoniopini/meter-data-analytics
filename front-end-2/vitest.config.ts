@@ -10,7 +10,10 @@ export default mergeConfig(
   defineConfig({
     test: {
       coverage: {
-        reportsDirectory: './tests/unit/coverage'
+        enabled: true,
+        lines: 98.14,
+        reportsDirectory: './tests/unit/coverage',
+        thresholdAutoUpdate: true
       },
       environment: 'jsdom',
       exclude: [...configDefaults.exclude, 'e2e/*'],

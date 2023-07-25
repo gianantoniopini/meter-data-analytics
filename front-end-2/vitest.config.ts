@@ -17,6 +17,7 @@ export default mergeConfig(
       },
       environment: 'jsdom',
       exclude: [...configDefaults.exclude, 'e2e/*'],
+      reporters: ['verbose'],
       root: fileURLToPath(new URL('./', import.meta.url)),
       setupFiles: ['vitest.setup.ts'],
       transformMode: {

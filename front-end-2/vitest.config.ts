@@ -9,6 +9,9 @@ export default mergeConfig(
   viteConfig({ command: 'build', mode: 'test' }),
   defineConfig({
     test: {
+      coverage: {
+        reportsDirectory: './tests/unit/coverage'
+      },
       environment: 'jsdom',
       exclude: [...configDefaults.exclude, 'e2e/*'],
       root: fileURLToPath(new URL('./', import.meta.url)),

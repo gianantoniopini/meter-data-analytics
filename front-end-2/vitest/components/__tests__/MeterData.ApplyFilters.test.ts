@@ -96,22 +96,6 @@ describe('MeterData', () => {
     const smartMeterId = 'abcd-1234'
     const measurementsCount = 100
 
-    /*
-    it('displays Loading message', async () => {
-      const { wrapper, applyButton } = await setup(
-        smartMeterId,
-        undefined,
-        undefined,
-        measurementsCount
-      )
-
-      await applyButton.trigger('click')
-
-      const loadingMessage = await waitForLoadingMessageToAppear(wrapper)
-      //expect(loadingMessage).toBeInTheDocument()
-    })
-    */
-
     it('disables button while loading', async () => {
       const { applyButton } = await setup(smartMeterId, undefined, undefined, measurementsCount)
 
@@ -190,25 +174,6 @@ describe('MeterData', () => {
         ).toHaveLength(1)
       }
     })
-
-    /*
-    it('renders Error message if api request fails', async () => {
-      const { wrapper, applyButton } = await setup(
-        smartMeterId,
-        undefined,
-        undefined,
-        0,
-        true
-      )
-      //jest.spyOn(console, 'error').mockImplementationOnce(() => {})
-
-      await applyButton.trigger('click')
-      //await waitForLoadingMessageToAppear()
-
-      const errorMessage = 'An unexpected error occurred. Please try again.'
-      expect(wrapper.findAll('*').filter((node) => node.text() === errorMessage)).toHaveLength(1)
-    })
-    */
   })
 })
 

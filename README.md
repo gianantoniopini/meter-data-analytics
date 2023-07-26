@@ -4,7 +4,7 @@ Smart meter data analytics app built with the MEVN stack (MongoDB, Express, Vue,
 
 The app visualizes smart meter measurements time-series data and provides simple analytics.
 
-The [external-api][10] simulates an external REST API providing smart meter measurements data. It implements authentication using JWT (JSON Web Tokens).  
+The [external-api][9] simulates an external REST API providing smart meter measurements data. It implements authentication using JWT (JSON Web Tokens).  
 The [back-end][1] provides a REST API to retrieve the smart meter measurements data from the MongoDB database. It also provides an endpoint to import the data from the external-api into the database.  
 The [front-end][2] provides a single-page application to visualize the smart meter measurements data retrieved from the back-end REST API. It also provides simple analytics with graphs showing the data grouped by different time intervals.
 
@@ -15,7 +15,6 @@ _All the smart meter data being used is just test data._
 - [Node.js][3]
 - [npm][4]
 - MongoDB - [Download and install][5], or install with Docker
-- [http-server][9] (only required to start the production version of the front-end)
 
 ## Setup
 
@@ -35,7 +34,7 @@ npm install
 
 #### 1.3 Create your `.env` file
 
-See file [.env.example][11] for an example
+See file [.env.example][10] for an example
 
 #### 1.4 Compiles and hot-reloads for development
 
@@ -129,28 +128,28 @@ npm install
 
 See file [.env.example][8] for an example.
 
-#### 3.4 Compiles and hot-reloads for development
+#### 3.4 Compile and hot-reload for development
 
 ```sh
-npm run serve
+npm run dev
 ```
 
-#### 3.5 Runs tests
+#### 3.5 Run unit tests
 
 ```sh
 npm run test:unit
 ```
 
-#### 3.6 Compiles and minifies for production
+#### 3.6 Type-check, compile and minify for production
 
 ```sh
 npm run build
 ```
 
-#### 3.7 Starts production
+#### 3.7 Preview production build
 
 ```sh
-npm run serve:production
+npm run preview
 ```
 
 <!-- MARKDOWN LINKS -->
@@ -163,6 +162,5 @@ npm run serve:production
 [6]: ./back-end/.env.example
 [7]: ./back-end/measurements.json.example
 [8]: ./front-end/.env.example
-[9]: https://www.npmjs.com/package/http-server
-[10]: ./external-api
-[11]: ./external-api/.env.example
+[9]: ./external-api
+[10]: ./external-api/.env.example

@@ -13,6 +13,12 @@ const setup = async () => {
 }
 
 describe('App', () => {
+  it('sets page title', async () => {
+    await setup()
+
+    expect(document.title).toBe('Meter Data Analytics')
+  })
+
   it('renders Navbar menu', async () => {
     const wrapper = await setup()
 

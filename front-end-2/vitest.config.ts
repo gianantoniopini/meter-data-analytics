@@ -11,7 +11,7 @@ export default mergeConfig(
     test: {
       coverage: {
         enabled: true,
-        lines: 98.14,
+        lines: 98.16,
         reportsDirectory: './tests/unit/coverage',
         thresholdAutoUpdate: true
       },

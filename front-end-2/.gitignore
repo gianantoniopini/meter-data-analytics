@@ -16,7 +16,6 @@ node_modules
 .DS_Store
 dist
 dist-ssr
-coverage
 *.local
 
 /cypress/videos/
@@ -31,3 +30,9 @@ coverage
 *.njsproj
 *.sln
 *.sw?
+
+# Code coverage
+coverage
+
+# Links file
+links.txt

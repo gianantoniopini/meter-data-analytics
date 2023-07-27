@@ -1,4 +1,4 @@
-import { DefineNumberFormat } from 'vue-i18n';
+import type { DefineNumberFormat } from 'vue-i18n'
 
 const numberFormat: DefineNumberFormat = {
   decimal: {
@@ -10,6 +10,6 @@ const numberFormat: DefineNumberFormat = {
     style: 'percent',
     useGrouping: false
   }
-};
+}
 
-export default numberFormat;
+export default numberFormat

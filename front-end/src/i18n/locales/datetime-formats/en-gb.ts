@@ -1,4 +1,4 @@
-import { DefineDateTimeFormat } from 'vue-i18n';
+import type { DefineDateTimeFormat } from 'vue-i18n'
 
 const datetimeFormat: DefineDateTimeFormat = {
   short: {
@@ -17,6 +17,6 @@ const datetimeFormat: DefineDateTimeFormat = {
     hour12: false,
     timeZone: 'UTC'
   }
-};
+}
 
-export default datetimeFormat;
+export default datetimeFormat

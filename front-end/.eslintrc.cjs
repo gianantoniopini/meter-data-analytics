@@ -1,57 +1,42 @@
-// eslint-disable-next-line unicorn/prefer-module
+/* eslint-env node */
+require('@rushstack/eslint-patch/modern-module-resolution')
+
 module.exports = {
   root: true,
-
-  env: {
-    node: true,
-    'vue/setup-compiler-macros': true
-  },
-
   extends: [
     'plugin:vue/vue3-essential',
     'plugin:vue/vue3-strongly-recommended',
     'plugin:vue/vue3-recommended',
     'eslint:recommended',
-    '@vue/typescript/recommended',
-    'plugin:jest/recommended',
-    'plugin:jest-dom/recommended',
-    'plugin:prettier/recommended',
+    '@vue/eslint-config-typescript',
+    '@vue/eslint-config-prettier/skip-formatting',
     'plugin:sonarjs/recommended',
     'plugin:unicorn/recommended'
   ],
-
   parserOptions: {
-    ecmaVersion: 2020
+    ecmaVersion: 'latest'
   },
-
   rules: {
-    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'unicorn/filename-case': [
       'error',
       {
-        case: 'kebabCase'
+        case: 'kebabCase',
+        ignore: ['^.+\\.(spec|test)\\.(j|t)s$']
       }
     ],
     'unicorn/prevent-abbreviations': [
       'error',
       {
         allowList: {
+          env: true,
           props: true
         }
       }
     ]
   },
-
   overrides: [
     {
-      files: ['**/__tests__/*.{j,t}s?(x)'],
-      env: {
-        jest: true
-      }
-    },
-    {
-      files: ['*.vue', '**/__tests__/**/*.{j,t}s?(x)'],
+      files: ['*.vue', '**/components/__tests__/helpers/*.ts'],
       rules: {
         'unicorn/filename-case': [
           'error',
@@ -62,4 +47,4 @@ module.exports = {
       }
     }
   ]
-};
+}

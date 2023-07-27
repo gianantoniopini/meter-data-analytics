@@ -1,24 +1,35 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import { LineChart } from 'vue-chart-3';
-import { Chart, ChartData, ChartOptions, registerables } from 'chart.js';
-import { useI18n } from 'vue-i18n';
-import ChartDataset from '@/interfaces/chart-dataset.interface';
+import { computed } from 'vue'
+import { Line } from 'vue-chartjs'
+import type { ChartData, ChartOptions } from 'chart.js'
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+} from 'chart.js'
+import { useI18n } from 'vue-i18n'
+import type ChartDataset from '@/interfaces/chart-dataset.interface'
 
-Chart.register(...registerables);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
 
 interface Properties {
-  labels: string[];
-  datasets: ChartDataset[];
-  title?: string;
+  labels: string[]
+  datasets: ChartDataset[]
+  title?: string
 }
 
-const { locale } = useI18n();
+const { locale } = useI18n()
 
-const props = defineProps<Properties>();
+const props = defineProps<Properties>()
 
-const options = ref<ChartOptions<'line'>>({
+const options = computed<ChartOptions<'line'>>(() => ({
   responsive: true,
+  maintainAspectRatio: false,
   plugins: {
     legend: {
       position: 'top'
@@ -30,15 +41,17 @@ const options = ref<ChartOptions<'line'>>({
     }
   },
   locale: locale.value
-});
+}))
 const chartData = computed<ChartData<'line'>>(() => ({
   labels: props.labels,
   datasets: props.datasets
-}));
+}))
 </script>
 
 <template>
-  <div>
-    <LineChart :chart-data="chartData" :options="options" />
+  <div class="container-fluid">
+    <div class="row">
+      <Line :data="chartData" :options="options" class="col-12" />
+    </div>
   </div>
 </template>

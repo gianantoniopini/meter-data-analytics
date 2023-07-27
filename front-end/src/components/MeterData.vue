@@ -1,96 +1,92 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref, Ref, watch } from 'vue';
-import { useI18n } from 'vue-i18n';
-import { createToast } from 'mosha-vue-toastify';
-import InstantaneousPowerMeasurement from '@/interfaces/instantaneous-power-measurement.interface';
-import ChartDataset from '@/interfaces/chart-dataset.interface';
-import HourAveragePower from '@shared/interfaces/hour-average-power.interface';
-import WeekdayAveragePower from '@shared/interfaces/weekday-average-power.interface';
-import BaseLayout from './BaseLayout.vue';
-import BaseSidebar from './BaseSidebar.vue';
-import BaseLineChart from './BaseLineChart.vue';
-import MeterDataService from '@/services/meter-data.service';
-import { getWeekdayName } from '@/utils/date-utils';
+import type { Ref } from 'vue'
+import { computed, onMounted, reactive, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { createToast } from 'mosha-vue-toastify'
+import type InstantaneousPowerMeasurement from '@/interfaces/instantaneous-power-measurement.interface'
+import type ChartDataset from '@/interfaces/chart-dataset.interface'
+import type HourAveragePower from '@shared/interfaces/hour-average-power.interface'
+import type WeekdayAveragePower from '@shared/interfaces/weekday-average-power.interface'
+import BaseLayout from './BaseLayout.vue'
+import BaseSidebar from './BaseSidebar.vue'
+import BaseLineChart from './BaseLineChart.vue'
+import MeterDataService from '@/services/meter-data.service'
+import { getWeekdayName } from '@/utils/date-utils'
 
 interface Series<T> {
-  values: T[];
+  values: T[]
 }
 
 interface Chart {
-  labels: string[];
-  dataSets: ChartDataset[];
+  labels: string[]
+  dataSets: ChartDataset[]
 }
 
-const { d, n, t, locale } = useI18n();
+const { d, n, t, locale } = useI18n()
 
-const loading = ref(false);
-const smartMeterIdFilter = ref(
-  process.env.VUE_APP_DEFAULT_SMART_METER_ID as string
-);
-const datePickerMasksInput = 'YYYY-MM-DD';
-const timestampFromFilter: Ref<Date | undefined> = ref();
-const timestampToFilter: Ref<Date | undefined> = ref();
+const loading = ref(false)
+const smartMeterIdFilter = ref(import.meta.env.VITE_DEFAULT_SMART_METER_ID as string)
+const datePickerFormat = 'yyyy-MM-dd'
+const timestampFromFilter: Ref<Date | undefined> = ref()
+const timestampToFilter: Ref<Date | undefined> = ref()
 const timeSeries: Series<InstantaneousPowerMeasurement> = reactive({
   values: []
-});
-const averagePowerByWeekday: Series<WeekdayAveragePower> = { values: [] };
-const averagePowerByHour: Series<HourAveragePower> = { values: [] };
-const timeSeriesChart: Chart = reactive({ labels: [], dataSets: [] });
+})
+const averagePowerByWeekday: Series<WeekdayAveragePower> = { values: [] }
+const averagePowerByHour: Series<HourAveragePower> = { values: [] }
+const timeSeriesChart: Chart = reactive({ labels: [], dataSets: [] })
 const averagePowerByWeekdayChart: Chart = reactive({
   labels: [],
   dataSets: []
-});
-const averagePowerByHourChart: Chart = reactive({ labels: [], dataSets: [] });
+})
+const averagePowerByHourChart: Chart = reactive({ labels: [], dataSets: [] })
 const validationErrors = reactive({
   smartMeterIdFilter: ''
-});
+})
 
 watch(smartMeterIdFilter, (value: string) => {
-  validateSmartMeterIdFilter(value);
-});
+  validateSmartMeterIdFilter(value)
+})
 
-const invalid = computed(() => validationErrors.smartMeterIdFilter.length > 0);
-const applyFiltersDisabled = computed(() => loading.value || invalid.value);
+const invalid = computed(() => validationErrors.smartMeterIdFilter.length > 0)
+const applyFiltersDisabled = computed(() => loading.value || invalid.value)
 
 const retrieveInstantaneousPowerMeasurements = async (
   smartMeterId: string,
   timestampFrom: string | undefined,
   timestampTo: string | undefined
 ): Promise<void> => {
-  loading.value = true;
+  loading.value = true
   const { close: closeToast } = createToast(t('meterData.toasts.loadingData'), {
     position: 'top-center',
     showCloseButton: false,
     timeout: -1,
     transition: 'slide',
     type: 'info'
-  });
+  })
 
   try {
-    const instantaneousPowerMeasurements =
-      await MeterDataService.getInstantaneousPowerMeasurements(
-        smartMeterId,
-        timestampFrom,
-        timestampTo
-      );
+    const instantaneousPowerMeasurements = await MeterDataService.getInstantaneousPowerMeasurements(
+      smartMeterId,
+      timestampFrom,
+      timestampTo
+    )
 
-    timeSeries.values = instantaneousPowerMeasurements.timeSeries;
-    averagePowerByWeekday.values =
-      instantaneousPowerMeasurements.analytics.averagePowerByWeekday;
-    averagePowerByHour.values =
-      instantaneousPowerMeasurements.analytics.averagePowerByHour;
+    timeSeries.values = instantaneousPowerMeasurements.timeSeries
+    averagePowerByWeekday.values = instantaneousPowerMeasurements.analytics.averagePowerByWeekday
+    averagePowerByHour.values = instantaneousPowerMeasurements.analytics.averagePowerByHour
 
-    refreshChartsData();
+    refreshChartsData()
   } catch (error) {
-    onError(error);
+    onError(error)
   } finally {
-    closeToast();
-    loading.value = false;
+    closeToast()
+    loading.value = false
   }
-};
+}
 
 const refreshChartsData = () => {
-  timeSeriesChart.labels = timeSeries.values.map((m) => d(m.timestamp, 'long'));
+  timeSeriesChart.labels = timeSeries.values.map((m) => d(m.timestamp, 'long'))
   timeSeriesChart.dataSets = [
     {
       label: t('meterData.timeSeries.chart.dataSet.label'),
@@ -98,25 +94,21 @@ const refreshChartsData = () => {
       backgroundColor: 'rgba(54, 162, 235, 0.2)',
       borderColor: 'rgb(54, 162, 235)'
     }
-  ];
+  ]
 
   averagePowerByWeekdayChart.labels = averagePowerByWeekday.values.map((apbw) =>
     getWeekdayName(locale.value, apbw.isoWeekday)
-  );
+  )
   averagePowerByWeekdayChart.dataSets = [
     {
-      label: t(
-        'meterData.analytics.charts.averagePowerByWeekday.dataSet.label'
-      ),
+      label: t('meterData.analytics.charts.averagePowerByWeekday.dataSet.label'),
       data: averagePowerByWeekday.values.map((apbw) => apbw.averagePower),
       backgroundColor: 'rgba(255, 99, 132, 0.2)',
       borderColor: 'rgb(255, 99, 132)'
     }
-  ];
+  ]
 
-  averagePowerByHourChart.labels = averagePowerByHour.values.map((apbh) =>
-    apbh.hour.toString()
-  );
+  averagePowerByHourChart.labels = averagePowerByHour.values.map((apbh) => apbh.hour.toString())
   averagePowerByHourChart.dataSets = [
     {
       label: t('meterData.analytics.charts.averagePowerByHour.dataSet.label'),
@@ -124,13 +116,13 @@ const refreshChartsData = () => {
       backgroundColor: 'rgba(255, 159, 64, 0.2)',
       borderColor: 'rgb(255, 159, 64)'
     }
-  ];
-};
+  ]
+}
 
 const applyFilters = async (): Promise<void> => {
-  validateSmartMeterIdFilter(smartMeterIdFilter.value);
+  validateSmartMeterIdFilter(smartMeterIdFilter.value)
   if (invalid.value) {
-    return;
+    return
   }
 
   const timestampFromDate = timestampFromFilter.value
@@ -144,7 +136,7 @@ const applyFilters = async (): Promise<void> => {
           0
         )
       )
-    : undefined;
+    : undefined
 
   const timestampToDate = timestampToFilter.value
     ? new Date(
@@ -157,14 +149,14 @@ const applyFilters = async (): Promise<void> => {
           59
         )
       )
-    : undefined;
+    : undefined
 
   await retrieveInstantaneousPowerMeasurements(
     smartMeterIdFilter.value,
     timestampFromDate ? timestampFromDate.toISOString() : undefined,
     timestampToDate ? timestampToDate.toISOString() : undefined
-  );
-};
+  )
+}
 
 const onError = (error: unknown) => {
   createToast(t('meterData.toasts.error'), {
@@ -173,27 +165,27 @@ const onError = (error: unknown) => {
     timeout: 4000,
     transition: 'slide',
     type: 'warning'
-  });
-  console.error(error);
-};
+  })
+  console.error(error)
+}
 
 const validateSmartMeterIdFilter = (value: string) => {
-  validationErrors.smartMeterIdFilter = '';
+  validationErrors.smartMeterIdFilter = ''
 
   if (!value || !value.trim()) {
     validationErrors.smartMeterIdFilter = t(
       'meterData.filters.smartMeterId.validationErrors.required'
-    );
+    )
   }
-};
+}
 
 const onSubmit = () => {
   // Do nothing
-};
+}
 
 onMounted(() => {
-  refreshChartsData();
-});
+  refreshChartsData()
+})
 </script>
 
 <template>
@@ -249,55 +241,35 @@ onMounted(() => {
                   'is-invalid': validationErrors.smartMeterIdFilter
                 }"
               />
-              <div
-                id="smartMeterIdFilterInvalidFeedback"
-                class="invalid-feedback"
-                role="alert"
-              >
+              <div id="smartMeterIdFilterInvalidFeedback" class="invalid-feedback" role="alert">
                 {{ validationErrors.smartMeterIdFilter }}
               </div>
             </div>
             <div class="form-group col-lg-4">
-              <label for="timestampFromFilter" class="form-label"
+              <label for="dp-input-timestampFromFilter" class="form-label"
                 >{{ t('meterData.filters.timestampFrom.label') }}:</label
               >
-              <v-date-picker
+              <VueDatePicker
                 v-model="timestampFromFilter"
-                mode="date"
-                :masks="{ input: datePickerMasksInput }"
+                :enable-time-picker="false"
+                :format="datePickerFormat"
+                input-class-name="form-control"
                 :locale="locale"
-                :input-debounce="0"
-              >
-                <template #default="{ inputValue, inputEvents }">
-                  <input
-                    id="timestampFromFilter"
-                    class="form-control"
-                    :value="inputValue"
-                    v-on="inputEvents"
-                  />
-                </template>
-              </v-date-picker>
+                uid="timestampFromFilter"
+              />
             </div>
             <div class="form-group col-lg-4">
-              <label for="timestampToFilter" class="form-label"
+              <label for="dp-input-timestampToFilter" class="form-label"
                 >{{ t('meterData.filters.timestampTo.label') }}:</label
               >
-              <v-date-picker
+              <VueDatePicker
                 v-model="timestampToFilter"
-                mode="date"
-                :masks="{ input: datePickerMasksInput }"
+                :enable-time-picker="false"
+                :format="datePickerFormat"
+                input-class-name="form-control"
                 :locale="locale"
-                :input-debounce="0"
-              >
-                <template #default="{ inputValue, inputEvents }">
-                  <input
-                    id="timestampToFilter"
-                    class="form-control"
-                    :value="inputValue"
-                    v-on="inputEvents"
-                  />
-                </template>
-              </v-date-picker>
+                uid="timestampToFilter"
+              />
             </div>
             <div class="col-12 pt-2">
               <button
@@ -352,11 +324,7 @@ onMounted(() => {
               {{ t('meterData.rawData.instantaneousPower') }}
             </div>
           </div>
-          <div
-            v-for="(measurement, index) in timeSeries.values"
-            :key="index"
-            class="row border"
-          >
+          <div v-for="(measurement, index) in timeSeries.values" :key="index" class="row border">
             <div class="col-lg-5 border text-lg-start">
               {{ measurement.muid }}
             </div>

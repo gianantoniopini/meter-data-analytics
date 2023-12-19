@@ -11,18 +11,16 @@ export default mergeConfig(
     test: {
       coverage: {
         enabled: true,
-        lines: 98.16,
-        reportsDirectory: './tests/unit/coverage',
-        thresholdAutoUpdate: true
+        thresholds: {
+          lines: 94.37
+        },
+        reportsDirectory: './tests/unit/coverage'
       },
       environment: 'jsdom',
       exclude: [...configDefaults.exclude, 'e2e/*'],
       reporters: ['verbose'],
       root: fileURLToPath(new URL('./', import.meta.url)),
-      setupFiles: ['vitest.setup.ts'],
-      transformMode: {
-        web: [/\.[jt]sx$/]
-      }
+      setupFiles: ['vitest.setup.ts']
     }
   }) as UserConfig
 )

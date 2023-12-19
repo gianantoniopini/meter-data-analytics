@@ -2,6 +2,7 @@
   "name": "meter-data-analytics-front-end",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "description": "Vue app with TypeScript and Axios",
   "author": "gianantoniopini",
   "scripts": {

@@ -19,8 +19,8 @@
   "dependencies": {
     "@vuepic/vue-datepicker": "^7.4.0",
     "axios": "^1.6.2",
-    "bootstrap": "^5.3.0",
-    "bootstrap-icons": "^1.10.5",
+    "bootstrap": "^5.3.2",
+    "bootstrap-icons": "^1.11.2",
     "chart.js": "^4.3.0",
     "mosha-vue-toastify": "^1.0.23",
     "pinia": "^2.1.3",

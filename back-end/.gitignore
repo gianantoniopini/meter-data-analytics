@@ -7,12 +7,5 @@ node_modules/
 # dotenv environment variable files
 .env
 
-# MongoDB data export files
-*.mongodb.json
-
 # Code coverage
 coverage/
-
-# Links, Notes files
-links.txt
-notes.txt
